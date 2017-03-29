@@ -507,12 +507,14 @@ void TestClassMemoryAllocationMT()
 
 	// --------------------- New Operator Test ---------------------------------
 
-	double summTime = 0;
+	double summAllocTime = 0;
+	auto summDeleteTime = 0;
+
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
 
-		std::thread thread1([array]()
+		std::thread allocThread1([array]()
 		{
 			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
 			{
@@ -520,7 +522,7 @@ void TestClassMemoryAllocationMT()
 			}
 		});
 
-		std::thread thread2([array]()
+		std::thread allocThread2([array]()
 		{
 			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
 			{
@@ -529,7 +531,7 @@ void TestClassMemoryAllocationMT()
 		});
 
 
-		std::thread thread3([array]()
+		std::thread allocThread3([array]()
 		{
 			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
 			{
@@ -537,7 +539,7 @@ void TestClassMemoryAllocationMT()
 			}
 		});
 
-		std::thread thread4([array]()
+		std::thread allocThread4([array]()
 		{
 			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
 			{
@@ -545,71 +547,69 @@ void TestClassMemoryAllocationMT()
 			}
 		});
 
-		thread1.join();
-		thread2.join();
-		thread3.join();
-		thread4.join();
+		allocThread1.join();
+		allocThread2.join();
+		allocThread3.join();
+		allocThread4.join();
 
 
 		auto time = GetTime();
-		summTime += time;
+		summAllocTime += time;
+	
+
+	// ---------------------- Delete Operator Test ------------------------
+		
+		Start();
+
+		std::thread deleteThread1([array]()
+		{
+			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+			{
+				delete array[i];
+			}
+		});
+
+		std::thread deleteThread2([array]()
+		{
+			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+			{
+				delete array[i];
+			}
+		});
+
+
+		std::thread deleteThread3([array]()
+		{
+			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+			{
+				delete array[i];
+			}
+		});
+
+		std::thread deleteThread4([array]()
+		{
+			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+			{
+				delete array[i];
+			}
+		});
+
+		deleteThread1.join();
+		deleteThread2.join();
+		deleteThread3.join();
+		deleteThread4.join();
+
+
+		time = GetTime();
+		summDeleteTime += time;
 	}
-	auto avgTime = summTime / testRepeatCount;
+
+	auto avgTime = summAllocTime / testRepeatCount;
 	WriteString("New Class Test MT = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
 
-	// ---------------------- Delete Operator Test ------------------------
-
-
-	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-	{
-		Start();
-
-		std::thread thread1([array]()
-		{
-			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
-			{
-				delete array[i];
-			}
-		});
-
-		std::thread thread2([array]()
-		{
-			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
-			{
-				delete array[i];
-			}
-		});
-
-
-		std::thread thread3([array]()
-		{
-			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
-			{
-				delete array[i];
-			}
-		});
-
-		std::thread thread4([array]()
-		{
-			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
-			{
-				delete array[i];
-			}
-		});
-
-		thread1.join();
-		thread2.join();
-		thread3.join();
-		thread4.join();
-
-
-		auto time = GetTime();
-		summTime += time;
-	}
-	avgTime = summTime / testRepeatCount;
+	avgTime = summDeleteTime / testRepeatCount;
 	WriteString("Delete Class Test MT = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
@@ -635,9 +635,9 @@ int main()
 
 	//TestClassMemoryAllocation();
 	//TestArraysMemoryAllocation();
-	TestVectorMemoryAllocation();
+	//TestVectorMemoryAllocation();
 
-	//TestClassMemoryAllocationMT();
+	TestClassMemoryAllocationMT();
 
 	getchar();
     return 0;
