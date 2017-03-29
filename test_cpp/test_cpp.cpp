@@ -5,7 +5,7 @@
 const int testRepeatCount = 1;
 
 const int testAccessArraySize_ = 100000000;
-
+const int testAllocationClassSize_ = 100000000;
 const int testAllocationArraySize_ = 1000000;
 
 _LARGE_INTEGER startCounter_;
@@ -353,7 +353,7 @@ class EmptyClass
 
 void TestClassMemoryAllocation()
 {
-	auto array = new EmptyClass*[testAccessArraySize_];
+	auto array = new EmptyClass*[testAllocationClassSize_];
 			
 	// --------------------- New Operator Test ---------------------------------
 
@@ -363,7 +363,7 @@ void TestClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < testAllocationClassSize_; i++)
 		{
 			array[i] = new EmptyClass();
 		}
@@ -387,7 +387,7 @@ void TestClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < testAllocationClassSize_; i++)
 		{
 			delete array[i];
 		}
@@ -519,65 +519,47 @@ void TestVectorMemoryAllocation()
 
 void TestClassMemoryAllocationMT()
 {
-	auto array = new EmptyClass*[testAccessArraySize_];
+	auto array = new EmptyClass*[testAllocationClassSize_];
 
 	// --------------------- New Operator Test ---------------------------------
 
 	double summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
-		std::condition_variable startCondition;
-		std::mutex startMutex;
-
-		std::thread thread1([array, &startMutex, &startCondition]()
-		{
-			std::unique_lock<std::mutex> lock(startMutex);
-			startCondition.wait(lock);
-
-			for (int i = 0; i < testAccessArraySize_ / 4; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
-
-		std::thread thread2([array, &startMutex, &startCondition]()
-		{
-			std::unique_lock<std::mutex> lock(startMutex);
-			startCondition.wait(lock);
-
-			for (int i = testAccessArraySize_ / 4; i < testAccessArraySize_ / 2; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
-
-
-		std::thread thread3([array, &startMutex, &startCondition]()
-		{
-			std::unique_lock<std::mutex> lock(startMutex);
-			startCondition.wait(lock);
-
-			for (int i = testAccessArraySize_ / 2; i < testAccessArraySize_ * 3 / 4; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
-
-		std::thread thread4([array, &startMutex, &startCondition]()
-		{
-			std::unique_lock<std::mutex> lock(startMutex);
-			startCondition.wait(lock);
-
-			for (int i = testAccessArraySize_ * 3 / 4; i < testAccessArraySize_; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
-
-
 		Start();
 
-		startCondition.notify_all();
+		std::thread thread1([array]()
+		{
+			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+		std::thread thread2([array]()
+		{
+			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+
+		std::thread thread3([array]()
+		{
+			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+		std::thread thread4([array]()
+		{
+			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
 
 		thread1.join();
 		thread2.join();
@@ -602,12 +584,44 @@ void TestClassMemoryAllocationMT()
 	{
 		Start();
 
-		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		std::thread thread1([array]()
 		{
-			delete array[i];
-		}
-		//--------------------------------------------------
+			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+			{
+				delete array[i];
+			}
+		});
+
+		std::thread thread2([array]()
+		{
+			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+			{
+				delete array[i];
+			}
+		});
+
+
+		std::thread thread3([array]()
+		{
+			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+			{
+				delete array[i];
+			}
+		});
+
+		std::thread thread4([array]()
+		{
+			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+			{
+				delete array[i];
+			}
+		});
+
+		thread1.join();
+		thread2.join();
+		thread3.join();
+		thread4.join();
+
 
 		auto time = GetTime();
 		time *= 1000.0;
