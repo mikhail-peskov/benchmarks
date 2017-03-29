@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Threading;
 
 namespace test_c_sharp
 {
@@ -238,20 +239,107 @@ namespace test_c_sharp
             WriteString("ms\r\n");
         }
 
-
-        static void Main(string[] args)
+        void TestClassMemoryAllocationMT()
         {
-            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            //testInlineMethodsObject.test();
+            var array = new EmptyClass[testAllocationClassSize_];
 
-            //TestArrayAccess();
-            //TODO: попробовать unmanaged-доступ
+            // --------------------- New Operator Test ---------------------------------
+
+            double summAllocTime = 0;
+            double summDeleteTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                var allocThread1 = new Thread(() =>
+                    {
+                        for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+                        {
+                            array[i] = new EmptyClass();
+                        }
+                    });
+
+                var allocThread2 = new Thread(() =>
+                {
+                    for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+                    {
+                        array[i] = new EmptyClass();
+                    }
+                });
 
 
-            TestClassMemoryAllocation();
-            //TestArraysMemoryAllocation();
+            var allocThread3 = new Thread(() =>
+            {
+                for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+                {
+                    array[i] = new EmptyClass();
+                }
+            });
+
+            var allocThread4 = new Thread(() =>
+            {
+                for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new EmptyClass();
+                }
+            });
+
+            allocThread1.Start();
+            allocThread2.Start();
+            allocThread3.Start();
+            allocThread4.Start();
+                
+            allocThread1.Join();
+            allocThread2.Join();
+            allocThread3.Join();
+            allocThread4.Join();
+
+
+            var time = GetTime();
+            summAllocTime += time;
+
+
+            // ---------------------- Delete Operator Test ------------------------
+
+            Start();
+
+            array = null;
+            GC.Collect();
+            time = GetTime();
+            summDeleteTime += time;
+        }
+
+        var avgTime = summAllocTime / testRepeatCount;
+
+        WriteString("New Class Test MT = ");
+
+        WriteDouble(avgTime);
+
+        WriteString("ms\r\n");
+
+        avgTime = summDeleteTime / testRepeatCount;
+
+        WriteString("Delete Class Test MT = ");
+
+        WriteDouble(avgTime);
+
+        WriteString("ms\r\n");
             
+    }
 
+
+    static void Main(string[] args)
+        {
+            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            testInlineMethodsObject.test();
+
+            TestArrayAccess();
+            //TODO: попробовать unmanaged-доступ
+            
+            TestClassMemoryAllocation();
+            TestArraysMemoryAllocation();
+            TestArraysMemoryAllocation();
 
             Console.ReadLine();
         }
