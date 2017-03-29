@@ -180,8 +180,6 @@ namespace test_c_sharp
 
                 double memoryBefore = GC.GetTotalMemory(true);
 
-
-
                 Start();
 
                 DoSomethingWidthEmptyClass(array[0]);
@@ -201,7 +199,8 @@ namespace test_c_sharp
                 if (collected < mustCollectBytes) 
                     Console.WriteLine("!!! GC.Collect Wrong");
 
-                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
             if (null != array)
@@ -218,6 +217,9 @@ namespace test_c_sharp
             WriteString("ms\r\n");
         }
 
+
+        public static void DoSomethingWithArray(int[] array) { }
+
         static void TestArraysMemoryAllocation()
         {
             var array = new int[testAccessArraySize_][];
@@ -229,6 +231,7 @@ namespace test_c_sharp
             {
 
                 // --------------------- New Operator Test ---------------------------------
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
                 Start();
 
@@ -244,15 +247,30 @@ namespace test_c_sharp
 
                 // ---------------------- Delete Operator Test ------------------------
 
+                double memoryBefore = GC.GetTotalMemory(true);
+
                 Start();
 
-                //--------------------------------------------------
+                DoSomethingWithArray(array[0]);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                //--------------------------------------------------
+
 
                 time = GetTime();
                 summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
+                // плюс 4 байта - ячейка в массиве
+                // плюс 100 4-байтных чисел в самом массиве
+                var mustCollectBytes = testAllocationArraySize_ * (12 + 4 + 100 * 4);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
             var avgAllocationTime = summAllocationTime / testRepeatCount;
@@ -266,7 +284,7 @@ namespace test_c_sharp
             WriteString("ms\r\n");
         }
 
-        void TestClassMemoryAllocationMT()
+        static void TestClassMemoryAllocationMT()
         {
             var array = new EmptyClass[testAllocationClassSize_];
 
@@ -296,48 +314,64 @@ namespace test_c_sharp
                 });
 
 
-            var allocThread3 = new Thread(() =>
-            {
-                for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+                var allocThread3 = new Thread(() =>
                 {
-                    array[i] = new EmptyClass();
-                }
-            });
+                    for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+                    {
+                        array[i] = new EmptyClass();
+                    }
+                });
 
-            var allocThread4 = new Thread(() =>
-            {
-                for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+                var allocThread4 = new Thread(() =>
                 {
-                    array[i] = new EmptyClass();
-                }
-            });
+                    for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+                    {
+                        array[i] = new EmptyClass();
+                    }
+                });
 
-            allocThread1.Start();
-            allocThread2.Start();
-            allocThread3.Start();
-            allocThread4.Start();
+                allocThread1.Start();
+                allocThread2.Start();
+                allocThread3.Start();
+                allocThread4.Start();
                 
-            allocThread1.Join();
-            allocThread2.Join();
-            allocThread3.Join();
-            allocThread4.Join();
+                allocThread1.Join();
+                allocThread2.Join();
+                allocThread3.Join();
+                allocThread4.Join();
 
 
-            var time = GetTime();
-            summAllocTime += time;
+                var time = GetTime();
+                summAllocTime += time;
 
 
-            // ---------------------- Delete Operator Test ------------------------
+                // ---------------------- Delete Operator Test ------------------------
 
 
+                double memoryBefore = GC.GetTotalMemory(true);
 
-            Start();
+                Start();
 
-            array = null;
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            time = GetTime();
-            summDeleteTime += time;
-        }
+                DoSomethingWidthEmptyClass(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
+                // плюс 4 байта - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (12 + 4);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
 
         var avgTime = summAllocTime / testRepeatCount;
 
@@ -360,15 +394,15 @@ namespace test_c_sharp
 
     static void Main(string[] args)
         {
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
 
-            TestArrayAccess();
+            //TestArrayAccess();
             //TODO: попробовать unmanaged-доступ
             
-            TestClassMemoryAllocation();
+            //TestClassMemoryAllocation();
             //TestArraysMemoryAllocation();
-            //TestArraysMemoryAllocation();
+            TestClassMemoryAllocationMT();
 
             Console.ReadLine();
         }
