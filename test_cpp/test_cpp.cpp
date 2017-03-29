@@ -28,15 +28,27 @@ double GetTime()
 	return ((double)CountE - (double)CountS) / (double)Freq;
 }
 
-void putDouble(double value)
+void writeString(const char* outString)
+{
+	std::cout << outString;
+	fileOut_ << outString;
+}
+
+void writeDouble(double value)
 {
 	std::cout << value;
+	fileOut_ << value;
 }
 
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
+	writeString("Hello");
+	writeDouble(3.142);
+
+
+	getchar();
     return 0;
 }
 
