@@ -5,7 +5,7 @@
 const int testRepeatCount = 1;
 
 const int testAccessArraySize_ = 100000000;
-const int testAllocationClassSize_ = 100000000;
+const int testAllocationClassSize_ = 50000000;
 const int testAllocationArraySize_ = 1000000;
 
 _LARGE_INTEGER startCounter_;
@@ -349,7 +349,7 @@ void TestClassMemoryAllocation()
 	// --------------------- New Operator Test ---------------------------------
 
 	double summAllocationTime = 0;
-	auto summDeleteTime = 0;
+	double summDeleteTime = 0;
 
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
@@ -456,7 +456,7 @@ void TestVectorMemoryAllocation()
 	// --------------------- New Operator Test ---------------------------------
 
 	double summAllocTime = 0;
-	auto summDeleteTime = 0;
+	double summDeleteTime = 0;
 
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
@@ -508,7 +508,7 @@ void TestClassMemoryAllocationMT()
 	// --------------------- New Operator Test ---------------------------------
 
 	double summAllocTime = 0;
-	auto summDeleteTime = 0;
+	double summDeleteTime = 0;
 
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
@@ -633,7 +633,7 @@ int main()
 	//TestVectorAccess();
 	//TestVectorRandomAccess();
 
-	//TestClassMemoryAllocation();
+	TestClassMemoryAllocation();
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
 

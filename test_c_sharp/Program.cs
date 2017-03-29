@@ -14,7 +14,7 @@ namespace test_c_sharp
         const int testRepeatCount = 1;
 
         const int testAccessArraySize_ = 100000000;
-        const int testAllocationClassSize_ = 100000000;
+        const int testAllocationClassSize_ = 50000000;
         const int testAllocationArraySize_ = 1000000;
 
         static Stopwatch stopwatch_ = new Stopwatch();
@@ -142,15 +142,115 @@ namespace test_c_sharp
         {
         };
 
+        static void TestClassMemoryAllocation()
+        {
+            var array = new EmptyClass[testAllocationClassSize_];
+
+            // --------------------- New Operator Test ---------------------------------
+
+            double summAllocationTime = 0;
+            double summDeleteTime = 0;
+
+            GC.Collect();
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new EmptyClass();
+                }
+                //--------------------------------------------------
+
+                var time = GetTime();
+                summAllocationTime += time;
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                Start();
+
+                array = null;
+                GC.Collect();
+                
+
+                time = GetTime();
+                summDeleteTime += time;
+            }
+
+            var avgAllocationTime = summAllocationTime / testRepeatCount;
+            WriteString("New Class Test = ");
+            WriteDouble(avgAllocationTime);
+            WriteString("ms\r\n");
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString("ms\r\n");
+        }
+
+        static void TestArraysMemoryAllocation()
+        {
+            var array = new int[testAccessArraySize_][];
+
+
+            double summAllocationTime = 0;
+            double summDeleteTime = 0;
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+
+                // --------------------- New Operator Test ---------------------------------
+
+                Start();
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationArraySize_; i++)
+                {
+                    array[i] = new int[100];
+                }
+                //--------------------------------------------------
+
+                var time = GetTime();
+                summAllocationTime += time;
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                Start();
+
+                //--------------------------------------------------
+                array = null;
+                GC.Collect();
+                //--------------------------------------------------
+
+                time = GetTime();
+                summDeleteTime += time;
+            }
+
+            var avgAllocationTime = summAllocationTime / testRepeatCount;
+            WriteString("New Array Test = ");
+            WriteDouble(avgAllocationTime);
+            WriteString("ms\r\n");
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Array Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString("ms\r\n");
+        }
 
 
         static void Main(string[] args)
         {
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
 
-            TestArrayAccess();
+            //TestArrayAccess();
             //TODO: попробовать unmanaged-доступ
+
+
+            TestClassMemoryAllocation();
+            //TestArraysMemoryAllocation();
+            
 
 
             Console.ReadLine();
