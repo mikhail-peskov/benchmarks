@@ -1,12 +1,12 @@
 #include "stdafx.h"
 
-
-
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 100;
+const int testRepeatCount = 1;
 
-const int arraySize_ = 100000000;
+const int testAccessArraySize_ = 100000000;
+
+const int testAllocationArraySize_ = 1000000;
 
 _LARGE_INTEGER startCounter_;
 
@@ -70,21 +70,21 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 
 void TestArrayAccessLambda()
 {
-	int* array = new int[arraySize_];
+	int* array = new int[testAccessArraySize_];
 
 	Test("Array Fill Lambda", [array]()
 	{
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
 			array[i] = i;
 		}
 	});
 	
-	int* destinationArray = new int[arraySize_];
+	int* destinationArray = new int[testAccessArraySize_];
 
 	Test("Array Copy Lambda", [array, destinationArray]()
 	{
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
 			destinationArray[i] = array[i];
 		}
@@ -156,7 +156,7 @@ void TestArrayAccess()
 
 void TestVectorAccess()
 {
-	std::vector<int> vector(arraySize_);
+	std::vector<int> vector(testAccessArraySize_);
 
 
 	// ------------------- Fill -----------------------------------------------
@@ -167,7 +167,7 @@ void TestVectorAccess()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
 			vector[i] = i;
 		}
@@ -185,14 +185,14 @@ void TestVectorAccess()
 	// ------------------- Copy -----------------------------------------------
 
 
-	std::vector<int> destinationVector(arraySize_);
+	std::vector<int> destinationVector(testAccessArraySize_);
 	summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
 			destinationVector[i] = vector[i];
 		}
@@ -211,7 +211,7 @@ void TestVectorAccess()
 
 void TestVectorRandomAccess()
 {
-	std::vector<int> vector(arraySize_);
+	std::vector<int> vector(testAccessArraySize_);
 
 
 	// ------------------- Fill -----------------------------------------------
@@ -222,7 +222,7 @@ void TestVectorRandomAccess()
 		Start();
 
 		//--------------------------------------------------
-		for (int forwardIndex = 0, backwardIndex = arraySize_ - 1; forwardIndex < arraySize_ / 2; forwardIndex++, backwardIndex--)
+		for (int forwardIndex = 0, backwardIndex = testAccessArraySize_ - 1; forwardIndex < testAccessArraySize_ / 2; forwardIndex++, backwardIndex--)
 		{
 			vector[forwardIndex] = forwardIndex;
 			vector[backwardIndex] = forwardIndex;
@@ -241,14 +241,14 @@ void TestVectorRandomAccess()
 	// ------------------- Copy -----------------------------------------------
 
 
-	std::vector<int> destinationVector(arraySize_);
+	std::vector<int> destinationVector(testAccessArraySize_);
 	summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int forwardIndex = 0, backwardIndex = arraySize_ - 1; forwardIndex < arraySize_ / 2; forwardIndex++, backwardIndex--)
+		for (int forwardIndex = 0, backwardIndex = testAccessArraySize_ - 1; forwardIndex < testAccessArraySize_ / 2; forwardIndex++, backwardIndex--)
 		{
 			destinationVector[forwardIndex] = vector[backwardIndex];
 			destinationVector[backwardIndex] = vector[forwardIndex];
@@ -283,7 +283,7 @@ public:
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < arraySize_; i++)
+			for (int i = 0; i < testAccessArraySize_; i++)
 			{
 				summResult = InlineMethod(i);
 			}
@@ -320,7 +320,7 @@ public:
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < arraySize_; i++)
+			for (int i = 0; i < testAccessArraySize_; i++)
 			{
 				summResult = noInlineMethod(i);
 			}
@@ -347,22 +347,301 @@ int TestNotInlineMethodsClass::noInlineMethod(const int param1) const
 	return param1;
 }
 
+class EmptyClass
+{
+};
+
+void TestClassMemoryAllocation()
+{
+	auto array = new EmptyClass*[testAccessArraySize_];
+			
+	// --------------------- New Operator Test ---------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAccessArraySize_; i++)
+		{
+			array[i] = new EmptyClass();
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("New Class Test = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+	
+	// ---------------------- Delete Operator Test ------------------------
+
+
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAccessArraySize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Delete Class Test = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+
+	delete[] array;
+}
+
+void TestArraysMemoryAllocation()
+{
+	auto array = new int*[testAccessArraySize_];
+
+	// --------------------- New Operator Test ---------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationArraySize_; i++)
+		{
+			array[i] = new int[100];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("New Array Test = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	// ---------------------- Delete Operator Test ------------------------
+
+
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationArraySize_; i++)
+		{
+			delete[] array[i];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Delete Array Test = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+
+	delete[] array;
+}
+
+
+void TestVectorMemoryAllocation()
+{
+	auto array = new std::vector<int>*[testAccessArraySize_];
+
+	// --------------------- New Operator Test ---------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationArraySize_; i++)
+		{
+			array[i] = new std::vector<int>(100);
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("New Vector Test = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	// ---------------------- Delete Operator Test ------------------------
+
+
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationArraySize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Delete Vector Test = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+
+	delete[] array;
+}
+
+void TestClassMemoryAllocationMT()
+{
+	auto array = new EmptyClass*[testAccessArraySize_];
+
+	// --------------------- New Operator Test ---------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		std::condition_variable startCondition;
+		std::mutex startMutex;
+
+		std::thread thread1([array, &startMutex, &startCondition]()
+		{
+			std::unique_lock<std::mutex> lock(startMutex);
+			startCondition.wait(lock);
+
+			for (int i = 0; i < testAccessArraySize_ / 4; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+		std::thread thread2([array, &startMutex, &startCondition]()
+		{
+			std::unique_lock<std::mutex> lock(startMutex);
+			startCondition.wait(lock);
+
+			for (int i = testAccessArraySize_ / 4; i < testAccessArraySize_ / 2; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+
+		std::thread thread3([array, &startMutex, &startCondition]()
+		{
+			std::unique_lock<std::mutex> lock(startMutex);
+			startCondition.wait(lock);
+
+			for (int i = testAccessArraySize_ / 2; i < testAccessArraySize_ * 3 / 4; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+		std::thread thread4([array, &startMutex, &startCondition]()
+		{
+			std::unique_lock<std::mutex> lock(startMutex);
+			startCondition.wait(lock);
+
+			for (int i = testAccessArraySize_ * 3 / 4; i < testAccessArraySize_; i++)
+			{
+				array[i] = new EmptyClass();
+			}
+		});
+
+
+		Start();
+
+		startCondition.notify_all();
+
+		thread1.join();
+		thread2.join();
+		thread3.join();
+		thread4.join();
+
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("New Class Test MT = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	// ---------------------- Delete Operator Test ------------------------
+
+
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAccessArraySize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Delete Class Test MT = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+
+	delete[] array;
+}
+
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	TestInlineMethodsClass testInline;
-	testInline.test();
+	//TestInlineMethodsClass testInline;
+	//testInline.test();
 
-	TestNotInlineMethodsClass testNoInline;
-	testNoInline.test();
+	//TestNotInlineMethodsClass testNoInline;
+	//testNoInline.test();
 
-	TestArrayAccessLambda();
-	TestArrayAccess();
-	TestVectorAccess();
-	TestVectorRandomAccess();
+	//TestArrayAccessLambda();
+	//TestArrayAccess();
+	//TestVectorAccess();
+	//TestVectorRandomAccess();
 
+	TestClassMemoryAllocation();
+	//TestArraysMemoryAllocation();
+	//TestVectorMemoryAllocation();
 
+	TestClassMemoryAllocationMT();
 
 	getchar();
     return 0;
