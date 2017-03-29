@@ -29,7 +29,7 @@ double GetTime()
 	QueryPerformanceFrequency(&FreqL);
 	__int64 Freq = FreqL.QuadPart;
 
-	return ((double)CountE - (double)CountS) / (double)Freq;
+	return (((double)CountE - (double)CountS) / (double)Freq) * 1000;
 }
 
 void WriteString(const char* outString)
@@ -54,7 +54,6 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 		function();
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	auto avgTime = summTime / avgIterationCount;
@@ -117,7 +116,6 @@ void TestArrayAccess()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	auto avgTime = summTime / testRepeatCount;
@@ -142,7 +140,6 @@ void TestArrayAccess()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	avgTime = summTime / testRepeatCount;
@@ -174,7 +171,6 @@ void TestVectorAccess()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	auto avgTime = summTime / testRepeatCount;
@@ -199,7 +195,6 @@ void TestVectorAccess()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	avgTime = summTime / testRepeatCount;
@@ -230,7 +225,6 @@ void TestVectorRandomAccess()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	auto avgTime = summTime / testRepeatCount;
@@ -256,7 +250,6 @@ void TestVectorRandomAccess()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	avgTime = summTime / testRepeatCount;
@@ -290,7 +283,6 @@ public:
 			//--------------------------------------------------
 
 			auto time = GetTime();
-			time *= 1000.0;
 			summTime += time;
 		}
 		auto avgTime = summTime / testRepeatCount;
@@ -306,7 +298,7 @@ public:
 };
 
 
-class TestNotInlineMethodsClass
+class TestNoInlineMethodsClass
 {
 	int noInlineMethod(const int param1) const;
 	
@@ -327,7 +319,6 @@ public:
 			//--------------------------------------------------
 
 			auto time = GetTime();
-			time *= 1000.0;
 			summTime += time;
 		}
 		auto avgTime = summTime / testRepeatCount;
@@ -342,7 +333,7 @@ public:
 	}
 };
 
-int TestNotInlineMethodsClass::noInlineMethod(const int param1) const
+int TestNoInlineMethodsClass::noInlineMethod(const int param1) const
 {
 	return param1;
 }
@@ -357,7 +348,9 @@ void TestClassMemoryAllocation()
 			
 	// --------------------- New Operator Test ---------------------------------
 
-	double summTime = 0;
+	double summAllocationTime = 0;
+	auto summDeleteTime = 0;
+
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
@@ -370,20 +363,10 @@ void TestClassMemoryAllocation()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
-		summTime += time;
-	}
-	auto avgTime = summTime / testRepeatCount;
-	WriteString("New Class Test = ");
-	WriteDouble(avgTime);
-	WriteString("ms\r\n");
+		summAllocationTime += time;
 	
 	// ---------------------- Delete Operator Test ------------------------
 
-
-	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-	{
 		Start();
 
 		//--------------------------------------------------
@@ -393,14 +376,20 @@ void TestClassMemoryAllocation()
 		}
 		//--------------------------------------------------
 
-		auto time = GetTime();
-		time *= 1000.0;
-		summTime += time;
+		time = GetTime();
+		summDeleteTime += time;
 	}
-	avgTime = summTime / testRepeatCount;
-	WriteString("Delete Class Test = ");
-	WriteDouble(avgTime);
+
+	auto avgAllocationTime = summAllocationTime / testRepeatCount;
+	WriteString("New Class Test = ");
+	WriteDouble(avgAllocationTime);
 	WriteString("ms\r\n");
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+
 
 
 	delete[] array;
@@ -410,11 +399,14 @@ void TestArraysMemoryAllocation()
 {
 	auto array = new int*[testAccessArraySize_];
 
-	// --------------------- New Operator Test ---------------------------------
 
-	double summTime = 0;
+	double summAllocationTime = 0;
+	double summDeleteTime = 0;
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
+
+// --------------------- New Operator Test ---------------------------------
+
 		Start();
 
 		//--------------------------------------------------
@@ -425,20 +417,10 @@ void TestArraysMemoryAllocation()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
-		summTime += time;
-	}
-	auto avgTime = summTime / testRepeatCount;
-	WriteString("New Array Test = ");
-	WriteDouble(avgTime);
-	WriteString("ms\r\n");
+		summAllocationTime += time;
 
-	// ---------------------- Delete Operator Test ------------------------
+// ---------------------- Delete Operator Test ------------------------
 
-
-	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-	{
 		Start();
 
 		//--------------------------------------------------
@@ -448,13 +430,18 @@ void TestArraysMemoryAllocation()
 		}
 		//--------------------------------------------------
 
-		auto time = GetTime();
-		time *= 1000.0;
-		summTime += time;
+		time = GetTime();
+		summDeleteTime += time;
 	}
-	avgTime = summTime / testRepeatCount;
+
+	auto avgAllocationTime = summAllocationTime / testRepeatCount;
+	WriteString("New Array Test = ");
+	WriteDouble(avgAllocationTime);
+	WriteString("ms\r\n");
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
 	WriteString("Delete Array Test = ");
-	WriteDouble(avgTime);
+	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
 
 
@@ -468,7 +455,9 @@ void TestVectorMemoryAllocation()
 
 	// --------------------- New Operator Test ---------------------------------
 
-	double summTime = 0;
+	double summAllocTime = 0;
+	auto summDeleteTime = 0;
+
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
@@ -481,20 +470,10 @@ void TestVectorMemoryAllocation()
 		//--------------------------------------------------
 
 		auto time = GetTime();
-		time *= 1000.0;
-		summTime += time;
-	}
-	auto avgTime = summTime / testRepeatCount;
-	WriteString("New Vector Test = ");
-	WriteDouble(avgTime);
-	WriteString("ms\r\n");
+		summAllocTime += time;
 
 	// ---------------------- Delete Operator Test ------------------------
 
-
-	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-	{
 		Start();
 
 		//--------------------------------------------------
@@ -504,13 +483,18 @@ void TestVectorMemoryAllocation()
 		}
 		//--------------------------------------------------
 
-		auto time = GetTime();
-		time *= 1000.0;
-		summTime += time;
+		time = GetTime();
+		summDeleteTime += time;
 	}
-	avgTime = summTime / testRepeatCount;
+
+	auto avgAllocTime = summAllocTime / testRepeatCount;
+	WriteString("New Vector Test = ");
+	WriteDouble(avgAllocTime);
+	WriteString("ms\r\n");
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
 	WriteString("Delete Vector Test = ");
-	WriteDouble(avgTime);
+	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
 
 
@@ -568,7 +552,6 @@ void TestClassMemoryAllocationMT()
 
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	auto avgTime = summTime / testRepeatCount;
@@ -624,7 +607,6 @@ void TestClassMemoryAllocationMT()
 
 
 		auto time = GetTime();
-		time *= 1000.0;
 		summTime += time;
 	}
 	avgTime = summTime / testRepeatCount;
@@ -643,7 +625,7 @@ int main()
 	//TestInlineMethodsClass testInline;
 	//testInline.test();
 
-	//TestNotInlineMethodsClass testNoInline;
+	//TestNoInlineMethodsClass testNoInline;
 	//testNoInline.test();
 
 	//TestArrayAccessLambda();
@@ -651,11 +633,11 @@ int main()
 	//TestVectorAccess();
 	//TestVectorRandomAccess();
 
-	TestClassMemoryAllocation();
+	//TestClassMemoryAllocation();
 	//TestArraysMemoryAllocation();
-	//TestVectorMemoryAllocation();
+	TestVectorMemoryAllocation();
 
-	TestClassMemoryAllocationMT();
+	//TestClassMemoryAllocationMT();
 
 	getchar();
     return 0;
