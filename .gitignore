@@ -45,3 +45,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/test_c_sharp/.vs
+/test_c_sharp/bin
+/test_c_sharp/ipch
+/test_c_sharp/obj
