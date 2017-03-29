@@ -2,7 +2,7 @@
 
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 1;
+const int testRepeatCount = 10;
 
 const int testAccessArraySize_ = 100000000;
 const int testAllocationClassSize_ = 50000000;
@@ -622,20 +622,20 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	//TestInlineMethodsClass testInline;
-	//testInline.test();
+	TestInlineMethodsClass testInline;
+	testInline.test();
 
-	//TestNoInlineMethodsClass testNoInline;
-	//testNoInline.test();
+	TestNoInlineMethodsClass testNoInline;
+	testNoInline.test();
 
-	//TestArrayAccessLambda();
-	//TestArrayAccess();
-	//TestVectorAccess();
-	//TestVectorRandomAccess();
+	TestArrayAccessLambda();
+	TestArrayAccess();
+	TestVectorAccess();
+	TestVectorRandomAccess();
 
 	TestClassMemoryAllocation();
-	//TestArraysMemoryAllocation();
-	//TestVectorMemoryAllocation();
+	TestArraysMemoryAllocation();
+	TestVectorMemoryAllocation();
 
 	TestClassMemoryAllocationMT();
 

@@ -111,6 +111,9 @@ namespace test_c_sharp
 
             public void test()
             {
+                // прогреваем метод
+                InlineMethod(0);
+
                 double summTime = 0;
                 int summResult = 0;
                 for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
