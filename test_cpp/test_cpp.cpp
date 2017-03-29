@@ -6,6 +6,8 @@
 
 const int testRepeatCount = 1;
 
+const int arraySize_ = 100000000;
+
 _LARGE_INTEGER startCounter_;
 
 std::ofstream fileOut_;
@@ -66,24 +68,23 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 //---------------------------- Benchmarks ---------------------------------------
 
 
-void TestArrayAccess()
+void TestArrayAccessLambda()
 {
-	const int arraySize = 100000000;
-	int* array = new int[arraySize];
+	int* array = new int[arraySize_];
 
-	Test("Array Fill", [array, arraySize]()
+	Test("Array Fill Lambda", [array]()
 	{
-		for (int i = 0; i < arraySize; i++)
+		for (int i = 0; i < arraySize_; i++)
 		{
 			array[i] = i;
 		}
 	});
 	
-	int* destinationArray = new int[arraySize];
+	int* destinationArray = new int[arraySize_];
 
-	Test("Array Copy", [array, destinationArray, arraySize]()
+	Test("Array Copy Lambda", [array, destinationArray]()
 	{
-		for (int i = 0; i < arraySize; i++)
+		for (int i = 0; i < arraySize_; i++)
 		{
 			destinationArray[i] = array[i];
 		}
@@ -94,11 +95,11 @@ void TestArrayAccess()
 	delete[] destinationArray;
 }
 
-void TestVectorAccess()
+void TestArrayAccess()
 {
-	const int arraySize = 100000000;
+	const int arraySize_ = 100000000;
 
-	std::vector<int> vector(arraySize);
+	int* array = new int[arraySize_];
 
 
 	// ------------------- Fill -----------------------------------------------
@@ -109,7 +110,64 @@ void TestVectorAccess()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < arraySize; i++)
+		for (int i = 0; i < arraySize_; i++)
+		{
+			array[i] = i;
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("Array Fill = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	// ------------------- Copy -----------------------------------------------
+
+
+	int* destinationArray = new int[arraySize_];
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < arraySize_; i++)
+		{
+			destinationArray[i] = array[i];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Array Copy = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	delete[] array;
+	delete[] destinationArray;
+}
+
+void TestVectorAccess()
+{
+	std::vector<int> vector(arraySize_);
+
+
+	// ------------------- Fill -----------------------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < arraySize_; i++)
 		{
 			vector[i] = i;
 		}
@@ -127,14 +185,14 @@ void TestVectorAccess()
 	// ------------------- Copy -----------------------------------------------
 
 
-	std::vector<int> destinationVector(arraySize);
+	std::vector<int> destinationVector(arraySize_);
 	summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < arraySize; i++)
+		for (int i = 0; i < arraySize_; i++)
 		{
 			destinationVector[i] = vector[i];
 		}
@@ -151,12 +209,158 @@ void TestVectorAccess()
 }
 
 
+void TestVectorRandomAccess()
+{
+	std::vector<int> vector(arraySize_);
+
+
+	// ------------------- Fill -----------------------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int forwardIndex = 0, backwardIndex = arraySize_ - 1; forwardIndex < arraySize_ / 2; forwardIndex++, backwardIndex--)
+		{
+			vector[forwardIndex] = forwardIndex;
+			vector[backwardIndex] = forwardIndex;
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("Rand. Access Vector Fill = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	// ------------------- Copy -----------------------------------------------
+
+
+	std::vector<int> destinationVector(arraySize_);
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int forwardIndex = 0, backwardIndex = arraySize_ - 1; forwardIndex < arraySize_ / 2; forwardIndex++, backwardIndex--)
+		{
+			destinationVector[forwardIndex] = vector[backwardIndex];
+			destinationVector[backwardIndex] = vector[forwardIndex];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Rand. Access Vector Copy = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+}
+
+
+class TestInlineMethodsClass
+{
+	int summ(const int param1, const int param2) const
+	{
+		return param1 + param2;
+	}
+
+public:
+	void test()
+	{
+		double summTime = 0;
+		int summResult = 0;
+		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+		{
+			Start();
+
+			//--------------------------------------------------
+			for (int i = 0; i < arraySize_; i++)
+			{
+				summResult = summ(i, i);
+			}
+			//--------------------------------------------------
+
+			auto time = GetTime();
+			time *= 1000.0;
+			summTime += time;
+		}
+		auto avgTime = summTime / testRepeatCount;
+		WriteString("Inline Method = ");
+		WriteDouble(avgTime);
+		WriteString("ms\r\n");
+		WriteString("Inline result = ");
+		WriteDouble(summResult);
+		WriteString("\r\n");
+
+		// ------------------- Copy -----------------------------------------------		
+	}
+};
+
+
+class TestNotInlineMethodsClass
+{
+	int summ(const int param1, const int param2) const;
+	
+public:
+	void test()
+	{
+		double summTime = 0;
+		int summResult = 0;
+		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+		{
+			Start();
+
+			//--------------------------------------------------
+			for (int i = 0; i < arraySize_; i++)
+			{
+				summResult = summ(i, i);
+			}
+			//--------------------------------------------------
+
+			auto time = GetTime();
+			time *= 1000.0;
+			summTime += time;
+		}
+		auto avgTime = summTime / testRepeatCount;
+		WriteString("No Inline Method = ");
+		WriteDouble(avgTime);
+		WriteString("ms\r\n");
+		WriteString("No Inline result = ");
+		WriteDouble(summResult);
+		WriteString("\r\n");
+
+		// ------------------- Copy -----------------------------------------------		
+	}
+};
+
+int TestNotInlineMethodsClass::summ(const int param1, const int param2) const
+{
+	return param1 + param2;
+}
+
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	TestVectorAccess();
+	TestInlineMethodsClass testInline;
+	testInline.test();
+
+	TestNotInlineMethodsClass testNoInline;
+	testNoInline.test();
+
+	TestArrayAccessLambda();
 	TestArrayAccess();
+	TestVectorAccess();
+	TestVectorRandomAccess();
 
 
 
