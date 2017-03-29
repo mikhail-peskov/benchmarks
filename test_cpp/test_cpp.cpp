@@ -57,7 +57,7 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 	WriteString(testName);
 	WriteString(" = ");
 	WriteDouble(avgTime);
-	WriteString("ms");
+	WriteString("ms\r\n");
 }
 
 //---------------------------- Benchmarks ---------------------------------------
@@ -71,24 +71,25 @@ void TestArrayAccess()
 
 	Start();
 
-
-	for (int i = 0; i < arraySize_; i++)
+	Test("Array Fill", [array, arraySize_]()
 	{
-		array[i] = i;
-	}
-
+		for (int i = 0; i < arraySize_; i++)
+		{
+			array[i] = i;
+		}
+	});
+	
 	int* destinationArray = new int[arraySize_];
-	for (int i = 0; i < arraySize_; i++)
-	{
-		destinationArray[i] = array[i];
-	}
-	
 
-	auto time = GetTime();
-	WriteString("Write access time = ");
-	WriteDouble(time);
-	WriteString("\r\n");
-	
+	Test("Array Copy", [array, destinationArray, arraySize_]()
+	{
+		for (int i = 0; i < arraySize_; i++)
+		{
+			destinationArray[i] = array[i];
+		}
+
+	});
+
 	delete[] array;
 	delete[] destinationArray;
 }
@@ -97,13 +98,9 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	//TestArrayAccess();
+	TestArrayAccess();
 
 
-	Test("Sleep", []()
-	{
-		Sleep(1000);
-	});
 
 	getchar();
     return 0;
