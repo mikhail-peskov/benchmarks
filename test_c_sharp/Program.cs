@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace test_c_sharp
@@ -142,9 +143,11 @@ namespace test_c_sharp
             }
         }
 
-        class EmptyClass
+        public class EmptyClass
         {
         };
+
+        public static void DoSomethingWidthEmptyClass(EmptyClass emptyObj) { }
 
         static void TestClassMemoryAllocation()
         {
@@ -155,11 +158,12 @@ namespace test_c_sharp
             double summAllocationTime = 0;
             double summDeleteTime = 0;
 
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-            EmptyClass a0 = null;
+
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
                 Start();
 
                 //--------------------------------------------------
@@ -175,12 +179,12 @@ namespace test_c_sharp
                 // ---------------------- Delete Operator Test ------------------------
 
                 double memoryBefore = GC.GetTotalMemory(true);
-                Console.WriteLine("Before = " + memoryBefore);
-                
+
+
+
                 Start();
 
-                a0 = array[0];
-
+                DoSomethingWidthEmptyClass(array[0]);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
@@ -188,12 +192,20 @@ namespace test_c_sharp
                 time = GetTime();
                 summDeleteTime += time;
                 double memoryAfter = GC.GetTotalMemory(true);
-                Console.WriteLine("After = " + memoryAfter);
-                Console.WriteLine("Collected = {0}", memoryBefore - memoryAfter);
+                double collected = memoryBefore - memoryAfter;
+                Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
+                // плюс 4 байта - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (12 + 4);
+                if (collected < mustCollectBytes) 
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
             }
 
-            //if (null != array)
-                Console.WriteLine(a0);
+            if (null != array)
+                Console.WriteLine("Something Wrong");
 
             var avgAllocationTime = summAllocationTime / testRepeatCount;
             WriteString("New Class Test = ");
