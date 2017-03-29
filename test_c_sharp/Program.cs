@@ -75,7 +75,7 @@ namespace test_c_sharp
             var avgTime = summTime / testRepeatCount;
             WriteString("Array Fill = ");
             WriteDouble(avgTime);
-            WriteString("ms\r\n");
+            WriteString(" ms\r\n");
 
             // ------------------- Copy -----------------------------------------------
 
@@ -99,7 +99,7 @@ namespace test_c_sharp
             avgTime = summTime / testRepeatCount;
             WriteString("Array Copy = ");
             WriteDouble(avgTime);
-            WriteString("ms\r\n");
+            WriteString(" ms\r\n");
         }
 
         class TestInlineMethodsClass
@@ -134,7 +134,7 @@ namespace test_c_sharp
                 var avgTime = summTime / testRepeatCount;
                 WriteString("Inline Method = ");
                 WriteDouble(avgTime);
-                WriteString("ms\r\n");
+                WriteString(" ms\r\n");
                 WriteString("Inline result = ");
                 WriteDouble(summResult);
                 WriteString("\r\n");
@@ -191,7 +191,7 @@ namespace test_c_sharp
                 summDeleteTime += time;
                 double memoryAfter = GC.GetTotalMemory(true);
                 double collected = memoryBefore - memoryAfter;
-                Console.WriteLine("Collected = {0}", collected);
+                //Console.WriteLine("Collected = {0}", collected);
 
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
@@ -209,12 +209,12 @@ namespace test_c_sharp
             var avgAllocationTime = summAllocationTime / testRepeatCount;
             WriteString("New Class Test = ");
             WriteDouble(avgAllocationTime);
-            WriteString("ms\r\n");
+            WriteString(" ms\r\n");
 
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete Class Test = ");
             WriteDouble(avgDeleteTime);
-            WriteString("ms\r\n");
+            WriteString(" ms\r\n");
         }
 
 
@@ -260,7 +260,7 @@ namespace test_c_sharp
                 summDeleteTime += time;
                 double memoryAfter = GC.GetTotalMemory(true);
                 double collected = memoryBefore - memoryAfter;
-                Console.WriteLine("Collected = {0}", collected);
+                //Console.WriteLine("Collected = {0}", collected);
 
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
@@ -276,12 +276,12 @@ namespace test_c_sharp
             var avgAllocationTime = summAllocationTime / testRepeatCount;
             WriteString("New Array Test = ");
             WriteDouble(avgAllocationTime);
-            WriteString("ms\r\n");
+            WriteString(" ms\r\n");
 
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete Array Test = ");
             WriteDouble(avgDeleteTime);
-            WriteString("ms\r\n");
+            WriteString(" ms\r\n");
         }
 
         static void TestClassMemoryAllocationMT()
@@ -361,7 +361,7 @@ namespace test_c_sharp
                 summDeleteTime += time;
                 double memoryAfter = GC.GetTotalMemory(true);
                 double collected = memoryBefore - memoryAfter;
-                Console.WriteLine("Collected = {0}", collected);
+                //Console.WriteLine("Collected = {0}", collected);
 
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
@@ -379,7 +379,7 @@ namespace test_c_sharp
 
         WriteDouble(avgTime);
 
-        WriteString("ms\r\n");
+        WriteString(" ms\r\n");
 
         avgTime = summDeleteTime / testRepeatCount;
 
@@ -387,21 +387,21 @@ namespace test_c_sharp
 
         WriteDouble(avgTime);
 
-        WriteString("ms\r\n");
+        WriteString(" ms\r\n");
             
     }
 
 
     static void Main(string[] args)
         {
-            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            //testInlineMethodsObject.test();
+            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            testInlineMethodsObject.test();
 
-            //TestArrayAccess();
+            TestArrayAccess();
             //TODO: попробовать unmanaged-доступ
-            
-            //TestClassMemoryAllocation();
-            //TestArraysMemoryAllocation();
+
+            TestClassMemoryAllocation();
+            TestArraysMemoryAllocation();
             TestClassMemoryAllocationMT();
 
             Console.ReadLine();
