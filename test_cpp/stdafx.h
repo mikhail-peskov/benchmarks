@@ -12,7 +12,7 @@
 #include <windows.h>
 #include <iostream>
 #include <fstream>
-
+#include <functional>
 
 
 // TODO: reference additional headers your program requires here

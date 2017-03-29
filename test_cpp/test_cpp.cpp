@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+
 //---------------- Infrastructure ----------------------
 
 _LARGE_INTEGER startCounter_;
@@ -38,19 +39,50 @@ void WriteDouble(double value)
 	fileOut_ << value;
 }
 
+void Test(const char* testName, std::function<void()> function, int avgIterationCount = 1)
+{
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < avgIterationCount; iterationIndes++)
+	{
+		Start();
+
+		function();
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / avgIterationCount;
+
+	WriteString(testName);
+	WriteString(" = ");
+	WriteDouble(avgTime);
+	WriteString("ms");
+}
+
 //---------------------------- Benchmarks ---------------------------------------
+
 
 void TestArrayAccess()
 {
-	const int arraySize_ = 10000000;
+	const int arraySize_ = 100000000;
 	int* array = new int[arraySize_];
 
 
 	Start();
+
+
 	for (int i = 0; i < arraySize_; i++)
 	{
 		array[i] = i;
 	}
+
+	int* destinationArray = new int[arraySize_];
+	for (int i = 0; i < arraySize_; i++)
+	{
+		destinationArray[i] = array[i];
+	}
+	
 
 	auto time = GetTime();
 	WriteString("Write access time = ");
@@ -58,14 +90,20 @@ void TestArrayAccess()
 	WriteString("\r\n");
 	
 	delete[] array;
+	delete[] destinationArray;
 }
 
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	TestArrayAccess();
+	//TestArrayAccess();
 
+
+	Test("Sleep", []()
+	{
+		Sleep(1000);
+	});
 
 	getchar();
     return 0;
