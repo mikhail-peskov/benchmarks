@@ -4,7 +4,7 @@
 
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 1;
+const int testRepeatCount = 100;
 
 const int arraySize_ = 100000000;
 
@@ -268,9 +268,9 @@ void TestVectorRandomAccess()
 
 class TestInlineMethodsClass
 {
-	int summ(const int param1, const int param2) const
+	int InlineMethod(const int param1) const
 	{
-		return param1 + param2;
+		return param1;
 	}
 
 public:
@@ -285,7 +285,7 @@ public:
 			//--------------------------------------------------
 			for (int i = 0; i < arraySize_; i++)
 			{
-				summResult = summ(i, i);
+				summResult = InlineMethod(i);
 			}
 			//--------------------------------------------------
 
@@ -308,7 +308,7 @@ public:
 
 class TestNotInlineMethodsClass
 {
-	int summ(const int param1, const int param2) const;
+	int noInlineMethod(const int param1) const;
 	
 public:
 	void test()
@@ -322,7 +322,7 @@ public:
 			//--------------------------------------------------
 			for (int i = 0; i < arraySize_; i++)
 			{
-				summResult = summ(i, i);
+				summResult = noInlineMethod(i);
 			}
 			//--------------------------------------------------
 
@@ -342,9 +342,9 @@ public:
 	}
 };
 
-int TestNotInlineMethodsClass::summ(const int param1, const int param2) const
+int TestNotInlineMethodsClass::noInlineMethod(const int param1) const
 {
-	return param1 + param2;
+	return param1;
 }
 
 int main()
