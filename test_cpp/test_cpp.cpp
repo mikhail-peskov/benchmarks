@@ -1,7 +1,10 @@
 #include "stdafx.h"
 
 
+
 //---------------- Infrastructure ----------------------
+
+const int testRepeatCount = 1;
 
 _LARGE_INTEGER startCounter_;
 
@@ -39,7 +42,7 @@ void WriteDouble(double value)
 	fileOut_ << value;
 }
 
-void Test(const char* testName, std::function<void()> function, int avgIterationCount = 1)
+void Test(const char* testName, std::function<void()> function, int avgIterationCount = testRepeatCount)
 {
 	double summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < avgIterationCount; iterationIndes++)
@@ -65,25 +68,22 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 
 void TestArrayAccess()
 {
-	const int arraySize_ = 100000000;
-	int* array = new int[arraySize_];
+	const int arraySize = 100000000;
+	int* array = new int[arraySize];
 
-
-	Start();
-
-	Test("Array Fill", [array, arraySize_]()
+	Test("Array Fill", [array, arraySize]()
 	{
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < arraySize; i++)
 		{
 			array[i] = i;
 		}
 	});
 	
-	int* destinationArray = new int[arraySize_];
+	int* destinationArray = new int[arraySize];
 
-	Test("Array Copy", [array, destinationArray, arraySize_]()
+	Test("Array Copy", [array, destinationArray, arraySize]()
 	{
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < arraySize; i++)
 		{
 			destinationArray[i] = array[i];
 		}
@@ -94,10 +94,68 @@ void TestArrayAccess()
 	delete[] destinationArray;
 }
 
+void TestVectorAccess()
+{
+	const int arraySize = 100000000;
+
+	std::vector<int> vector(arraySize);
+
+
+	// ------------------- Fill -----------------------------------------------
+
+	double summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < arraySize; i++)
+		{
+			vector[i] = i;
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("Vector Fill = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+
+	// ------------------- Copy -----------------------------------------------
+
+
+	std::vector<int> destinationVector(arraySize);
+	summTime = 0;
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < arraySize; i++)
+		{
+			destinationVector[i] = vector[i];
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		time *= 1000.0;
+		summTime += time;
+	}
+	avgTime = summTime / testRepeatCount;
+	WriteString("Vector Copy = ");
+	WriteDouble(avgTime);
+	WriteString("ms\r\n");
+}
+
+
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
+	TestVectorAccess();
 	TestArrayAccess();
 
 

@@ -13,6 +13,6 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
-
+#include <vector>
 
 // TODO: reference additional headers your program requires here
