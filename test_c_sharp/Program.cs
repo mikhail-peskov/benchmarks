@@ -149,7 +149,7 @@ namespace test_c_sharp
 
         public static void DoSomethingWidthEmptyClass(EmptyClass emptyObj) { }
 
-        static void TestClassMemoryAllocation()
+        static void TestEmptyClassMemoryAllocation()
         {
             var array = new EmptyClass[testAllocationClassSize_];
 
@@ -193,9 +193,9 @@ namespace test_c_sharp
                 double collected = memoryBefore - memoryAfter;
                 //Console.WriteLine("Collected = {0}", collected);
 
-                // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
+                // объукт пустого класса  CLR = 10 байт: SyncBlock + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (12 + 4);
+                var mustCollectBytes = testAllocationClassSize_ * (8 + 4);
                 if (collected < mustCollectBytes) 
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -217,6 +217,67 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
         }
 
+        public class OneRefClass
+        {
+            public OneRefClass Reference1;
+        };
+
+        public static void DoSomethingWidthOneRefClassClass(OneRefClass emptyObj)
+        {
+        }
+
+
+        static void TestOneRefClassMemoryAllocation()
+        {
+            double summDeleteTime = 0;
+
+
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                var array = new OneRefClass[testAllocationClassSize_];
+
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new OneRefClass();
+                    int refIndex = (i + 1) % testAllocationClassSize_;
+                    array[i].Reference1 = array[refIndex];
+                }
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthOneRefClassClass(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
+                // плюс 4 байта - ячейка в массиве, плюс 4 байта - указатель
+                var mustCollectBytes = testAllocationClassSize_ * (8 + 4 + 4);
+                Console.WriteLine(collected);
+                Console.WriteLine(mustCollectBytes);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Class with 1 ref class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
 
         public static void DoSomethingWithArray(int[] array) { }
 
@@ -265,7 +326,7 @@ namespace test_c_sharp
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
                 // плюс 100 4-байтных чисел в самом массиве
-                var mustCollectBytes = testAllocationArraySize_ * (12 + 4 + 100 * 4);
+                var mustCollectBytes = testAllocationArraySize_ * (8 + 4 + 100 * 4);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -394,15 +455,16 @@ namespace test_c_sharp
 
     static void Main(string[] args)
         {
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
 
-            TestArrayAccess();
+            //TestArrayAccess();
             //TODO: попробовать unmanaged-доступ
 
-            TestClassMemoryAllocation();
-            TestArraysMemoryAllocation();
-            TestClassMemoryAllocationMT();
+            TestEmptyClassMemoryAllocation();
+            TestOneRefClassMemoryAllocation();
+            //TestArraysMemoryAllocation();
+            //TestClassMemoryAllocationMT();
 
             Console.ReadLine();
         }
