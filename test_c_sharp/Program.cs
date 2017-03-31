@@ -147,7 +147,7 @@ namespace test_c_sharp
         {
         };
 
-        public static void DoSomethingWidthEmptyClass(EmptyClass emptyObj) { }
+        public static void DoSomethingWidthEmptyClassArray(EmptyClass[] emptyObjArray) { }
 
         static void TestEmptyClassMemoryAllocation()
         {
@@ -182,7 +182,7 @@ namespace test_c_sharp
 
                 Start();
 
-                DoSomethingWidthEmptyClass(array[0]);
+                DoSomethingWidthEmptyClassArray(array);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
@@ -222,7 +222,7 @@ namespace test_c_sharp
             public OneRefClass Reference1;
         };
 
-        public static void DoSomethingWidthOneRefClassClass(OneRefClass emptyObj)
+        public static void DoSomethingWidthOneRefObjArray(OneRefClass[] emptyObj)
         {
         }
 
@@ -251,7 +251,7 @@ namespace test_c_sharp
 
                 Start();
 
-                DoSomethingWidthOneRefClassClass(array[0]);
+                DoSomethingWidthOneRefObjArray(array);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
                 
@@ -413,7 +413,7 @@ namespace test_c_sharp
 
                 Start();
 
-                DoSomethingWidthEmptyClass(array[0]);
+                DoSomethingWidthEmptyClassArray(array);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
