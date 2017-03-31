@@ -15,9 +15,9 @@ namespace test_c_sharp
         //---------------- Infrastructure ----------------------
         const int testRepeatCount = 1;
 
-        const int testAccessArraySize_ = 100000000;
-        const int testAllocationClassSize_ = 50000000;
-        const int testAllocationArraySize_ = 1000000;
+        const long testAccessArraySize_ = 100000000;
+        const long testAllocationClassSize_ = 50000000;
+        const long testAllocationArraySize_ = 1000000;
 
         static Stopwatch stopwatch_ = new Stopwatch();
 
@@ -180,6 +180,8 @@ namespace test_c_sharp
 
                 double memoryBefore = GC.GetTotalMemory(true);
 
+                Console.WriteLine("Memory before = {0}", memoryBefore);
+
                 Start();
 
                 DoSomethingWidthEmptyClassArray(array);
@@ -191,11 +193,13 @@ namespace test_c_sharp
                 summDeleteTime += time;
                 double memoryAfter = GC.GetTotalMemory(true);
                 double collected = memoryBefore - memoryAfter;
-                //Console.WriteLine("Collected = {0}", collected);
+
+                Console.WriteLine("Memory after = {0}", memoryAfter);
+                Console.WriteLine("Collected = {0}", collected);
 
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (8 + 4);
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
                 if (collected < mustCollectBytes) 
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -241,7 +245,7 @@ namespace test_c_sharp
                 for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     array[i] = new OneRefClass();
-                    int refIndex = (i + 1) % testAllocationClassSize_;
+                    long refIndex = (i + 1) % testAllocationClassSize_;
                     array[i].Reference1 = array[refIndex];
                 }
 
@@ -263,7 +267,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве, плюс 4 байта - указатель
-                var mustCollectBytes = testAllocationClassSize_ * (8 + 4 + 4);
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8 + 8);
                 Console.WriteLine(collected);
                 Console.WriteLine(mustCollectBytes);
                 if (collected < mustCollectBytes)
@@ -278,6 +282,78 @@ namespace test_c_sharp
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
         }
+        
+        public class FiveRefClass
+        {
+            public FiveRefClass Reference1;
+            public FiveRefClass Reference2;
+            public FiveRefClass Reference3;
+            public FiveRefClass Reference4;
+            public FiveRefClass Reference5;
+        };
+
+        public static void DoSomethingWidthFiveRefObjArray(FiveRefClass[] emptyObj)
+        {
+        }
+
+
+        static void TestFiveRefClassMemoryAllocation()
+        {
+            double summDeleteTime = 0;
+            
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                var array = new FiveRefClass[testAllocationClassSize_];
+
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new FiveRefClass();
+                    long refIndex = (i + 5) % testAllocationClassSize_;
+                    array[i].Reference1 = array[refIndex];
+                    array[i].Reference2 = array[refIndex - 1];
+                    array[i].Reference3 = array[refIndex - 2];
+                    array[i].Reference4 = array[refIndex = 3];
+                    array[i].Reference5 = array[refIndex - 4];
+                }
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthFiveRefObjArray(array);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
+                // плюс 4 байта - ячейка в массиве, плюс 4 байта - указатель
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8 + 8 * 5);
+                Console.WriteLine(collected);
+                Console.WriteLine(mustCollectBytes);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Class with 1 ref class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+
+
+
 
         public static void DoSomethingWithArray(int[] array) { }
 
@@ -326,7 +402,7 @@ namespace test_c_sharp
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
                 // плюс 100 4-байтных чисел в самом массиве
-                var mustCollectBytes = testAllocationArraySize_ * (8 + 4 + 100 * 4);
+                var mustCollectBytes = testAllocationArraySize_ * (16 + 8 + 100 * 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -368,7 +444,7 @@ namespace test_c_sharp
 
                 var allocThread2 = new Thread(() =>
                 {
-                    for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+                    for (long i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -377,7 +453,7 @@ namespace test_c_sharp
 
                 var allocThread3 = new Thread(() =>
                 {
-                    for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+                    for (long i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -385,7 +461,7 @@ namespace test_c_sharp
 
                 var allocThread4 = new Thread(() =>
                 {
-                    for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+                    for (long i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -426,7 +502,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + MethodTablePointer + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (12 + 4);
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
