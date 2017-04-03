@@ -198,7 +198,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8);
                 if (collected < mustCollectBytes) 
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -215,7 +215,7 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
 
             var avgDeleteTime = summDeleteTime / testRepeatCount;
-            WriteString("Delete Class Test = ");
+            WriteString("Delete Empty Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
         }
@@ -280,7 +280,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -369,7 +369,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*5);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -473,7 +473,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*10);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -593,7 +593,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*15);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -728,7 +728,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*20);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -940,6 +940,8 @@ namespace test_c_sharp
             TestTwentyRefClassMemoryAllocation();
             TestArraysMemoryAllocation();
             TestClassMemoryAllocationMT();
+
+            Console.WriteLine("--- Complete ---");
 
             Console.ReadLine();
         }
