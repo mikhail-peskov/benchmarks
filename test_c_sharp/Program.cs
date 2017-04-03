@@ -262,15 +262,15 @@ namespace test_c_sharp
                 double collected = memoryBefore - memoryAfter;
                 //Console.WriteLine("Collected = {0}", collected);
 
-                // объукт пустого класса  CLR = 10 байт: SyncBlock +  ReferenceTypePointer
-                // плюс 4 байта - ячейка в массиве
+                // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
                 // плюс 100 4-байтных чисел в самом массиве
-                var mustCollectBytes = testAllocationArraySize_ * (12 + 4 + 100 * 4);
+                var mustCollectBytes = testAllocationArraySize_ * (16 + 8 + 100 * 4);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
-                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
-                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
             var avgAllocationTime = summAllocationTime / testRepeatCount;
@@ -363,14 +363,14 @@ namespace test_c_sharp
                 double collected = memoryBefore - memoryAfter;
                 //Console.WriteLine("Collected = {0}", collected);
 
-                // объукт пустого класса  CLR = 10 байт: SyncBlock +  ReferenceTypePointer
-                // плюс 4 байта - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (12 + 4);
+                // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
-                //Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
-                //Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
         var avgTime = summAllocTime / testRepeatCount;
@@ -401,8 +401,8 @@ namespace test_c_sharp
             ////TODO: попробовать unmanaged-доступ
 
             TestClassMemoryAllocation();
-            //TestArraysMemoryAllocation();
-            //TestClassMemoryAllocationMT();
+            TestArraysMemoryAllocation();
+            TestClassMemoryAllocationMT();
 
             Console.ReadLine();
         }
