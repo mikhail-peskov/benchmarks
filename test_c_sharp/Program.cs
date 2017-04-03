@@ -193,9 +193,9 @@ namespace test_c_sharp
                 double collected = memoryBefore - memoryAfter;
                 //Console.WriteLine("Collected = {0}", collected);
 
-                // объукт пустого класса  CLR = 8 байт: SyncBlock + ReferenceTypePointer
-                // плюс 4 байта - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (8 + 4);
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
                 if (collected < mustCollectBytes) 
                     Console.WriteLine("!!! GC.Collect Wrong");
 
