@@ -253,7 +253,7 @@ namespace test_c_sharp
                 for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     long refIndex = (i + 1) % testAllocationClassSize_;
-                    array[i] = array[refIndex];
+                    array[i].Ref1 = array[refIndex];
                 }
                 //--------------------------------------------------
 
@@ -295,6 +295,94 @@ namespace test_c_sharp
         }
 
         #endregion
+
+#region -----------------------   Five Ref classs ----------------------------------
+
+        public class FiveRefClass
+        {
+            public FiveRefClass Ref1;
+            public FiveRefClass Ref2;
+            public FiveRefClass Ref3;
+            public FiveRefClass Ref4;
+            public FiveRefClass Ref5;
+        };
+
+        public static void DoSomethingWidthFiveRefObject(FiveRefClass emptyObj) { }
+
+
+        static void TestFiveRefClassMemoryAllocation()
+        {
+            var array = new FiveRefClass[testAllocationClassSize_];
+
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new FiveRefClass();
+                }
+
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    array[i].Ref1 = array[refIndex];
+                    refIndex = (i + 2) % testAllocationClassSize_;
+                    array[i].Ref2 = array[refIndex];
+                    refIndex = (i + 3) % testAllocationClassSize_;
+                    array[i].Ref3 = array[refIndex];
+                    refIndex = (i + 4) % testAllocationClassSize_;
+                    array[i].Ref4 = array[refIndex];
+                    refIndex = (i + 5) % testAllocationClassSize_;
+                    array[i].Ref5 = array[refIndex];
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthFiveRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            if (null != array)
+                Console.WriteLine("Something Wrong");
+
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete One Ref Class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+#endregion
+
+
 
         public static void DoSomethingWithArray(int[] array) { }
 
@@ -480,6 +568,7 @@ namespace test_c_sharp
 
             TestEmptyClassMemoryAllocation();
             TestOneRefClassMemoryAllocation();
+            TestFiveRefClassMemoryAllocation();
             //TestArraysMemoryAllocation();
             //TestClassMemoryAllocationMT();
 
