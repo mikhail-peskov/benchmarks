@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 10;
+        const int testRepeatCount = 2;
 
         const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 50000000;
@@ -111,22 +111,23 @@ namespace test_c_sharp
 
             // ------------------- Fill -----------------------------------------------
             double summTime = 0;
-            fixed (int* pArray = array)
-            {
-                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-                {
-                    Start();
 
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                fixed (int* pArray = array)
+                {
                     //--------------------------------------------------
                     for (int i = 0; i < arraySize_; i++)
                     {
                         pArray[i] = i;
                     }
                     //--------------------------------------------------
-
-                    var time = GetTime();
-                    summTime += time;
                 }
+
+                var time = GetTime();
+                summTime += time;
             }
 
             var avgTime = summTime / testRepeatCount;
@@ -139,23 +140,24 @@ namespace test_c_sharp
 
             var destinationArray = new int[arraySize_];
             summTime = 0;
-            fixed (int* pArray = array)
-            fixed (int* pDestinationArray = destinationArray)
-            {
-                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-                {
-                    Start();
 
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                fixed (int* pArray = array)
+                fixed (int* pDestinationArray = destinationArray)
+                {
                     //--------------------------------------------------
                     for (int i = 0; i < arraySize_; i++)
                     {
                         pDestinationArray[i] = pArray[i];
                     }
                     //--------------------------------------------------
-
-                    var time = GetTime();
-                    summTime += time;
                 }
+
+                var time = GetTime();
+                summTime += time;
             }
 
             avgTime = summTime / testRepeatCount;
@@ -997,22 +999,22 @@ namespace test_c_sharp
             TestArrayUnsafeAccess();
             Console.WriteLine("---------------------");
 
-            TestEmptyClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestOneRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestFiveRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestTenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestFifteenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestTwentyRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestArraysMemoryAllocation();
-            Console.WriteLine("---------------------");
-            TestClassMemoryAllocationMT();
-            Console.WriteLine("---------------------");
+            //TestEmptyClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestOneRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestFiveRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestTenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestFifteenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestTwentyRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestArraysMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //TestClassMemoryAllocationMT();
+            //Console.WriteLine("---------------------");
 
             Console.WriteLine("--- Complete ---");
 
