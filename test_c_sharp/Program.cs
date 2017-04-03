@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 2;
+        const int testRepeatCount = 1;
 
         const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 50000000;
@@ -207,7 +207,7 @@ namespace test_c_sharp
             }
         }
 
-#region -----------------------   Empty classs ----------------------------------
+        #region -----------------------   Empty classs ----------------------------------
 
         public class EmptyClass
         {
@@ -265,7 +265,7 @@ namespace test_c_sharp
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
                 var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8);
-                if (collected < mustCollectBytes) 
+                if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
                 Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
@@ -284,9 +284,9 @@ namespace test_c_sharp
         }
 
 
-#endregion
+        #endregion
 
-#region -----------------------   One Ref classs ----------------------------------
+        #region -----------------------   One Ref classs ----------------------------------
 
         public class OneRefClass
         {
@@ -349,7 +349,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
-       
+
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete One Ref Class Test = ");
             WriteDouble(avgDeleteTime);
@@ -358,7 +358,7 @@ namespace test_c_sharp
 
         #endregion
 
-#region -----------------------   Five Ref classs ----------------------------------
+        #region -----------------------   Five Ref classs ----------------------------------
 
         public class FiveRefClass
         {
@@ -426,7 +426,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*5);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 5);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -440,10 +440,10 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
         }
 
-#endregion
+        #endregion
 
 
-#region -----------------------   Ten Ref classs ----------------------------------
+        #region -----------------------   Ten Ref classs ----------------------------------
 
         public class TenRefClass
         {
@@ -525,7 +525,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*10);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 10);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -542,7 +542,7 @@ namespace test_c_sharp
         #endregion
 
 
-#region -----------------------   Fifteen Ref classs ----------------------------------
+        #region -----------------------   Fifteen Ref classs ----------------------------------
 
         public class FifteenRefClass
         {
@@ -640,7 +640,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*15);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 15);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -657,7 +657,7 @@ namespace test_c_sharp
         #endregion
 
 
-#region -----------------------   Twenty Ref classs ----------------------------------
+        #region -----------------------   Twenty Ref classs ----------------------------------
 
         public class TwentyRefClass
         {
@@ -770,7 +770,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8*20);
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 20);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -904,7 +904,7 @@ namespace test_c_sharp
                 allocThread2.Start();
                 allocThread3.Start();
                 allocThread4.Start();
-                
+
                 allocThread1.Join();
                 allocThread2.Join();
                 allocThread3.Join();
@@ -943,53 +943,68 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-        var avgTime = summAllocTime / testRepeatCount;
+            var avgTime = summAllocTime / testRepeatCount;
 
-        WriteString("New Class Test MT = ");
+            WriteString("New Class Test MT = ");
 
-        WriteDouble(avgTime);
+            WriteDouble(avgTime);
 
-        WriteString(" ms\r\n");
+            WriteString(" ms\r\n");
 
-        avgTime = summDeleteTime / testRepeatCount;
+            avgTime = summDeleteTime / testRepeatCount;
 
-        WriteString("Delete Class Test MT = ");
+            WriteString("Delete Class Test MT = ");
 
-        WriteDouble(avgTime);
+            WriteDouble(avgTime);
 
-        WriteString(" ms\r\n");
-            
-    }
+            WriteString(" ms\r\n");
+
+        }
 
 
-    static void Main(string[] args)
+        static void Main(string[] args)
         {
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Restart();
+
             TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
             testInlineMethodsObject.test();
             Console.WriteLine("---------------------");
+            file_.Flush();
 
             TestArrayAccess();
             TestArrayUnsafeAccess();
             Console.WriteLine("---------------------");
+            file_.Flush();
 
             TestEmptyClassMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestOneRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestFiveRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestTenRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestFifteenRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestTwentyRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestArraysMemoryAllocation();
             Console.WriteLine("---------------------");
+            file_.Flush();
             TestClassMemoryAllocationMT();
             Console.WriteLine("---------------------");
+            file_.Flush();
 
             Console.WriteLine("--- Complete ---");
+
+            Console.WriteLine("Total Time = {0}", totalStopwatch.Elapsed.ToString());
 
             file_.Close();
 
