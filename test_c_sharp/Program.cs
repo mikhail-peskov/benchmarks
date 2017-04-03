@@ -50,9 +50,7 @@ namespace test_c_sharp
 
         static void TestArrayAccess()
         {
-            const int arraySize_ = 100000000;
-
-            var array = new int[arraySize_];
+            var array = new int[testAccessArraySize_];
 
 
             // ------------------- Fill -----------------------------------------------
@@ -63,7 +61,7 @@ namespace test_c_sharp
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < arraySize_; i++)
+                for (int i = 0; i < testAccessArraySize_; i++)
                 {
                     array[i] = i;
                 }
@@ -80,14 +78,14 @@ namespace test_c_sharp
             // ------------------- Copy -----------------------------------------------
 
 
-            var destinationArray = new int[arraySize_];
+            var destinationArray = new int[testAccessArraySize_];
             summTime = 0;
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < arraySize_; i++)
+                for (int i = 0; i < testAccessArraySize_; i++)
                 {
                     destinationArray[i] = array[i];
                 }
@@ -104,9 +102,7 @@ namespace test_c_sharp
 
         static unsafe void TestArrayUnsafeAccess()
         {
-            const int arraySize_ = 100000000;
-
-            var array = new int[arraySize_];
+            var array = new int[testAccessArraySize_];
 
 
             // ------------------- Fill -----------------------------------------------
@@ -119,7 +115,7 @@ namespace test_c_sharp
                 fixed (int* pArray = array)
                 {
                     //--------------------------------------------------
-                    for (int i = 0; i < arraySize_; i++)
+                    for (int i = 0; i < testAccessArraySize_; i++)
                     {
                         pArray[i] = i;
                     }
@@ -138,7 +134,7 @@ namespace test_c_sharp
             // ------------------- Copy -----------------------------------------------
 
 
-            var destinationArray = new int[arraySize_];
+            var destinationArray = new int[testAccessArraySize_];
             summTime = 0;
 
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
@@ -149,7 +145,7 @@ namespace test_c_sharp
                 fixed (int* pDestinationArray = destinationArray)
                 {
                     //--------------------------------------------------
-                    for (int i = 0; i < arraySize_; i++)
+                    for (int i = 0; i < testAccessArraySize_; i++)
                     {
                         pDestinationArray[i] = pArray[i];
                     }
@@ -165,6 +161,12 @@ namespace test_c_sharp
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
         }
+
+        void TestArrayRandomAccess()
+        {
+            
+        }
+
 
         class TestInlineMethodsClass
         {
@@ -967,40 +969,41 @@ namespace test_c_sharp
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Restart();
 
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             TestArrayAccess();
             TestArrayUnsafeAccess();
+            TestArrayRandomAccess();
             Console.WriteLine("---------------------");
             file_.Flush();
 
-            TestEmptyClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestOneRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFiveRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFifteenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTwentyRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestArraysMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestClassMemoryAllocationMT();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestEmptyClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestOneRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFiveRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFifteenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTwentyRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestArraysMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestClassMemoryAllocationMT();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             Console.WriteLine("--- Complete ---");
 
@@ -1012,3 +1015,4 @@ namespace test_c_sharp
         }
     }
 }
+    
