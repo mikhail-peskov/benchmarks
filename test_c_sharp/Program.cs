@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 1;
+        const int testRepeatCount = 2;
 
         const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 50000000;
@@ -990,19 +990,18 @@ namespace test_c_sharp
 
     static void Main(string[] args)
         {
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
-
-            Console.WriteLine("---------------------");
-
-            TestArrayAccess();
-            TestArrayUnsafeAccess();
-            Console.WriteLine("---------------------");
-
-            //TestEmptyClassMemoryAllocation();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
             //Console.WriteLine("---------------------");
-            //TestOneRefClassMemoryAllocation();
+
+            //TestArrayAccess();
+            //TestArrayUnsafeAccess();
             //Console.WriteLine("---------------------");
+
+            TestEmptyClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            TestOneRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
             //TestFiveRefClassMemoryAllocation();
             //Console.WriteLine("---------------------");
             //TestTenRefClassMemoryAllocation();
