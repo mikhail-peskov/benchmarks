@@ -375,12 +375,232 @@ namespace test_c_sharp
 
 
             var avgDeleteTime = summDeleteTime / testRepeatCount;
-            WriteString("Delete One Ref Class Test = ");
+            WriteString("Delete Five Ref Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
         }
 
 #endregion
+
+
+#region -----------------------   Ten Ref classs ----------------------------------
+
+        public class TenRefClass
+        {
+            public TenRefClass Ref1;
+            public TenRefClass Ref2;
+            public TenRefClass Ref3;
+            public TenRefClass Ref4;
+            public TenRefClass Ref5;
+            public TenRefClass Ref6;
+            public TenRefClass Ref7;
+            public TenRefClass Ref8;
+            public TenRefClass Ref9;
+            public TenRefClass Ref10;
+        };
+
+        public static void DoSomethingWidthTenRefObject(TenRefClass emptyObj) { }
+
+
+        static void TestTenRefClassMemoryAllocation()
+        {
+            var array = new TenRefClass[testAllocationClassSize_];
+
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new TenRefClass();
+                }
+
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    array[i].Ref1 = array[refIndex];
+                    refIndex = (i + 2) % testAllocationClassSize_;
+                    array[i].Ref2 = array[refIndex];
+                    refIndex = (i + 3) % testAllocationClassSize_;
+                    array[i].Ref3 = array[refIndex];
+                    refIndex = (i + 4) % testAllocationClassSize_;
+                    array[i].Ref4 = array[refIndex];
+                    refIndex = (i + 5) % testAllocationClassSize_;
+                    array[i].Ref5 = array[refIndex];
+                    refIndex = (i + 6) % testAllocationClassSize_;
+                    array[i].Ref6 = array[refIndex];
+                    refIndex = (i + 7) % testAllocationClassSize_;
+                    array[i].Ref7 = array[refIndex];
+                    refIndex = (i + 8) % testAllocationClassSize_;
+                    array[i].Ref8 = array[refIndex];
+                    refIndex = (i + 9) % testAllocationClassSize_;
+                    array[i].Ref9 = array[refIndex];
+                    refIndex = (i + 10) % testAllocationClassSize_;
+                    array[i].Ref10 = array[refIndex];
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthTenRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            if (null != array)
+                Console.WriteLine("Something Wrong");
+
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Ten Ref Class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
+
+#region -----------------------   Fifteen Ref classs ----------------------------------
+
+        public class FifteenRefClass
+        {
+            public FifteenRefClass Ref1;
+            public FifteenRefClass Ref2;
+            public FifteenRefClass Ref3;
+            public FifteenRefClass Ref4;
+            public FifteenRefClass Ref5;
+            public FifteenRefClass Ref6;
+            public FifteenRefClass Ref7;
+            public FifteenRefClass Ref8;
+            public FifteenRefClass Ref9;
+            public FifteenRefClass Ref10;
+            public FifteenRefClass Ref11;
+            public FifteenRefClass Ref12;
+            public FifteenRefClass Ref13;
+            public FifteenRefClass Ref14;
+            public FifteenRefClass Ref15;
+        };
+
+        public static void DoSomethingWidthFifteenRefObject(FifteenRefClass emptyObj) { }
+
+
+        static void TestFifteenRefClassMemoryAllocation()
+        {
+            var array = new FifteenRefClass[testAllocationClassSize_];
+
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new FifteenRefClass();
+                }
+
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    array[i].Ref1 = array[refIndex];
+                    refIndex = (i + 2) % testAllocationClassSize_;
+                    array[i].Ref2 = array[refIndex];
+                    refIndex = (i + 3) % testAllocationClassSize_;
+                    array[i].Ref3 = array[refIndex];
+                    refIndex = (i + 4) % testAllocationClassSize_;
+                    array[i].Ref4 = array[refIndex];
+                    refIndex = (i + 5) % testAllocationClassSize_;
+                    array[i].Ref5 = array[refIndex];
+                    refIndex = (i + 6) % testAllocationClassSize_;
+                    array[i].Ref6 = array[refIndex];
+                    refIndex = (i + 7) % testAllocationClassSize_;
+                    array[i].Ref7 = array[refIndex];
+                    refIndex = (i + 8) % testAllocationClassSize_;
+                    array[i].Ref8 = array[refIndex];
+                    refIndex = (i + 9) % testAllocationClassSize_;
+                    array[i].Ref9 = array[refIndex];
+                    refIndex = (i + 10) % testAllocationClassSize_;
+                    array[i].Ref10 = array[refIndex];
+                    refIndex = (i + 11) % testAllocationClassSize_;
+                    array[i].Ref11 = array[refIndex];
+                    refIndex = (i + 12) % testAllocationClassSize_;
+                    array[i].Ref12 = array[refIndex];
+                    refIndex = (i + 13) % testAllocationClassSize_;
+                    array[i].Ref13 = array[refIndex];
+                    refIndex = (i + 14) % testAllocationClassSize_;
+                    array[i].Ref14 = array[refIndex];
+                    refIndex = (i + 15) % testAllocationClassSize_;
+                    array[i].Ref15 = array[refIndex];
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthFifteenRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            if (null != array)
+                Console.WriteLine("Something Wrong");
+
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Fifteen Ref Class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
 
 
 
@@ -569,6 +789,8 @@ namespace test_c_sharp
             TestEmptyClassMemoryAllocation();
             TestOneRefClassMemoryAllocation();
             TestFiveRefClassMemoryAllocation();
+            TestTenRefClassMemoryAllocation();
+            TestFifteenRefClassMemoryAllocation();
             //TestArraysMemoryAllocation();
             //TestClassMemoryAllocationMT();
 
