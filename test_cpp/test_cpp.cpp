@@ -180,6 +180,8 @@ void TestArrayRandomAccess()
 	int* sourceArray = new int[testAccessArraySize_];
 	int* destinationArray = new int[testAccessArraySize_];
 
+	srand(time(NULL));
+
 	for (int i = 0; i < testAccessArraySize_; i++) {
 		indexArray[i] = rand() % testAccessArraySize_;
 	}
@@ -219,6 +221,8 @@ void TestVectorRandomAccess()
 	std::vector<int> indexArray(testAccessArraySize_);
 	std::vector<int> sourceArray(testAccessArraySize_);
 	std::vector<int> destinationArray(testAccessArraySize_);
+
+	srand(time(NULL));
 
 	for (int i = 0; i < testAccessArraySize_; i++) {
 		indexArray[i] = rand() % testAccessArraySize_;

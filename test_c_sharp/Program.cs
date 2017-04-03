@@ -100,6 +100,59 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
         }
 
+        static void TestListAccess()
+        {
+            var array = new List<int>(testAccessArraySize_);
+
+
+            // ------------------- Fill -----------------------------------------------
+
+            double summTime = 0;
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAccessArraySize_; i++)
+                {
+                    array[i] = i;
+                }
+                //--------------------------------------------------
+
+                var time = GetTime();
+                summTime += time;
+            }
+            var avgTime = summTime / testRepeatCount;
+            WriteString("Array Fill = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+
+            // ------------------- Copy -----------------------------------------------
+
+
+            var destinationArray = new List<int>(testAccessArraySize_);
+            summTime = 0;
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAccessArraySize_; i++)
+                {
+                    destinationArray[i] = array[i];
+                }
+                //--------------------------------------------------
+
+                var time = GetTime();
+                summTime += time;
+            }
+            avgTime = summTime / testRepeatCount;
+            WriteString("Array Copy = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+
+
         static unsafe void TestArrayUnsafeAccess()
         {
             var array = new int[testAccessArraySize_];
@@ -1052,6 +1105,7 @@ namespace test_c_sharp
             //file_.Flush();
 
             TestArrayAccess();
+            TestListAccess();
             TestArrayUnsafeAccess();
             TestArrayRandomAccess();
             TestArrayRandomAccessUnsafe();
