@@ -394,8 +394,8 @@ namespace test_c_sharp
 
     static void Main(string[] args)
         {
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
 
             //TestArrayAccess();
             ////TODO: попробовать unmanaged-доступ
