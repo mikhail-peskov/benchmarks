@@ -15,9 +15,9 @@ namespace test_c_sharp
         //---------------- Infrastructure ----------------------
         const int testRepeatCount = 1;
 
-        const long testAccessArraySize_ = 100000000;
-        const long testAllocationClassSize_ = 50000000;
-        const long testAllocationArraySize_ = 1000000;
+        const int testAccessArraySize_ = 100000000;
+        const int testAllocationClassSize_ = 50000000;
+        const int testAllocationArraySize_ = 1000000;
 
         static Stopwatch stopwatch_ = new Stopwatch();
 
@@ -170,7 +170,7 @@ namespace test_c_sharp
                 Start();
 
                 //--------------------------------------------------
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     array[i] = new EmptyClass();
                 }
@@ -249,12 +249,12 @@ namespace test_c_sharp
 
 
                 //--------------------------------------------------
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     array[i] = new OneRefClass();
                 }
 
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     long refIndex = (i + 1) % testAllocationClassSize_;
                     array[i].Ref1 = array[refIndex];
@@ -280,7 +280,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8 + 8);
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -330,7 +330,7 @@ namespace test_c_sharp
 
 
                 //--------------------------------------------------
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     array[i] = new FiveRefClass();
                 }
@@ -424,12 +424,12 @@ namespace test_c_sharp
 
 
                 //--------------------------------------------------
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     array[i] = new TenRefClass();
                 }
 
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     long refIndex = (i + 1) % testAllocationClassSize_;
                     array[i].Ref1 = array[refIndex];
@@ -534,12 +534,12 @@ namespace test_c_sharp
 
 
                 //--------------------------------------------------
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     array[i] = new FifteenRefClass();
                 }
 
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     long refIndex = (i + 1) % testAllocationClassSize_;
                     array[i].Ref1 = array[refIndex];
@@ -663,7 +663,7 @@ namespace test_c_sharp
                     array[i] = new TwentyRefClass();
                 }
 
-                for (long i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < testAllocationClassSize_; i++)
                 {
                     long refIndex = (i + 1) % testAllocationClassSize_;
                     array[i].Ref1 = array[refIndex];
@@ -768,7 +768,7 @@ namespace test_c_sharp
                 Start();
 
                 //--------------------------------------------------
-                for (long i = 0; i < testAllocationArraySize_; i++)
+                for (int i = 0; i < testAllocationArraySize_; i++)
                 {
                     array[i] = new int[100];
                 }
@@ -831,7 +831,7 @@ namespace test_c_sharp
 
                 var allocThread1 = new Thread(() =>
                     {
-                        for (long i = 0; i < testAllocationClassSize_ / 4; i++)
+                        for (int i = 0; i < testAllocationClassSize_ / 4; i++)
                         {
                             array[i] = new EmptyClass();
                         }
@@ -839,7 +839,7 @@ namespace test_c_sharp
 
                 var allocThread2 = new Thread(() =>
                 {
-                    for (long i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+                    for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -848,7 +848,7 @@ namespace test_c_sharp
 
                 var allocThread3 = new Thread(() =>
                 {
-                    for (long i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+                    for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -856,7 +856,7 @@ namespace test_c_sharp
 
                 var allocThread4 = new Thread(() =>
                 {
-                    for (long i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+                    for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -930,7 +930,7 @@ namespace test_c_sharp
             testInlineMethodsObject.test();
 
             TestArrayAccess();
-            ////TODO: попробовать unmanaged-доступ
+            //TODO: попробовать unmanaged-доступ
 
             TestEmptyClassMemoryAllocation();
             TestOneRefClassMemoryAllocation();
