@@ -991,6 +991,8 @@ namespace test_c_sharp
 
             Console.WriteLine("--- Complete ---");
 
+            file_.Close();
+
             Console.ReadLine();
         }
     }
