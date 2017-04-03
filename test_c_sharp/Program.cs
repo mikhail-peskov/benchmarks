@@ -160,7 +160,8 @@ namespace test_c_sharp
             double summAllocationTime = 0;
             double summDeleteTime = 0;
 
-
+            // прогреваем метод
+            DoSomethingWidthEmptyObject(null);
 
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
@@ -239,6 +240,9 @@ namespace test_c_sharp
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
 
+            // прогреваем метод
+            DoSomethingWidthOneRefObject(null);
+
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
@@ -316,6 +320,9 @@ namespace test_c_sharp
 
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
+
+            // прогреваем метод
+            DoSomethingWidthFiveRefObject(null);
 
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
@@ -408,6 +415,8 @@ namespace test_c_sharp
 
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
+
+            DoSomethingWidthTenRefObject(null);
 
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
@@ -515,6 +524,9 @@ namespace test_c_sharp
 
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
+
+            // прогреваем метод
+            DoSomethingWidthFifteenRefObject(null);
 
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
@@ -637,6 +649,8 @@ namespace test_c_sharp
 
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
+
+            DoSomethingWidthTwentyRefObject(null);
 
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
@@ -924,8 +938,8 @@ namespace test_c_sharp
             TestTenRefClassMemoryAllocation();
             TestFifteenRefClassMemoryAllocation();
             TestTwentyRefClassMemoryAllocation();
-            //TestArraysMemoryAllocation();
-            //TestClassMemoryAllocationMT();
+            TestArraysMemoryAllocation();
+            TestClassMemoryAllocationMT();
 
             Console.ReadLine();
         }
