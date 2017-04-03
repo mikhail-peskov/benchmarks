@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 1;
+        const int testRepeatCount = 2;
 
         const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 50000000;
@@ -102,9 +102,8 @@ namespace test_c_sharp
 
         static void TestListAccess()
         {
-            var array = new List<int>(testAccessArraySize_);
-
-
+            var array = new List<int>(new int[testAccessArraySize_]);
+            
             // ------------------- Fill -----------------------------------------------
 
             double summTime = 0;
@@ -123,14 +122,14 @@ namespace test_c_sharp
                 summTime += time;
             }
             var avgTime = summTime / testRepeatCount;
-            WriteString("Array Fill = ");
+            WriteString("List Fill = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
 
             // ------------------- Copy -----------------------------------------------
 
 
-            var destinationArray = new List<int>(testAccessArraySize_);
+            var destinationArray = new List<int>(new int[testAccessArraySize_]);
             summTime = 0;
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
@@ -147,7 +146,7 @@ namespace test_c_sharp
                 summTime += time;
             }
             avgTime = summTime / testRepeatCount;
-            WriteString("Array Copy = ");
+            WriteString("List Copy = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
         }
@@ -248,12 +247,11 @@ namespace test_c_sharp
             }
 
             var avgTime = summTime / testRepeatCount;
-            WriteString("Test Random Access = ");
+            WriteString("Array Random Access = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
         }
-
-
+        
         static unsafe void TestArrayRandomAccessUnsafe()
         {
             var indexArray = new int[testAccessArraySize_];
@@ -292,7 +290,45 @@ namespace test_c_sharp
             }
 
             var avgTime = summTime / testRepeatCount;
-            WriteString("Test Random Access Unsafe = ");
+            WriteString("Array Random Access Unsafe = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+        
+        static void TestListRandomAccess()
+        {
+            var indexArray = new List<int>(new int[testAccessArraySize_]);
+            var indexRandom = new Random();
+            for (int i = 0; i < testAccessArraySize_; i++)
+            {
+                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+            }
+
+            var sourceArray = new List<int>(new int[testAccessArraySize_]);
+            for (int i = 0; i < testAccessArraySize_; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new List<int>(new int[testAccessArraySize_]);
+            double summTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                for (int i = 0; i < testAccessArraySize_; i++)
+                {
+                    int index = indexArray[i];
+                    destinationArray[index] = sourceArray[index];
+                }
+
+                var time = GetTime();
+                summTime += time;
+            }
+
+            var avgTime = summTime / testRepeatCount;
+            WriteString("List Random Access = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
         }
@@ -1099,43 +1135,45 @@ namespace test_c_sharp
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Restart();
 
-            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            //testInlineMethodsObject.test();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-
-            TestArrayAccess();
-            TestListAccess();
-            TestArrayUnsafeAccess();
-            TestArrayRandomAccess();
-            TestArrayRandomAccessUnsafe();
+            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            testInlineMethodsObject.test();
             Console.WriteLine("---------------------");
             file_.Flush();
 
-            //TestEmptyClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestOneRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestFiveRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestTenRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestFifteenRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestTwentyRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestArraysMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestClassMemoryAllocationMT();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestArrayAccess();
+            TestArrayUnsafeAccess();
+            TestListAccess();
+            
+            TestArrayRandomAccess();
+            TestArrayRandomAccessUnsafe();
+            TestListRandomAccess();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+
+            TestEmptyClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestOneRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestFiveRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestTenRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestFifteenRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestTwentyRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestArraysMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestClassMemoryAllocationMT();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
             Console.WriteLine("--- Complete ---");
 
