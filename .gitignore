@@ -59,3 +59,7 @@ benchmarks.VC.db
 *.db
 /test_cpp/x64/Release
 /test_cpp/Release
+x64/Release/test_cpp.exe
+*.pdb
+*.iobj
+x64/Release/test_cpp.ipdb
