@@ -56,3 +56,4 @@ test_cpp/test_cpp.vcxproj.user
 *.opendb
 *.suo
 benchmarks.VC.db
+*.db
