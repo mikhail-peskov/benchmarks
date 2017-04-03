@@ -602,6 +602,138 @@ namespace test_c_sharp
         #endregion
 
 
+#region -----------------------   Twenty Ref classs ----------------------------------
+
+        public class TwentyRefClass
+        {
+            public TwentyRefClass Ref1;
+            public TwentyRefClass Ref2;
+            public TwentyRefClass Ref3;
+            public TwentyRefClass Ref4;
+            public TwentyRefClass Ref5;
+            public TwentyRefClass Ref6;
+            public TwentyRefClass Ref7;
+            public TwentyRefClass Ref8;
+            public TwentyRefClass Ref9;
+            public TwentyRefClass Ref10;
+            public TwentyRefClass Ref11;
+            public TwentyRefClass Ref12;
+            public TwentyRefClass Ref13;
+            public TwentyRefClass Ref14;
+            public TwentyRefClass Ref15;
+            public TwentyRefClass Ref16;
+            public TwentyRefClass Ref17;
+            public TwentyRefClass Ref18;
+            public TwentyRefClass Ref19;
+            public TwentyRefClass Ref20;
+        };
+
+        public static void DoSomethingWidthTwentyRefObject(TwentyRefClass emptyObj) { }
+
+
+        static void TestTwentyRefClassMemoryAllocation()
+        {
+            var array = new TwentyRefClass[testAllocationClassSize_];
+
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new TwentyRefClass();
+                }
+
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    array[i].Ref1 = array[refIndex];
+                    refIndex = (i + 2) % testAllocationClassSize_;
+                    array[i].Ref2 = array[refIndex];
+                    refIndex = (i + 3) % testAllocationClassSize_;
+                    array[i].Ref3 = array[refIndex];
+                    refIndex = (i + 4) % testAllocationClassSize_;
+                    array[i].Ref4 = array[refIndex];
+                    refIndex = (i + 5) % testAllocationClassSize_;
+                    array[i].Ref5 = array[refIndex];
+                    refIndex = (i + 6) % testAllocationClassSize_;
+                    array[i].Ref6 = array[refIndex];
+                    refIndex = (i + 7) % testAllocationClassSize_;
+                    array[i].Ref7 = array[refIndex];
+                    refIndex = (i + 8) % testAllocationClassSize_;
+                    array[i].Ref8 = array[refIndex];
+                    refIndex = (i + 9) % testAllocationClassSize_;
+                    array[i].Ref9 = array[refIndex];
+                    refIndex = (i + 10) % testAllocationClassSize_;
+                    array[i].Ref10 = array[refIndex];
+
+                    refIndex = (i + 11) % testAllocationClassSize_;
+                    array[i].Ref11 = array[refIndex];
+                    refIndex = (i + 12) % testAllocationClassSize_;
+                    array[i].Ref12 = array[refIndex];
+                    refIndex = (i + 13) % testAllocationClassSize_;
+                    array[i].Ref13 = array[refIndex];
+                    refIndex = (i + 14) % testAllocationClassSize_;
+                    array[i].Ref14 = array[refIndex];
+                    refIndex = (i + 15) % testAllocationClassSize_;
+                    array[i].Ref15 = array[refIndex];
+                    refIndex = (i + 16) % testAllocationClassSize_;
+                    array[i].Ref16 = array[refIndex];
+                    refIndex = (i + 17) % testAllocationClassSize_;
+                    array[i].Ref17 = array[refIndex];
+                    refIndex = (i + 18) % testAllocationClassSize_;
+                    array[i].Ref18 = array[refIndex];
+                    refIndex = (i + 19) % testAllocationClassSize_;
+                    array[i].Ref19 = array[refIndex];
+                    refIndex = (i + 20) % testAllocationClassSize_;
+                    array[i].Ref20 = array[refIndex];
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthTwentyRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            if (null != array)
+                Console.WriteLine("Something Wrong");
+
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Twenty Ref Class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
 
 
         public static void DoSomethingWithArray(int[] array) { }
@@ -791,6 +923,7 @@ namespace test_c_sharp
             TestFiveRefClassMemoryAllocation();
             TestTenRefClassMemoryAllocation();
             TestFifteenRefClassMemoryAllocation();
+            TestTwentyRefClassMemoryAllocation();
             //TestArraysMemoryAllocation();
             //TestClassMemoryAllocationMT();
 
