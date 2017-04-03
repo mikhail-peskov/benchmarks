@@ -67,38 +67,9 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 //---------------------------- Benchmarks ---------------------------------------
 
 
-void TestArrayAccessLambda()
-{
-	int* array = new int[testAccessArraySize_];
-
-	Test("Array Fill Lambda", [array]()
-	{
-		for (int i = 0; i < testAccessArraySize_; i++)
-		{
-			array[i] = i;
-		}
-	});
-	
-	int* destinationArray = new int[testAccessArraySize_];
-
-	Test("Array Copy Lambda", [array, destinationArray]()
-	{
-		for (int i = 0; i < testAccessArraySize_; i++)
-		{
-			destinationArray[i] = array[i];
-		}
-
-	});
-
-	delete[] array;
-	delete[] destinationArray;
-}
-
 void TestArrayAccess()
 {
-	const int arraySize_ = 100000000;
-
-	int* array = new int[arraySize_];
+	int* array = new int[testAccessArraySize_];
 
 
 	// ------------------- Fill -----------------------------------------------
@@ -109,7 +80,7 @@ void TestArrayAccess()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
 			array[i] = i;
 		}
@@ -126,14 +97,14 @@ void TestArrayAccess()
 	// ------------------- Copy -----------------------------------------------
 
 
-	int* destinationArray = new int[arraySize_];
+	int* destinationArray = new int[testAccessArraySize_];
 	summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < arraySize_; i++)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
 			destinationArray[i] = array[i];
 		}
@@ -203,61 +174,45 @@ void TestVectorAccess()
 	WriteString("ms\r\n");
 }
 
-
-void TestVectorRandomAccess()
+void TestArrayRandomAccess()
 {
-	std::vector<int> vector(testAccessArraySize_);
+	int* indexArray = new int[testAccessArraySize_];
+	int* sourceArray = new int[testAccessArraySize_];
+	int* destinationArray = new int[testAccessArraySize_];
 
+	for (int i = 0; i < testAccessArraySize_; i++) {
+		indexArray[i] = rand() % testAccessArraySize_;
+	}
 
-	// ------------------- Fill -----------------------------------------------
+	for (int i = 0; i < testAccessArraySize_; i++) {
+		sourceArray[i] = i;
+	}
 
 	double summTime = 0;
+
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
 		Start();
 
-		//--------------------------------------------------
-		for (int forwardIndex = 0, backwardIndex = testAccessArraySize_ - 1; forwardIndex < testAccessArraySize_ / 2; forwardIndex++, backwardIndex--)
+		for (int i = 0; i < testAccessArraySize_; i++)
 		{
-			vector[forwardIndex] = forwardIndex;
-			vector[backwardIndex] = forwardIndex;
+			int index = indexArray[i];
+			destinationArray[index] = sourceArray[index];
 		}
-		//--------------------------------------------------
 
 		auto time = GetTime();
 		summTime += time;
 	}
+
 	auto avgTime = summTime / testRepeatCount;
-	WriteString("Rand. Access Vector Fill = ");
+	WriteString("Test Random Access = ");
 	WriteDouble(avgTime);
-	WriteString("ms\r\n");
+	WriteString(" ms\r\n");
 
-	// ------------------- Copy -----------------------------------------------
-
-
-	std::vector<int> destinationVector(testAccessArraySize_);
-	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
-	{
-		Start();
-
-		//--------------------------------------------------
-		for (int forwardIndex = 0, backwardIndex = testAccessArraySize_ - 1; forwardIndex < testAccessArraySize_ / 2; forwardIndex++, backwardIndex--)
-		{
-			destinationVector[forwardIndex] = vector[backwardIndex];
-			destinationVector[backwardIndex] = vector[forwardIndex];
-		}
-		//--------------------------------------------------
-
-		auto time = GetTime();
-		summTime += time;
-	}
-	avgTime = summTime / testRepeatCount;
-	WriteString("Rand. Access Vector Copy = ");
-	WriteDouble(avgTime);
-	WriteString("ms\r\n");
+	delete[] indexArray;
+	delete[] sourceArray;
+	delete[] destinationArray;
 }
-
 
 class TestInlineMethodsClass
 {
@@ -622,18 +577,18 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	TestInlineMethodsClass testInline;
-	testInline.test();
+	//TestInlineMethodsClass testInline;
+	//testInline.test();
 
-	TestNoInlineMethodsClass testNoInline;
-	testNoInline.test();
-
-	TestArrayAccessLambda();
+	//TestNoInlineMethodsClass testNoInline;
+	//testNoInline.test();
+		
 	TestArrayAccess();
 	TestVectorAccess();
-	//TestVectorRandomAccess();
+	
+	TestArrayRandomAccess();
 
-	TestClassMemoryAllocation();
+	//TestClassMemoryAllocation();
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
 
