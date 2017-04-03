@@ -214,6 +214,43 @@ void TestArrayRandomAccess()
 	delete[] destinationArray;
 }
 
+void TestVectorRandomAccess()
+{
+	std::vector<int> indexArray(testAccessArraySize_);
+	std::vector<int> sourceArray(testAccessArraySize_);
+	std::vector<int> destinationArray(testAccessArraySize_);
+
+	for (int i = 0; i < testAccessArraySize_; i++) {
+		indexArray[i] = rand() % testAccessArraySize_;
+	}
+
+	for (int i = 0; i < testAccessArraySize_; i++) {
+		sourceArray[i] = i;
+	}
+
+	double summTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		for (int i = 0; i < testAccessArraySize_; i++)
+		{
+			int index = indexArray[i];
+			destinationArray[index] = sourceArray[index];
+		}
+
+		auto time = GetTime();
+		summTime += time;
+	}
+
+	auto avgTime = summTime / testRepeatCount;
+	WriteString("Test Random Access Vector = ");
+	WriteDouble(avgTime);
+	WriteString(" ms\r\n");
+}
+
+
 class TestInlineMethodsClass
 {
 	int InlineMethod(const int param1) const
@@ -587,6 +624,7 @@ int main()
 	TestVectorAccess();
 	
 	TestArrayRandomAccess();
+	TestVectorRandomAccess();
 
 	//TestClassMemoryAllocation();
 	//TestArraysMemoryAllocation();
