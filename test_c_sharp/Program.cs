@@ -143,13 +143,15 @@ namespace test_c_sharp
             }
         }
 
+#region -----------------------   Empty classs ----------------------------------
+
         public class EmptyClass
         {
         };
 
-        public static void DoSomethingWidthEmptyClass(EmptyClass emptyObj) { }
+        public static void DoSomethingWidthEmptyObject(EmptyClass emptyObj) { }
 
-        static void TestClassMemoryAllocation()
+        static void TestEmptyClassMemoryAllocation()
         {
             var array = new EmptyClass[testAllocationClassSize_];
 
@@ -182,7 +184,7 @@ namespace test_c_sharp
 
                 Start();
 
-                DoSomethingWidthEmptyClass(array[0]);
+                DoSomethingWidthEmptyObject(array[0]);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
@@ -217,6 +219,82 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
         }
 
+
+#endregion
+
+#region -----------------------   One Ref classs ----------------------------------
+
+        public class OneRefClass
+        {
+            public OneRefClass Ref1;
+        };
+
+        public static void DoSomethingWidthOneRefObject(OneRefClass emptyObj) { }
+
+
+        static void TestOneRefClassMemoryAllocation()
+        {
+            var array = new OneRefClass[testAllocationClassSize_];
+
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new OneRefClass();
+                }
+
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    array[i] = array[refIndex];
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthOneRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            if (null != array)
+                Console.WriteLine("Something Wrong");
+
+       
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete One Ref Class Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
 
         public static void DoSomethingWithArray(int[] array) { }
 
@@ -352,7 +430,7 @@ namespace test_c_sharp
 
                 Start();
 
-                DoSomethingWidthEmptyClass(array[0]);
+                DoSomethingWidthEmptyObject(array[0]);
                 array = null;
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
@@ -400,9 +478,10 @@ namespace test_c_sharp
             //TestArrayAccess();
             ////TODO: попробовать unmanaged-доступ
 
-            TestClassMemoryAllocation();
-            TestArraysMemoryAllocation();
-            TestClassMemoryAllocationMT();
+            TestEmptyClassMemoryAllocation();
+            TestOneRefClassMemoryAllocation();
+            //TestArraysMemoryAllocation();
+            //TestClassMemoryAllocationMT();
 
             Console.ReadLine();
         }
