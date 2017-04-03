@@ -55,3 +55,4 @@ ipch/TEST_CPP-eef8b62/TEST_CPP-40620dce.ipch
 test_cpp/test_cpp.vcxproj.user
 *.opendb
 *.suo
+benchmarks.VC.db

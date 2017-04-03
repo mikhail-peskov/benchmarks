@@ -164,6 +164,9 @@ namespace test_c_sharp
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
+                var memoryInit = GC.GetTotalMemory(true);
+                Console.WriteLine("Memory Init = {0}", memoryInit);
+
                 Start();
 
                 //--------------------------------------------------
@@ -185,7 +188,8 @@ namespace test_c_sharp
                 Start();
 
                 DoSomethingWidthEmptyClassArray(array);
-                array = null;
+
+                Volatile.Write(ref array, null);
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
 
@@ -200,6 +204,9 @@ namespace test_c_sharp
                 // объукт пустого класса  CLR = 10 байт: SyncBlock + ReferenceTypePointer
                 // плюс 4 байта - ячейка в массиве
                 var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+
+                Console.WriteLine("Must Collect = {0}", mustCollectBytes);
+
                 if (collected < mustCollectBytes) 
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -538,7 +545,7 @@ namespace test_c_sharp
             //TODO: попробовать unmanaged-доступ
 
             TestEmptyClassMemoryAllocation();
-            TestOneRefClassMemoryAllocation();
+            //TestOneRefClassMemoryAllocation();
             //TestArraysMemoryAllocation();
             //TestClassMemoryAllocationMT();
 
