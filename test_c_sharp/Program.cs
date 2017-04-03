@@ -217,7 +217,7 @@ namespace test_c_sharp
 
         static void TestEmptyClassMemoryAllocation()
         {
-            var array = new EmptyClass[testAllocationClassSize_];
+
 
             // --------------------- New Operator Test ---------------------------------
 
@@ -230,6 +230,8 @@ namespace test_c_sharp
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new EmptyClass[testAllocationClassSize_];
 
                 Start();
 
@@ -270,9 +272,6 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            if (null != array)
-                Console.WriteLine("Something Wrong");
-
             var avgAllocationTime = summAllocationTime / testRepeatCount;
             WriteString("New Class Test = ");
             WriteDouble(avgAllocationTime);
@@ -299,8 +298,6 @@ namespace test_c_sharp
 
         static void TestOneRefClassMemoryAllocation()
         {
-            var array = new OneRefClass[testAllocationClassSize_];
-
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
 
@@ -311,6 +308,7 @@ namespace test_c_sharp
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
+                var array = new OneRefClass[testAllocationClassSize_];
 
                 //--------------------------------------------------
                 for (int i = 0; i < testAllocationClassSize_; i++)
@@ -351,10 +349,6 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
-
-            if (null != array)
-                Console.WriteLine("Something Wrong");
-
        
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete One Ref Class Test = ");
@@ -380,8 +374,6 @@ namespace test_c_sharp
 
         static void TestFiveRefClassMemoryAllocation()
         {
-            var array = new FiveRefClass[testAllocationClassSize_];
-
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
 
@@ -392,6 +384,7 @@ namespace test_c_sharp
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
+                var array = new FiveRefClass[testAllocationClassSize_];
 
                 //--------------------------------------------------
                 for (int i = 0; i < testAllocationClassSize_; i++)
@@ -441,10 +434,6 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            if (null != array)
-                Console.WriteLine("Something Wrong");
-
-
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete Five Ref Class Test = ");
             WriteDouble(avgDeleteTime);
@@ -475,8 +464,6 @@ namespace test_c_sharp
 
         static void TestTenRefClassMemoryAllocation()
         {
-            var array = new TenRefClass[testAllocationClassSize_];
-
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
 
@@ -486,6 +473,7 @@ namespace test_c_sharp
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
+                var array = new TenRefClass[testAllocationClassSize_];
 
                 //--------------------------------------------------
                 for (int i = 0; i < testAllocationClassSize_; i++)
@@ -545,10 +533,6 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            if (null != array)
-                Console.WriteLine("Something Wrong");
-
-
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete Ten Ref Class Test = ");
             WriteDouble(avgDeleteTime);
@@ -584,8 +568,6 @@ namespace test_c_sharp
 
         static void TestFifteenRefClassMemoryAllocation()
         {
-            var array = new FifteenRefClass[testAllocationClassSize_];
-
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
 
@@ -596,6 +578,7 @@ namespace test_c_sharp
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
+                var array = new FifteenRefClass[testAllocationClassSize_];
 
                 //--------------------------------------------------
                 for (int i = 0; i < testAllocationClassSize_; i++)
@@ -665,10 +648,6 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            if (null != array)
-                Console.WriteLine("Something Wrong");
-
-
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete Fifteen Ref Class Test = ");
             WriteDouble(avgDeleteTime);
@@ -709,8 +688,6 @@ namespace test_c_sharp
 
         static void TestTwentyRefClassMemoryAllocation()
         {
-            var array = new TwentyRefClass[testAllocationClassSize_];
-
             // --------------------- New Operator Test ---------------------------------
             double summDeleteTime = 0;
 
@@ -720,6 +697,7 @@ namespace test_c_sharp
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
+                var array = new TwentyRefClass[testAllocationClassSize_];
 
                 //--------------------------------------------------
                 for (int i = 0; i < testAllocationClassSize_; i++)
@@ -800,10 +778,6 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            if (null != array)
-                Console.WriteLine("Something Wrong");
-
-
             var avgDeleteTime = summDeleteTime / testRepeatCount;
             WriteString("Delete Twenty Ref Class Test = ");
             WriteDouble(avgDeleteTime);
@@ -818,16 +792,14 @@ namespace test_c_sharp
 
         static void TestArraysMemoryAllocation()
         {
-            var array = new int[testAccessArraySize_][];
-
-
             double summAllocationTime = 0;
             double summDeleteTime = 0;
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
-
                 // --------------------- New Operator Test ---------------------------------
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new int[testAccessArraySize_][];
 
                 Start();
 
@@ -882,7 +854,7 @@ namespace test_c_sharp
 
         static void TestClassMemoryAllocationMT()
         {
-            var array = new EmptyClass[testAllocationClassSize_];
+
 
             // --------------------- New Operator Test ---------------------------------
 
@@ -892,6 +864,8 @@ namespace test_c_sharp
             for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
             {
                 Start();
+
+                var array = new EmptyClass[testAllocationClassSize_];
 
                 var allocThread1 = new Thread(() =>
                     {
@@ -990,30 +964,30 @@ namespace test_c_sharp
 
     static void Main(string[] args)
         {
-            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            //testInlineMethodsObject.test();
-            //Console.WriteLine("---------------------");
+            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            testInlineMethodsObject.test();
+            Console.WriteLine("---------------------");
 
-            //TestArrayAccess();
-            //TestArrayUnsafeAccess();
-            //Console.WriteLine("---------------------");
+            TestArrayAccess();
+            TestArrayUnsafeAccess();
+            Console.WriteLine("---------------------");
 
             TestEmptyClassMemoryAllocation();
             Console.WriteLine("---------------------");
             TestOneRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
-            //TestFiveRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //TestTenRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //TestFifteenRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //TestTwentyRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //TestArraysMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //TestClassMemoryAllocationMT();
-            //Console.WriteLine("---------------------");
+            TestFiveRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            TestTenRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            TestFifteenRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            TestTwentyRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            TestArraysMemoryAllocation();
+            Console.WriteLine("---------------------");
+            TestClassMemoryAllocationMT();
+            Console.WriteLine("---------------------");
 
             Console.WriteLine("--- Complete ---");
 

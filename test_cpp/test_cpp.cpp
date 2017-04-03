@@ -633,7 +633,7 @@ int main()
 	TestVectorAccess();
 	//TestVectorRandomAccess();
 
-	//TestClassMemoryAllocation();
+	TestClassMemoryAllocation();
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
 
