@@ -2,7 +2,7 @@
 
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 10;
+const int testRepeatCount = 1;
 
 const int testAccessArraySize_ = 100000000;
 const int testAllocationClassSize_ = 50000000;
@@ -631,13 +631,13 @@ int main()
 	TestArrayAccessLambda();
 	TestArrayAccess();
 	TestVectorAccess();
-	TestVectorRandomAccess();
+	//TestVectorRandomAccess();
 
-	TestClassMemoryAllocation();
-	TestArraysMemoryAllocation();
-	TestVectorMemoryAllocation();
+	//TestClassMemoryAllocation();
+	//TestArraysMemoryAllocation();
+	//TestVectorMemoryAllocation();
 
-	TestClassMemoryAllocationMT();
+	//TestClassMemoryAllocationMT();
 
 	getchar();
     return 0;
