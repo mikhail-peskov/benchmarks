@@ -162,9 +162,86 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
         }
 
-        void TestArrayRandomAccess()
+        static void TestArrayRandomAccess()
         {
-            
+            var indexArray = new int[testAccessArraySize_];
+            var indexRandom = new Random();
+            for (int i = 0; i < testAccessArraySize_; i++)
+            {
+                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+            }
+
+            var sourceArray = new int[testAccessArraySize_];
+            for (int i = 0; i < testAccessArraySize_; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new int[testAccessArraySize_];
+            double summTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                for (int i = 0; i < testAccessArraySize_; i++)
+                {
+                    int index = indexArray[i];
+                    destinationArray[index] = sourceArray[index];
+                }
+
+                var time = GetTime();
+                summTime += time;
+            }
+
+            var avgTime = summTime / testRepeatCount;
+            WriteString("Test Random Access = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+
+
+        static unsafe void TestArrayRandomAccessUnsafe()
+        {
+            var indexArray = new int[testAccessArraySize_];
+            var indexRandom = new Random();
+            for (int i = 0; i < testAccessArraySize_; i++)
+            {
+                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+            }
+
+            var sourceArray = new int[testAccessArraySize_];
+            for (int i = 0; i < testAccessArraySize_; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new int[testAccessArraySize_];
+            double summTime = 0;
+
+            fixed (int* pIndexArray = indexArray)
+            fixed (int* pSourceArray = sourceArray)
+            fixed (int* pDestinationArray = destinationArray)
+            {
+                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+                {
+                    Start();
+
+                    for (int i = 0; i < testAccessArraySize_; i++)
+                    {
+                        int index = pIndexArray[i];
+                        pDestinationArray[index] = pSourceArray[index];
+                    }
+
+                    var time = GetTime();
+                    summTime += time;
+                }
+            }
+
+            var avgTime = summTime / testRepeatCount;
+            WriteString("Test Random Access Unsafe = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
         }
 
 
@@ -977,6 +1054,7 @@ namespace test_c_sharp
             TestArrayAccess();
             TestArrayUnsafeAccess();
             TestArrayRandomAccess();
+            TestArrayRandomAccessUnsafe();
             Console.WriteLine("---------------------");
             file_.Flush();
 
