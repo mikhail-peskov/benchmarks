@@ -1732,58 +1732,58 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	//TestInlineMethodsClass testInline;
-	//testInline.test();
-	//fileOut_.flush();
+	TestInlineMethodsClass testInline;
+	testInline.test();
+	fileOut_.flush();
 
-	//TestNoInlineMethodsClass testNoInline;
-	//testNoInline.test();
-	//fileOut_.flush();
-	//	
-	//TestArrayAccess();
-	//fileOut_.flush();
-	//TestVectorAccess();
-	//fileOut_.flush();
+	TestNoInlineMethodsClass testNoInline;
+	testNoInline.test();
+	fileOut_.flush();
+		
+	TestArrayAccess();
+	fileOut_.flush();
+	TestVectorAccess();
+	fileOut_.flush();
 
-	//TestArrayRandomAccess();
-	//fileOut_.flush();
-	//TestVectorRandomAccess();
-	//fileOut_.flush();
+	TestArrayRandomAccess();
+	fileOut_.flush();
+	TestVectorRandomAccess();
+	fileOut_.flush();
 
-	//TestEmptyClassMemoryAllocation();
-	//fileOut_.flush();
-	//TestOneRefClassMemoryAllocation();
-	//fileOut_.flush();
-	//TestFiveRefClassMemoryAllocation();
-	//fileOut_.flush();
-	//TestTenRefClassMemoryAllocation();
-	//fileOut_.flush();
-	//TestFifteenRefClassMemoryAllocation();
-	//fileOut_.flush();
-	//TestTwentyRefClassMemoryAllocation();
-	//fileOut_.flush();
-	//
-	//TestEmptyClassMemoryAllocationSharedPtr();
-	//fileOut_.flush();
+	TestEmptyClassMemoryAllocation();
+	fileOut_.flush();
+	TestOneRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestFiveRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestTenRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestFifteenRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestTwentyRefClassMemoryAllocation();
+	fileOut_.flush();
+	
+	TestEmptyClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 
-	//TestOneRefClassMemoryAllocationSharedPtr();
-	//fileOut_.flush();
-	//TestFiveRefClassMemoryAllocationSharedPtr();
-	//fileOut_.flush();
-	//TestTenRefClassMemoryAllocationSharedPtr();
-	//fileOut_.flush();
-	//TestFifteenRefClassMemoryAllocationSharedPtr();
-	//fileOut_.flush();
-	//TestTwentyRefClassMemoryAllocationSharedPtr();
-	//fileOut_.flush();
+	TestOneRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
+	TestFiveRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
+	TestTenRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
+	TestFifteenRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
+	TestTwentyRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 
-	//TestArraysMemoryAllocation();
-	//fileOut_.flush();
+	TestArraysMemoryAllocation();
+	fileOut_.flush();
 	TestVectorMemoryAllocation();
 	fileOut_.flush();
 
-	//TestClassMemoryAllocationMT();
-	//fileOut_.flush();
+	TestClassMemoryAllocationMT();
+	fileOut_.flush();
 
 	cout << "----------- Complete ------------------\r\n";
 

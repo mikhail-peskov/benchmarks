@@ -15,7 +15,7 @@ namespace test_c_sharp
         //---------------- Infrastructure ----------------------
         const int testRepeatCount = 1;
 
-        const int testAccessArraySize_ = 100000000;
+        const int testAccessArraySize_ = 100000;
         const int testAllocationClassSize_ = 10000000;
         const int testAllocationArraySize_ = 1000000;
 
@@ -1397,64 +1397,74 @@ namespace test_c_sharp
 
         static void TestArraysMemoryAllocation()
         {
-            double summAllocationTime = 0;
-            double summDeleteTime = 0;
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            int subArraySize = 1;
+
+            for (int onderNumber = 0; onderNumber < 4; onderNumber++)
             {
-                // --------------------- New Operator Test ---------------------------------
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                subArraySize *= 10;
 
-                var array = new int[testAccessArraySize_][];
 
-                Start();
-
-                //--------------------------------------------------
-                for (int i = 0; i < testAllocationArraySize_; i++)
+                double summAllocationTime = 0;
+                double summDeleteTime = 0;
+                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
                 {
-                    array[i] = new int[100];
+                    // --------------------- New Operator Test ---------------------------------
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                    var array = new int[testAccessArraySize_][];
+
+                    Start();
+
+                    //--------------------------------------------------
+                    for (int i = 0; i < testAccessArraySize_; i++)
+                    {
+                        array[i] = new int[subArraySize];
+                    }
+                    //--------------------------------------------------
+
+                    var time = GetTime();
+                    summAllocationTime += time;
+
+                    // ---------------------- Delete Operator Test ------------------------
+
+                    double memoryBefore = GC.GetTotalMemory(true);
+
+                    Start();
+
+                    DoSomethingWithArray(array[0]);
+                    array = null;
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                    time = GetTime();
+                    summDeleteTime += time;
+                    double memoryAfter = GC.GetTotalMemory(true);
+                    double collected = memoryBefore - memoryAfter;
+                    //Console.WriteLine("Collected = {0}", collected);
+
+                    // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
+                    // плюс 8 байт - ячейка в массиве
+                    // плюс 100 4-байтных чисел в самом массиве
+                    var mustCollectBytes = testAllocationArraySize_ * (16 + 8 + subArraySize * 4);
+                    if (collected < mustCollectBytes)
+                        Console.WriteLine("!!! GC.Collect Wrong");
+
+                    Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                    Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
                 }
-                //--------------------------------------------------
 
-                var time = GetTime();
-                summAllocationTime += time;
+                var avgAllocationTime = summAllocationTime / testRepeatCount;
+                WriteDouble(subArraySize);
+                WriteString(" Size New Array Test = ");
+                WriteDouble(avgAllocationTime);
+                WriteString(" ms\r\n");
 
-                // ---------------------- Delete Operator Test ------------------------
-
-                double memoryBefore = GC.GetTotalMemory(true);
-
-                Start();
-
-                DoSomethingWithArray(array[0]);
-                array = null;
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-
-
-                time = GetTime();
-                summDeleteTime += time;
-                double memoryAfter = GC.GetTotalMemory(true);
-                double collected = memoryBefore - memoryAfter;
-                //Console.WriteLine("Collected = {0}", collected);
-
-                // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
-                // плюс 8 байт - ячейка в массиве
-                // плюс 100 4-байтных чисел в самом массиве
-                var mustCollectBytes = testAllocationArraySize_ * (16 + 8 + 100 * 4);
-                if (collected < mustCollectBytes)
-                    Console.WriteLine("!!! GC.Collect Wrong");
-
-                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
-                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+                var avgDeleteTime = summDeleteTime / testRepeatCount;
+                WriteDouble(subArraySize);
+                WriteString(" Size Delete Array Test = ");
+                WriteDouble(avgDeleteTime);
+                WriteString(" ms\r\n");
             }
-
-            var avgAllocationTime = summAllocationTime / testRepeatCount;
-            WriteString("New Array Test = ");
-            WriteDouble(avgAllocationTime);
-            WriteString(" ms\r\n");
-
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
-            WriteString("Delete Array Test = ");
-            WriteDouble(avgDeleteTime);
-            WriteString(" ms\r\n");
         }
 
         static void TestClassMemoryAllocationMT()
@@ -1572,68 +1582,68 @@ namespace test_c_sharp
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Restart();
 
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
-            TestArrayAccess();
-            TestArrayUnsafeAccess();
-            TestListAccess();
+            //TestArrayAccess();
+            //TestArrayUnsafeAccess();
+            //TestListAccess();
 
-            TestArrayRandomAccess();
-            TestArrayRandomAccessUnsafe();
-            TestArrayRandomAccessUnsafePointerArythmetic();
-            //TestListRandomAccess();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestArrayRandomAccess();
+            //TestArrayRandomAccessUnsafe();
+            //TestArrayRandomAccessUnsafePointerArythmetic();
+            ////TestListRandomAccess();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
-            TestEmptyClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestEmptyClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
-            TestOneRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFiveRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFifteenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTwentyRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestOneRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFiveRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFifteenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTwentyRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
 
 
-            // -------------- No Recursion Ptr Methods Calling -----------------------
+            //// -------------- No Recursion Ptr Methods Calling -----------------------
 
-            TestOneRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFiveRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTenRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFifteenRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTwentyRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestOneRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFiveRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTenRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFifteenRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTwentyRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             TestArraysMemoryAllocation();
             Console.WriteLine("---------------------");
             file_.Flush();
-            TestClassMemoryAllocationMT();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestClassMemoryAllocationMT();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             Console.WriteLine("--- Complete ---");
 
