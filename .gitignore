@@ -63,3 +63,6 @@ x64/Release/test_cpp.exe
 *.pdb
 *.iobj
 x64/Release/test_cpp.ipdb
+/Debug
+/x64/Debug
+/test_cpp/x64/Debug

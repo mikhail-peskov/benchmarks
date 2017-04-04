@@ -880,9 +880,9 @@ void TestOneRefClassMemoryAllocationSharedPtr()
 			array[i] = make_shared<OneRefClassSharedPtr>();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < testAllocationClassSize_ - 1; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = i + 1;
 			array[i]->Ref1 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -1216,7 +1216,7 @@ void TestTwentyRefClassMemoryAllocationSharedPtr()
 			array[i]->Ref20 = array[refIndex];
 		}
 		//--------------------------------------------------
-
+		
 		// ---------------------- Delete Operator Test ------------------------
 
 		Start();
@@ -1483,13 +1483,8 @@ int main()
 	//TestFifteenRefClassMemoryAllocation();
 	//TestTwentyRefClassMemoryAllocation();
 	
-
 	//TestEmptyClassMemoryAllocationSharedPtr();
-	//TestOneRefClassMemoryAllocationSharedPtr();
-	TestFiveRefClassMemoryAllocationSharedPtr();
-	//TestTenRefClassMemoryAllocationSharedPtr();
-	//TestFifteenRefClassMemoryAllocationSharedPtr();
-	//TestTwentyRefClassMemoryAllocationSharedPtr();
+
 
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
@@ -1497,6 +1492,15 @@ int main()
 	//TestClassMemoryAllocationMT();
 
 	cout << "----------- Complete ------------------\r\n";
+
+
+	// эти хрени приводят к stack overflow даже на 10 тыс. точек
+
+	//TestOneRefClassMemoryAllocationSharedPtr();
+	//TestFiveRefClassMemoryAllocationSharedPtr();
+	//TestTenRefClassMemoryAllocationSharedPtr();
+	//TestFifteenRefClassMemoryAllocationSharedPtr();
+	//TestTwentyRefClassMemoryAllocationSharedPtr();
 
 	getchar();
     return 0;
