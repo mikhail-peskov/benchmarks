@@ -1482,9 +1482,8 @@ int main()
 	//TestFifteenRefClassMemoryAllocation();
 	//TestTwentyRefClassMemoryAllocation();
 	
-	
 
-	//TestEmptyClassMemoryAllocationSharedPtr();
+	TestEmptyClassMemoryAllocationSharedPtr();
 	//TestOneRefClassMemoryAllocationSharedPtr();
 	//TestFiveRefClassMemoryAllocationSharedPtr();
 	//TestTenRefClassMemoryAllocationSharedPtr();
@@ -1495,6 +1494,8 @@ int main()
 	//TestVectorMemoryAllocation();
 
 	//TestClassMemoryAllocationMT();
+
+	cout << "----------- Complete ------------------\r\n";
 
 	getchar();
     return 0;
