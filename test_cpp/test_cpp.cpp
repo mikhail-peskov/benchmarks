@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+using namespace std;
+
 //---------------- Infrastructure ----------------------
 
 const int testRepeatCount = 1;
@@ -333,6 +335,8 @@ int TestNoInlineMethodsClass::noInlineMethod(const int param1) const
 {
 	return param1;
 }
+
+//-----------------------   EmptyClasss ----------------------------------
 
 class EmptyClass
 {
@@ -800,6 +804,57 @@ void TestTwentyRefClassMemoryAllocation()
 }
 
 
+// ----------------------- SHARED POINTER TEST ----------------------------------------
+
+
+
+//-----------------------   EmptyClasss Shared Pointer ----------------------------------
+
+void TestEmptyClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summAllocationTime = 0;
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<EmptyClass>[testAllocationClassSize_];
+
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<EmptyClass>();
+		}
+		//--------------------------------------------------
+
+		auto time = GetTime();
+		summAllocationTime += time;
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgAllocationTime = summAllocationTime / testRepeatCount;
+	WriteString("New Class Test Shared Pointers = ");
+	WriteDouble(avgAllocationTime);
+	WriteString("ms\r\n");
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete Empty Class Shared Pointers Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+
 void TestArraysMemoryAllocation()
 {
 	auto array = new int*[testAccessArraySize_];
@@ -1040,12 +1095,13 @@ int main()
 	//TestVectorRandomAccess();
 
 	TestEmptyClassMemoryAllocation();
-	TestOneRefClassMemoryAllocation();
-	TestFiveRefClassMemoryAllocation();
-	TestTenRefClassMemoryAllocation();
-	TestFifteenRefClassMemoryAllocation();
-	TestTwentyRefClassMemoryAllocation();
-
+	//TestOneRefClassMemoryAllocation();
+	//TestFiveRefClassMemoryAllocation();
+	//TestTenRefClassMemoryAllocation();
+	//TestFifteenRefClassMemoryAllocation();
+	//TestTwentyRefClassMemoryAllocation();
+	
+	TestEmptyClassMemoryAllocationSharedPtr();
 
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
