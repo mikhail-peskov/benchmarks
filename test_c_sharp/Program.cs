@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 100;
+        const int testRepeatCount = 1;
 
         const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 10000000;
@@ -500,6 +500,14 @@ namespace test_c_sharp
 
 
         #endregion
+
+
+
+
+
+
+
+
 
         #region -----------------------   One Ref classs ----------------------------------
 
@@ -1003,6 +1011,388 @@ namespace test_c_sharp
 
 
 
+
+
+
+
+
+
+
+        #region -----------------------   One Ref classs NoRecursionPtr ----------------------------------
+
+        static void TestOneRefClassMemoryAllocationNoRecursionPtr()
+        {
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            // прогреваем метод
+            DoSomethingWidthOneRefObject(null);
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new OneRefClass[testAllocationClassSize_];
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new OneRefClass();
+                }
+
+                var sharedObj = new OneRefClass();
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i].Ref1 = sharedObj;
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthOneRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete One Ref Class NoRecursionPtr Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
+        #region -----------------------   Five Ref classs NoRecursionPtr ----------------------------------
+
+        static void TestFiveRefClassMemoryAllocationNoRecursionPtr()
+        {
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            // прогреваем метод
+            DoSomethingWidthFiveRefObject(null);
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new FiveRefClass[testAllocationClassSize_];
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new FiveRefClass();
+                }
+
+                var sharedObj = new FiveRefClass();
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i].Ref1 = sharedObj;
+                    array[i].Ref2 = sharedObj;
+                    array[i].Ref3 = sharedObj;
+                    array[i].Ref4 = sharedObj;
+                    array[i].Ref5 = sharedObj;
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthFiveRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 5);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Five Ref Class NoRecursionPtr Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
+
+        #region -----------------------   Ten Ref classs NoRecursionPtr ----------------------------------
+
+
+        static void TestTenRefClassMemoryAllocationNoRecursionPtr()
+        {
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            DoSomethingWidthTenRefObject(null);
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new TenRefClass[testAllocationClassSize_];
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new TenRefClass();
+                }
+
+                var sharedObj = new TenRefClass();
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i].Ref1 = sharedObj;
+                    array[i].Ref2 = sharedObj;
+                    array[i].Ref3 = sharedObj;
+                    array[i].Ref4 = sharedObj;
+                    array[i].Ref5 = sharedObj;
+                    array[i].Ref6 = sharedObj;
+                    array[i].Ref7 = sharedObj;
+                    array[i].Ref8 = sharedObj;
+                    array[i].Ref9 = sharedObj;
+                    array[i].Ref10 = sharedObj;
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthTenRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 10);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Ten Ref Class NoRecursionPtr Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
+
+        #region -----------------------   Fifteen Ref classs NoRecursionPtr ----------------------------------
+
+        static void TestFifteenRefClassMemoryAllocationNoRecursionPtr()
+        {
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            // прогреваем метод
+            DoSomethingWidthFifteenRefObject(null);
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new FifteenRefClass[testAllocationClassSize_];
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new FifteenRefClass();
+                }
+
+                var sharedObj = new FifteenRefClass();
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i].Ref1 = sharedObj;
+                    array[i].Ref2 = sharedObj;
+                    array[i].Ref3 = sharedObj;
+                    array[i].Ref4 = sharedObj;
+                    array[i].Ref5 = sharedObj;
+                    array[i].Ref6 = sharedObj;
+                    array[i].Ref7 = sharedObj;
+                    array[i].Ref8 = sharedObj;
+                    array[i].Ref9 = sharedObj;
+                    array[i].Ref10 = sharedObj;
+                    array[i].Ref11 = sharedObj;
+                    array[i].Ref12 = sharedObj;
+                    array[i].Ref13 = sharedObj;
+                    array[i].Ref14 = sharedObj;
+                    array[i].Ref15 = sharedObj;
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthFifteenRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 15);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Fifteen Ref Class NoRecursionPtr Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
+
+        #region -----------------------   Twenty Ref classs NoRecursionPtr ----------------------------------
+
+        static void TestTwentyRefClassMemoryAllocationNoRecursionPtr()
+        {
+            // --------------------- New Operator Test ---------------------------------
+            double summDeleteTime = 0;
+
+            DoSomethingWidthTwentyRefObject(null);
+
+            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                var array = new TwentyRefClass[testAllocationClassSize_];
+
+                //--------------------------------------------------
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i] = new TwentyRefClass();
+                }
+
+                var sharedObj = new TwentyRefClass();
+                for (int i = 0; i < testAllocationClassSize_; i++)
+                {
+                    array[i].Ref1 = sharedObj;
+                    array[i].Ref2 = sharedObj;
+                    array[i].Ref3 = sharedObj;
+                    array[i].Ref4 = sharedObj;
+                    array[i].Ref5 = sharedObj;
+                    array[i].Ref6 = sharedObj;
+                    array[i].Ref7 = sharedObj;
+                    array[i].Ref8 = sharedObj;
+                    array[i].Ref9 = sharedObj;
+                    array[i].Ref10 = sharedObj;
+
+                    array[i].Ref11 = sharedObj;
+                    array[i].Ref12 = sharedObj;
+                    array[i].Ref13 = sharedObj;
+                    array[i].Ref14 = sharedObj;
+                    array[i].Ref15 = sharedObj;
+                    array[i].Ref16 = sharedObj;
+                    array[i].Ref17 = sharedObj;
+                    array[i].Ref18 = sharedObj;
+                    array[i].Ref19 = sharedObj;
+                    array[i].Ref20 = sharedObj;
+                }
+                //--------------------------------------------------
+
+                // ---------------------- Delete Operator Test ------------------------
+
+                double memoryBefore = GC.GetTotalMemory(true);
+
+                Start();
+
+                DoSomethingWidthTwentyRefObject(array[0]);
+                array = null;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+                var time = GetTime();
+                summDeleteTime += time;
+                double memoryAfter = GC.GetTotalMemory(true);
+                double collected = memoryBefore - memoryAfter;
+                //Console.WriteLine("Collected = {0}", collected);
+
+                // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
+                // плюс 8 байт - ячейка в массиве
+                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 20);
+                if (collected < mustCollectBytes)
+                    Console.WriteLine("!!! GC.Collect Wrong");
+
+                Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+            }
+
+            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            WriteString("Delete Twenty Ref Class NoRecursionPtr Test = ");
+            WriteDouble(avgDeleteTime);
+            WriteString(" ms\r\n");
+        }
+
+        #endregion
+
+
+
+        
+
+
+
         public static void DoSomethingWithArray(int[] array) { }
 
         static void TestArraysMemoryAllocation()
@@ -1193,29 +1583,54 @@ namespace test_c_sharp
 
             //TestArrayRandomAccess();
             //TestArrayRandomAccessUnsafe();
-            TestArrayRandomAccessUnsafePointerArythmetic();
-            //TestListRandomAccess();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestArrayRandomAccessUnsafePointerArythmetic();
+            ////TestListRandomAccess();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             //TestEmptyClassMemoryAllocation();
             //Console.WriteLine("---------------------");
             //file_.Flush();
-            //TestOneRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestFiveRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestTenRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestFifteenRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestTwentyRefClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+
+            TestOneRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestFiveRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestTenRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestFifteenRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestTwentyRefClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+
+
+
+            // -------------- No Recursion Ptr Methods Calling -----------------------
+
+            TestOneRefClassMemoryAllocationNoRecursionPtr();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestFiveRefClassMemoryAllocationNoRecursionPtr();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestTenRefClassMemoryAllocationNoRecursionPtr();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestFifteenRefClassMemoryAllocationNoRecursionPtr();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestTwentyRefClassMemoryAllocationNoRecursionPtr();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+
+
+
+
             //TestArraysMemoryAllocation();
             //Console.WriteLine("---------------------");
             //file_.Flush();
