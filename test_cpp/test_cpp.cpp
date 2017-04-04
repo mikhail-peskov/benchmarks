@@ -4,7 +4,7 @@ using namespace std;
 
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 1;
+const int testRepeatCount = 2;
 
 const int testAccessArraySize_ = 100000000;
 const int testAllocationClassSize_ = 10000000;
@@ -1718,37 +1718,58 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	//TestInlineMethodsClass testInline;
-	//testInline.test();
+	TestInlineMethodsClass testInline;
+	testInline.test();
+	fileOut_.flush();
 
-	//TestNoInlineMethodsClass testNoInline;
-	//testNoInline.test();
+	TestNoInlineMethodsClass testNoInline;
+	testNoInline.test();
+	fileOut_.flush();
 		
-	//TestArrayAccess();
-	//TestVectorAccess();
-	//
-	//TestArrayRandomAccess();
-	//TestVectorRandomAccess();
+	TestArrayAccess();
+	fileOut_.flush();
+	TestVectorAccess();
+	fileOut_.flush();
 
-	//TestEmptyClassMemoryAllocation();
-	//TestOneRefClassMemoryAllocation();
-	//TestFiveRefClassMemoryAllocation();
-	//TestTenRefClassMemoryAllocation();
-	//TestFifteenRefClassMemoryAllocation();
-	//TestTwentyRefClassMemoryAllocation();
+	TestArrayRandomAccess();
+	fileOut_.flush();
+	TestVectorRandomAccess();
+	fileOut_.flush();
+
+	TestEmptyClassMemoryAllocation();
+	fileOut_.flush();
+	TestOneRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestFiveRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestTenRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestFifteenRefClassMemoryAllocation();
+	fileOut_.flush();
+	TestTwentyRefClassMemoryAllocation();
+	fileOut_.flush();
 	
-	//TestEmptyClassMemoryAllocationSharedPtr();
+	TestEmptyClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 
 	TestOneRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 	TestFiveRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 	TestTenRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 	TestFifteenRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 	TestTwentyRefClassMemoryAllocationSharedPtr();
+	fileOut_.flush();
 
-	//TestArraysMemoryAllocation();
-	//TestVectorMemoryAllocation();
+	TestArraysMemoryAllocation();
+	fileOut_.flush();
+	TestVectorMemoryAllocation();
+	fileOut_.flush();
 
-	//TestClassMemoryAllocationMT();
+	TestClassMemoryAllocationMT();
+	fileOut_.flush();
 
 	cout << "----------- Complete ------------------\r\n";
 

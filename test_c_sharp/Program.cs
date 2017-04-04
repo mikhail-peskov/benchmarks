@@ -1572,25 +1572,25 @@ namespace test_c_sharp
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Restart();
 
-            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            //testInlineMethodsObject.test();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            testInlineMethodsObject.test();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
-            //TestArrayAccess();
-            //TestArrayUnsafeAccess();
-            //TestListAccess();
+            TestArrayAccess();
+            TestArrayUnsafeAccess();
+            TestListAccess();
 
-            //TestArrayRandomAccess();
-            //TestArrayRandomAccessUnsafe();
-            //TestArrayRandomAccessUnsafePointerArythmetic();
-            ////TestListRandomAccess();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestArrayRandomAccess();
+            TestArrayRandomAccessUnsafe();
+            TestArrayRandomAccessUnsafePointerArythmetic();
+            //TestListRandomAccess();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
-            //TestEmptyClassMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestEmptyClassMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
             TestOneRefClassMemoryAllocation();
             Console.WriteLine("---------------------");
@@ -1628,15 +1628,12 @@ namespace test_c_sharp
             Console.WriteLine("---------------------");
             file_.Flush();
 
-
-
-
-            //TestArraysMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
-            //TestClassMemoryAllocationMT();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestArraysMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            TestClassMemoryAllocationMT();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
             Console.WriteLine("--- Complete ---");
 
