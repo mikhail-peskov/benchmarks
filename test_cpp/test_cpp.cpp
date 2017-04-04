@@ -7,7 +7,7 @@ using namespace std;
 const int testRepeatCount = 1;
 
 const int testAccessArraySize_ = 100000000;
-const int testAllocationClassSize_ = 50000000;
+const int testAllocationClassSize_ = 10000000;
 const int testAllocationArraySize_ = 1000000;
 
 _LARGE_INTEGER startCounter_;
@@ -833,6 +833,7 @@ void TestEmptyClassMemoryAllocationSharedPtr()
 		auto time = GetTime();
 		summAllocationTime += time;
 
+		
 		// ---------------------- Delete Operator Test ------------------------
 
 		Start();
@@ -885,7 +886,7 @@ void TestOneRefClassMemoryAllocationSharedPtr()
 			array[i]->Ref1 = array[refIndex];
 		}
 		//--------------------------------------------------
-
+		
 		// ---------------------- Delete Operator Test ------------------------
 
 		Start();
@@ -1483,9 +1484,9 @@ int main()
 	//TestTwentyRefClassMemoryAllocation();
 	
 
-	TestEmptyClassMemoryAllocationSharedPtr();
+	//TestEmptyClassMemoryAllocationSharedPtr();
 	//TestOneRefClassMemoryAllocationSharedPtr();
-	//TestFiveRefClassMemoryAllocationSharedPtr();
+	TestFiveRefClassMemoryAllocationSharedPtr();
 	//TestTenRefClassMemoryAllocationSharedPtr();
 	//TestFifteenRefClassMemoryAllocationSharedPtr();
 	//TestTwentyRefClassMemoryAllocationSharedPtr();

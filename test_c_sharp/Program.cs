@@ -16,7 +16,7 @@ namespace test_c_sharp
         const int testRepeatCount = 100;
 
         const int testAccessArraySize_ = 100000000;
-        const int testAllocationClassSize_ = 50000000;
+        const int testAllocationClassSize_ = 10000000;
         const int testAllocationArraySize_ = 1000000;
 
         static Stopwatch stopwatch_ = new Stopwatch();
