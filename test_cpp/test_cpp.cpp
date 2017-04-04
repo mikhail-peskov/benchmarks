@@ -856,6 +856,8 @@ void TestEmptyClassMemoryAllocationSharedPtr()
 }
 
 
+
+
 //-----------------------   One Ref classs Shared Pointer ----------------------------------
 
 class OneRefClassSharedPtr
@@ -865,6 +867,332 @@ public:
 };
 
 void TestOneRefClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<OneRefClassSharedPtr>[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<OneRefClassSharedPtr>();
+		}
+
+		auto sharedObj = make_shared<OneRefClassSharedPtr>();
+		for (int i = 0; i < testAllocationClassSize_ - 1; i++)
+		{
+			long refIndex = i + 1;
+			array[i]->Ref1 = sharedObj;
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 1 Ref Class SharedPtr Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+//-----------------------   Five Ref classs SharedPtr ----------------------------------
+
+class FiveRefClassSharedPtr
+{
+public:
+	shared_ptr<FiveRefClassSharedPtr> Ref1;
+	shared_ptr<FiveRefClassSharedPtr> Ref2;
+	shared_ptr<FiveRefClassSharedPtr> Ref3;
+	shared_ptr<FiveRefClassSharedPtr> Ref4;
+	shared_ptr<FiveRefClassSharedPtr> Ref5;
+};
+
+void TestFiveRefClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<FiveRefClassSharedPtr>[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<FiveRefClassSharedPtr>();
+		}
+
+		auto sharedObj = make_shared<FiveRefClassSharedPtr>();
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i]->Ref1 = sharedObj;
+			array[i]->Ref2 = sharedObj;
+			array[i]->Ref3 = sharedObj;
+			array[i]->Ref4 = sharedObj;
+			array[i]->Ref5 = sharedObj;
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 5 Ref Class SharedPtr Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+//-----------------------   Ten Ref classs ----------------------------------
+
+class TenRefClassSharedPtr
+{
+public:
+	shared_ptr<TenRefClassSharedPtr> Ref1;
+	shared_ptr<TenRefClassSharedPtr> Ref2;
+	shared_ptr<TenRefClassSharedPtr> Ref3;
+	shared_ptr<TenRefClassSharedPtr> Ref4;
+	shared_ptr<TenRefClassSharedPtr> Ref5;
+	shared_ptr<TenRefClassSharedPtr> Ref6;
+	shared_ptr<TenRefClassSharedPtr> Ref7;
+	shared_ptr<TenRefClassSharedPtr> Ref8;
+	shared_ptr<TenRefClassSharedPtr> Ref9;
+	shared_ptr<TenRefClassSharedPtr> Ref10;
+};
+
+void TestTenRefClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<TenRefClassSharedPtr>[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<TenRefClassSharedPtr>();
+		}
+
+		auto sharedObj = make_shared<TenRefClassSharedPtr>();
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i]->Ref1 = sharedObj;
+			array[i]->Ref2 = sharedObj;
+			array[i]->Ref3 = sharedObj;
+			array[i]->Ref4 = sharedObj;
+			array[i]->Ref5 = sharedObj;
+			array[i]->Ref6 = sharedObj;
+			array[i]->Ref7 = sharedObj;
+			array[i]->Ref8 = sharedObj;
+			array[i]->Ref9 = sharedObj;
+			array[i]->Ref10 =sharedObj;
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 10 Ref Class SharedPtr Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+//-----------------------   Fifteen Ref classs ----------------------------------
+
+class FifteenRefClassSharedPtr
+{
+public:
+	shared_ptr<FifteenRefClassSharedPtr> Ref1;
+	shared_ptr<FifteenRefClassSharedPtr> Ref2;
+	shared_ptr<FifteenRefClassSharedPtr> Ref3;
+	shared_ptr<FifteenRefClassSharedPtr> Ref4;
+	shared_ptr<FifteenRefClassSharedPtr> Ref5;
+	shared_ptr<FifteenRefClassSharedPtr> Ref6;
+	shared_ptr<FifteenRefClassSharedPtr> Ref7;
+	shared_ptr<FifteenRefClassSharedPtr> Ref8;
+	shared_ptr<FifteenRefClassSharedPtr> Ref9;
+	shared_ptr<FifteenRefClassSharedPtr> Ref10;
+	shared_ptr<FifteenRefClassSharedPtr> Ref11;
+	shared_ptr<FifteenRefClassSharedPtr> Ref12;
+	shared_ptr<FifteenRefClassSharedPtr> Ref13;
+	shared_ptr<FifteenRefClassSharedPtr> Ref14;
+	shared_ptr<FifteenRefClassSharedPtr> Ref15;
+};
+
+void TestFifteenRefClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<FifteenRefClassSharedPtr>[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<FifteenRefClassSharedPtr>();
+		}
+
+		auto sharedObj = make_shared<FifteenRefClassSharedPtr>();
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i]->Ref1 = sharedObj;
+			array[i]->Ref2 = sharedObj;
+			array[i]->Ref3 = sharedObj;
+			array[i]->Ref4 = sharedObj;
+			array[i]->Ref5 = sharedObj;
+			array[i]->Ref6 = sharedObj;
+			array[i]->Ref7 = sharedObj;
+			array[i]->Ref8 = sharedObj;
+			array[i]->Ref9 = sharedObj;
+			array[i]->Ref10 = sharedObj;
+			array[i]->Ref11 = sharedObj;
+			array[i]->Ref12 = sharedObj;
+			array[i]->Ref13 = sharedObj;
+			array[i]->Ref14 = sharedObj;
+			array[i]->Ref15 = sharedObj;
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 15 Ref Class SharedPtr Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+//-----------------------   Twenty Ref classs SharedPtr ----------------------------------
+
+class TwentyRefClassSharedPtr
+{
+public:
+	shared_ptr<TwentyRefClassSharedPtr> Ref1;
+	shared_ptr<TwentyRefClassSharedPtr> Ref2;
+	shared_ptr<TwentyRefClassSharedPtr> Ref3;
+	shared_ptr<TwentyRefClassSharedPtr> Ref4;
+	shared_ptr<TwentyRefClassSharedPtr> Ref5;
+	shared_ptr<TwentyRefClassSharedPtr> Ref6;
+	shared_ptr<TwentyRefClassSharedPtr> Ref7;
+	shared_ptr<TwentyRefClassSharedPtr> Ref8;
+	shared_ptr<TwentyRefClassSharedPtr> Ref9;
+	shared_ptr<TwentyRefClassSharedPtr> Ref10;
+	shared_ptr<TwentyRefClassSharedPtr> Ref11;
+	shared_ptr<TwentyRefClassSharedPtr> Ref12;
+	shared_ptr<TwentyRefClassSharedPtr> Ref13;
+	shared_ptr<TwentyRefClassSharedPtr> Ref14;
+	shared_ptr<TwentyRefClassSharedPtr> Ref15;
+	shared_ptr<TwentyRefClassSharedPtr> Ref16;
+	shared_ptr<TwentyRefClassSharedPtr> Ref17;
+	shared_ptr<TwentyRefClassSharedPtr> Ref18;
+	shared_ptr<TwentyRefClassSharedPtr> Ref19;
+	shared_ptr<TwentyRefClassSharedPtr> Ref20;
+};
+
+void TestTwentyRefClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<TwentyRefClassSharedPtr>[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<TwentyRefClassSharedPtr>();
+		}
+
+		auto sharedObj = make_shared<TwentyRefClassSharedPtr>();
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i]->Ref1 = sharedObj;
+			array[i]->Ref2 = sharedObj;
+			array[i]->Ref3 = sharedObj;
+			array[i]->Ref4 = sharedObj;
+			array[i]->Ref5 = sharedObj;
+			array[i]->Ref6 = sharedObj;
+			array[i]->Ref7 = sharedObj;
+			array[i]->Ref8 = sharedObj;
+			array[i]->Ref9 = sharedObj;
+			array[i]->Ref10 = sharedObj;
+			array[i]->Ref11 = sharedObj;
+			array[i]->Ref12 = sharedObj;
+			array[i]->Ref13 = sharedObj;
+			array[i]->Ref14 = sharedObj;
+			array[i]->Ref15 = sharedObj;
+			array[i]->Ref16 = sharedObj;
+			array[i]->Ref17 = sharedObj;
+			array[i]->Ref18 = sharedObj;
+			array[i]->Ref19 = sharedObj;
+			array[i]->Ref20 = sharedObj;
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 20 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+
+
+
+
+//-----------------------   One Ref classs Shared Pointer with stack overflow ----------------------------------
+
+void TestOneRefClassMemoryAllocationSharedPtrStackOverflow()
 {
 	// --------------------- New Operator Test ---------------------------------
 
@@ -903,19 +1231,9 @@ void TestOneRefClassMemoryAllocationSharedPtr()
 	WriteString("ms\r\n");
 }
 
-//-----------------------   Five Ref classs SharedPtr ----------------------------------
+//-----------------------   Five Ref classs SharedPtr with stack overflow ----------------------------------
 
-class FiveRefClassSharedPtr
-{
-public:
-	shared_ptr<FiveRefClassSharedPtr> Ref1;
-	shared_ptr<FiveRefClassSharedPtr> Ref2;
-	shared_ptr<FiveRefClassSharedPtr> Ref3;
-	shared_ptr<FiveRefClassSharedPtr> Ref4;
-	shared_ptr<FiveRefClassSharedPtr> Ref5;
-};
-
-void TestFiveRefClassMemoryAllocationSharedPtr()
+void TestFiveRefClassMemoryAllocationSharedPtrStackOverflow()
 {
 	// --------------------- New Operator Test ---------------------------------
 
@@ -962,25 +1280,9 @@ void TestFiveRefClassMemoryAllocationSharedPtr()
 	WriteString("ms\r\n");
 }
 
+//-----------------------   Ten Ref classs with stack overflow ----------------------------------
 
-//-----------------------   Ten Ref classs ----------------------------------
-
-class TenRefClassSharedPtr
-{
-public:
-	shared_ptr<TenRefClassSharedPtr> Ref1;
-	shared_ptr<TenRefClassSharedPtr> Ref2;
-	shared_ptr<TenRefClassSharedPtr> Ref3;
-	shared_ptr<TenRefClassSharedPtr> Ref4;
-	shared_ptr<TenRefClassSharedPtr> Ref5;
-	shared_ptr<TenRefClassSharedPtr> Ref6;
-	shared_ptr<TenRefClassSharedPtr> Ref7;
-	shared_ptr<TenRefClassSharedPtr> Ref8;
-	shared_ptr<TenRefClassSharedPtr> Ref9;
-	shared_ptr<TenRefClassSharedPtr> Ref10;
-};
-
-void TestTenRefClassMemoryAllocationSharedPtr()
+void TestTenRefClassMemoryAllocationSharedPtrStackOverflow()
 {
 	// --------------------- New Operator Test ---------------------------------
 
@@ -1037,30 +1339,9 @@ void TestTenRefClassMemoryAllocationSharedPtr()
 	WriteString("ms\r\n");
 }
 
-//-----------------------   Fifteen Ref classs ----------------------------------
+//-----------------------   Fifteen Ref classs with stack overflow ----------------------------------
 
-
-class FifteenRefClassSharedPtr
-{
-public:
-	shared_ptr<FifteenRefClassSharedPtr> Ref1;
-	shared_ptr<FifteenRefClassSharedPtr> Ref2;
-	shared_ptr<FifteenRefClassSharedPtr> Ref3;
-	shared_ptr<FifteenRefClassSharedPtr> Ref4;
-	shared_ptr<FifteenRefClassSharedPtr> Ref5;
-	shared_ptr<FifteenRefClassSharedPtr> Ref6;
-	shared_ptr<FifteenRefClassSharedPtr> Ref7;
-	shared_ptr<FifteenRefClassSharedPtr> Ref8;
-	shared_ptr<FifteenRefClassSharedPtr> Ref9;
-	shared_ptr<FifteenRefClassSharedPtr> Ref10;
-	shared_ptr<FifteenRefClassSharedPtr> Ref11;
-	shared_ptr<FifteenRefClassSharedPtr> Ref12;
-	shared_ptr<FifteenRefClassSharedPtr> Ref13;
-	shared_ptr<FifteenRefClassSharedPtr> Ref14;
-	shared_ptr<FifteenRefClassSharedPtr> Ref15;
-};
-
-void TestFifteenRefClassMemoryAllocationSharedPtr()
+void TestFifteenRefClassMemoryAllocationSharedPtrStackOverflow()
 {
 	// --------------------- New Operator Test ---------------------------------
 
@@ -1127,36 +1408,9 @@ void TestFifteenRefClassMemoryAllocationSharedPtr()
 	WriteString("ms\r\n");
 }
 
+//-----------------------   Twenty Ref classs SharedPtr with stac overflow ----------------------------------
 
-
-//-----------------------   Twenty Ref classs SharedPtr ----------------------------------
-
-class TwentyRefClassSharedPtr
-{
-public:
-	shared_ptr<TwentyRefClassSharedPtr> Ref1;
-	shared_ptr<TwentyRefClassSharedPtr> Ref2;
-	shared_ptr<TwentyRefClassSharedPtr> Ref3;
-	shared_ptr<TwentyRefClassSharedPtr> Ref4;
-	shared_ptr<TwentyRefClassSharedPtr> Ref5;
-	shared_ptr<TwentyRefClassSharedPtr> Ref6;
-	shared_ptr<TwentyRefClassSharedPtr> Ref7;
-	shared_ptr<TwentyRefClassSharedPtr> Ref8;
-	shared_ptr<TwentyRefClassSharedPtr> Ref9;
-	shared_ptr<TwentyRefClassSharedPtr> Ref10;
-	shared_ptr<TwentyRefClassSharedPtr> Ref11;
-	shared_ptr<TwentyRefClassSharedPtr> Ref12;
-	shared_ptr<TwentyRefClassSharedPtr> Ref13;
-	shared_ptr<TwentyRefClassSharedPtr> Ref14;
-	shared_ptr<TwentyRefClassSharedPtr> Ref15;
-	shared_ptr<TwentyRefClassSharedPtr> Ref16;
-	shared_ptr<TwentyRefClassSharedPtr> Ref17;
-	shared_ptr<TwentyRefClassSharedPtr> Ref18;
-	shared_ptr<TwentyRefClassSharedPtr> Ref19;
-	shared_ptr<TwentyRefClassSharedPtr> Ref20;
-};
-
-void TestTwentyRefClassMemoryAllocationSharedPtr()
+void TestTwentyRefClassMemoryAllocationSharedPtrStackOverflow()
 {
 	// --------------------- New Operator Test ---------------------------------
 
@@ -1485,6 +1739,11 @@ int main()
 	
 	//TestEmptyClassMemoryAllocationSharedPtr();
 
+	TestOneRefClassMemoryAllocationSharedPtr();
+	TestFiveRefClassMemoryAllocationSharedPtr();
+	TestTenRefClassMemoryAllocationSharedPtr();
+	TestFifteenRefClassMemoryAllocationSharedPtr();
+	TestTwentyRefClassMemoryAllocationSharedPtr();
 
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
@@ -1496,11 +1755,12 @@ int main()
 
 	// эти хрени приводят к stack overflow даже на 10 тыс. точек
 
-	//TestOneRefClassMemoryAllocationSharedPtr();
-	//TestFiveRefClassMemoryAllocationSharedPtr();
-	//TestTenRefClassMemoryAllocationSharedPtr();
-	//TestFifteenRefClassMemoryAllocationSharedPtr();
-	//TestTwentyRefClassMemoryAllocationSharedPtr();
+	//TestOneRefClassMemoryAllocationSharedPtrStackOverflow();
+	//TestFiveRefClassMemoryAllocationSharedPtrStackOverflow();
+	//TestTenRefClassMemoryAllocationSharedPtrStackOverflow();
+	//TestFifteenRefClassMemoryAllocationSharedPtrStackOverflow();
+	//TestTwentyRefClassMemoryAllocationSharedPtrStackOverflow();
+
 
 	getchar();
     return 0;
