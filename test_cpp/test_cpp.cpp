@@ -338,10 +338,8 @@ class EmptyClass
 {
 };
 
-void TestClassMemoryAllocation()
+void TestEmptyClassMemoryAllocation()
 {
-	auto array = new EmptyClass*[testAllocationClassSize_];
-			
 	// --------------------- New Operator Test ---------------------------------
 
 	double summAllocationTime = 0;
@@ -349,6 +347,8 @@ void TestClassMemoryAllocation()
 
 	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 	{
+		auto array = new EmptyClass*[testAllocationClassSize_];
+
 		Start();
 
 		//--------------------------------------------------
@@ -372,6 +372,8 @@ void TestClassMemoryAllocation()
 		}
 		//--------------------------------------------------
 
+		delete[] array;
+
 		time = GetTime();
 		summDeleteTime += time;
 	}
@@ -382,14 +384,421 @@ void TestClassMemoryAllocation()
 	WriteString("ms\r\n");
 
 	auto avgDeleteTime = summDeleteTime / testRepeatCount;
-	WriteString("Delete Class Test = ");
+	WriteString("Delete Empty Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
-
-
-
-	delete[] array;
 }
+
+//-----------------------   One Ref classs ----------------------------------
+
+class OneRefClass
+{
+public:
+	OneRefClass* Ref1;
+};
+
+void TestOneRefClassMemoryAllocation()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new OneRefClass*[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = new OneRefClass();
+		}
+
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			long refIndex = (i + 1) % testAllocationClassSize_;
+			array[i]->Ref1 = array[refIndex];
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 1 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+//-----------------------   Five Ref classs ----------------------------------
+
+class FiveRefClass
+{
+public:
+	FiveRefClass* Ref1;
+	FiveRefClass* Ref2;
+	FiveRefClass* Ref3;
+	FiveRefClass* Ref4;
+	FiveRefClass* Ref5;
+};
+
+void TestFiveRefClassMemoryAllocation()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new FiveRefClass*[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = new FiveRefClass();
+		}
+
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			long refIndex = (i + 1) % testAllocationClassSize_;
+			array[i]->Ref1 = array[refIndex];
+			refIndex = (i + 2) % testAllocationClassSize_;
+			array[i]->Ref2 = array[refIndex];
+			refIndex = (i + 3) % testAllocationClassSize_;
+			array[i]->Ref3 = array[refIndex];
+			refIndex = (i + 4) % testAllocationClassSize_;
+			array[i]->Ref4 = array[refIndex];
+			refIndex = (i + 5) % testAllocationClassSize_;
+			array[i]->Ref5 = array[refIndex];
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 5 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+
+//-----------------------   Ten Ref classs ----------------------------------
+
+class TenRefClass
+{
+public:
+	TenRefClass* Ref1;
+	TenRefClass* Ref2;
+	TenRefClass* Ref3;
+	TenRefClass* Ref4;
+	TenRefClass* Ref5;
+	TenRefClass* Ref6;
+	TenRefClass* Ref7;
+	TenRefClass* Ref8;
+	TenRefClass* Ref9;
+	TenRefClass* Ref10;
+};
+
+void TestTenRefClassMemoryAllocation()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new TenRefClass*[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = new TenRefClass();
+		}
+
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			long refIndex = (i + 1) % testAllocationClassSize_;
+			array[i]->Ref1 = array[refIndex];
+			refIndex = (i + 2) % testAllocationClassSize_;
+			array[i]->Ref2 = array[refIndex];
+			refIndex = (i + 3) % testAllocationClassSize_;
+			array[i]->Ref3 = array[refIndex];
+			refIndex = (i + 4) % testAllocationClassSize_;
+			array[i]->Ref4 = array[refIndex];
+			refIndex = (i + 5) % testAllocationClassSize_;
+			array[i]->Ref5 = array[refIndex];
+			refIndex = (i + 6) % testAllocationClassSize_;
+			array[i]->Ref6 = array[refIndex];
+			refIndex = (i + 7) % testAllocationClassSize_;
+			array[i]->Ref7 = array[refIndex];
+			refIndex = (i + 8) % testAllocationClassSize_;
+			array[i]->Ref8 = array[refIndex];
+			refIndex = (i + 9) % testAllocationClassSize_;
+			array[i]->Ref9 = array[refIndex];
+			refIndex = (i + 10) % testAllocationClassSize_;
+			array[i]->Ref10 = array[refIndex];
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 10 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+
+//-----------------------   Fifteen Ref classs ----------------------------------
+
+
+class FifteenRefClass
+{
+public:
+	FifteenRefClass* Ref1;
+	FifteenRefClass* Ref2;
+	FifteenRefClass* Ref3;
+	FifteenRefClass* Ref4;
+	FifteenRefClass* Ref5;
+	FifteenRefClass* Ref6;
+	FifteenRefClass* Ref7;
+	FifteenRefClass* Ref8;
+	FifteenRefClass* Ref9;
+	FifteenRefClass* Ref10;
+	FifteenRefClass* Ref11;
+	FifteenRefClass* Ref12;
+	FifteenRefClass* Ref13;
+	FifteenRefClass* Ref14;
+	FifteenRefClass* Ref15;
+};
+
+void TestFifteenRefClassMemoryAllocation()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new FifteenRefClass*[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = new FifteenRefClass();
+		}
+
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			long refIndex = (i + 1) % testAllocationClassSize_;
+			array[i]->Ref1 = array[refIndex];
+			refIndex = (i + 2) % testAllocationClassSize_;
+			array[i]->Ref2 = array[refIndex];
+			refIndex = (i + 3) % testAllocationClassSize_;
+			array[i]->Ref3 = array[refIndex];
+			refIndex = (i + 4) % testAllocationClassSize_;
+			array[i]->Ref4 = array[refIndex];
+			refIndex = (i + 5) % testAllocationClassSize_;
+			array[i]->Ref5 = array[refIndex];
+			refIndex = (i + 6) % testAllocationClassSize_;
+			array[i]->Ref6 = array[refIndex];
+			refIndex = (i + 7) % testAllocationClassSize_;
+			array[i]->Ref7 = array[refIndex];
+			refIndex = (i + 8) % testAllocationClassSize_;
+			array[i]->Ref8 = array[refIndex];
+			refIndex = (i + 9) % testAllocationClassSize_;
+			array[i]->Ref9 = array[refIndex];
+			refIndex = (i + 10) % testAllocationClassSize_;
+			array[i]->Ref10 = array[refIndex];
+			refIndex = (i + 11) % testAllocationClassSize_;
+			array[i]->Ref11 = array[refIndex];
+			refIndex = (i + 12) % testAllocationClassSize_;
+			array[i]->Ref12 = array[refIndex];
+			refIndex = (i + 13) % testAllocationClassSize_;
+			array[i]->Ref13 = array[refIndex];
+			refIndex = (i + 14) % testAllocationClassSize_;
+			array[i]->Ref14 = array[refIndex];
+			refIndex = (i + 15) % testAllocationClassSize_;
+			array[i]->Ref15 = array[refIndex];
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 15 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
+//-----------------------   Twenty Ref classs ----------------------------------
+
+class TwentyRefClass
+{
+public:
+	TwentyRefClass* Ref1;
+	TwentyRefClass* Ref2;
+	TwentyRefClass* Ref3;
+	TwentyRefClass* Ref4;
+	TwentyRefClass* Ref5;
+	TwentyRefClass* Ref6;
+	TwentyRefClass* Ref7;
+	TwentyRefClass* Ref8;
+	TwentyRefClass* Ref9;
+	TwentyRefClass* Ref10;
+	TwentyRefClass* Ref11;
+	TwentyRefClass* Ref12;
+	TwentyRefClass* Ref13;
+	TwentyRefClass* Ref14;
+	TwentyRefClass* Ref15;
+	TwentyRefClass* Ref16;
+	TwentyRefClass* Ref17;
+	TwentyRefClass* Ref18;
+	TwentyRefClass* Ref19;
+	TwentyRefClass* Ref20;
+};
+
+void TestTwentyRefClassMemoryAllocation()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new TwentyRefClass*[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = new TwentyRefClass();
+		}
+
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			long refIndex = (i + 1) % testAllocationClassSize_;
+			array[i]->Ref1 = array[refIndex];
+			refIndex = (i + 2) % testAllocationClassSize_;
+			array[i]->Ref2 = array[refIndex];
+			refIndex = (i + 3) % testAllocationClassSize_;
+			array[i]->Ref3 = array[refIndex];
+			refIndex = (i + 4) % testAllocationClassSize_;
+			array[i]->Ref4 = array[refIndex];
+			refIndex = (i + 5) % testAllocationClassSize_;
+			array[i]->Ref5 = array[refIndex];
+			refIndex = (i + 6) % testAllocationClassSize_;
+			array[i]->Ref6 = array[refIndex];
+			refIndex = (i + 7) % testAllocationClassSize_;
+			array[i]->Ref7 = array[refIndex];
+			refIndex = (i + 8) % testAllocationClassSize_;
+			array[i]->Ref8 = array[refIndex];
+			refIndex = (i + 9) % testAllocationClassSize_;
+			array[i]->Ref9 = array[refIndex];
+			refIndex = (i + 10) % testAllocationClassSize_;
+			array[i]->Ref10 = array[refIndex];
+			refIndex = (i + 11) % testAllocationClassSize_;
+			array[i]->Ref11 = array[refIndex];
+			refIndex = (i + 12) % testAllocationClassSize_;
+			array[i]->Ref12 = array[refIndex];
+			refIndex = (i + 13) % testAllocationClassSize_;
+			array[i]->Ref13 = array[refIndex];
+			refIndex = (i + 14) % testAllocationClassSize_;
+			array[i]->Ref14 = array[refIndex];
+			refIndex = (i + 15) % testAllocationClassSize_;
+			array[i]->Ref15 = array[refIndex];
+			refIndex = (i + 16) % testAllocationClassSize_;
+			array[i]->Ref16 = array[refIndex];
+			refIndex = (i + 17) % testAllocationClassSize_;
+			array[i]->Ref17 = array[refIndex];
+			refIndex = (i + 18) % testAllocationClassSize_;
+			array[i]->Ref18 = array[refIndex];
+			refIndex = (i + 19) % testAllocationClassSize_;
+			array[i]->Ref19 = array[refIndex];
+			refIndex = (i + 20) % testAllocationClassSize_;
+			array[i]->Ref20 = array[refIndex];
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			delete array[i];
+		}
+		//--------------------------------------------------
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 20 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
+
 
 void TestArraysMemoryAllocation()
 {
@@ -624,13 +1033,20 @@ int main()
 	//TestNoInlineMethodsClass testNoInline;
 	//testNoInline.test();
 		
-	TestArrayAccess();
-	TestVectorAccess();
-	
-	TestArrayRandomAccess();
-	TestVectorRandomAccess();
+	//TestArrayAccess();
+	//TestVectorAccess();
+	//
+	//TestArrayRandomAccess();
+	//TestVectorRandomAccess();
 
-	//TestClassMemoryAllocation();
+	TestEmptyClassMemoryAllocation();
+	TestOneRefClassMemoryAllocation();
+	TestFiveRefClassMemoryAllocation();
+	TestTenRefClassMemoryAllocation();
+	TestFifteenRefClassMemoryAllocation();
+	TestTwentyRefClassMemoryAllocation();
+
+
 	//TestArraysMemoryAllocation();
 	//TestVectorMemoryAllocation();
 

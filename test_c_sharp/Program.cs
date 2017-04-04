@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 1;
+        const int testRepeatCount = 100;
 
         const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 50000000;
