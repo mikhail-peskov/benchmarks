@@ -1,8 +1,8 @@
-10 Size New Array Test = 5.65467ms
-10Size Delete Array Test = 5.52658ms
-100 Size New Array Test = 14.6766ms
-100Size Delete Array Test = 20.5898ms
-1000 Size New Array Test = 92.5077ms
-1000Size Delete Array Test = 53.0351ms
-10000 Size New Array Test = 433.405ms
-10000Size Delete Array Test = 606.665ms
+10 Size New Vector Test = 10.8988ms
+10 Size Delete Vector Test = 10.3735ms
+100 Size New Vector Test = 28.8188ms
+100 Size Delete Vector Test = 21.7859ms
+1000 Size New Vector Test = 133.586ms
+1000 Size Delete Vector Test = 65.2534ms
+10000 Size New Vector Test = 1333.86ms
+10000 Size Delete Vector Test = 660.768ms

@@ -1553,54 +1553,62 @@ void TestArraysMemoryAllocation()
 
 void TestVectorMemoryAllocation()
 {
-	auto array = new std::vector<int>*[testAccessArraySize_];
+	int subArraySize = 1;
 
-	// --------------------- New Operator Test ---------------------------------
-
-	double summAllocTime = 0;
-	double summDeleteTime = 0;
-
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int onderNumber = 0; onderNumber < 4; onderNumber++)
 	{
-		Start();
+		subArraySize *= 10;
 
-		//--------------------------------------------------
-		for (int i = 0; i < testAllocationArraySize_; i++)
+		// --------------------- New Operator Test ---------------------------------
+
+		double summAllocTime = 0;
+		double summDeleteTime = 0;
+
+		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
 		{
-			array[i] = new std::vector<int>(100);
+			auto array = new std::vector<int>*[testAccessArraySize_];
+
+			Start();
+
+			//--------------------------------------------------
+			for (int i = 0; i < testAllocationArraySize_; i++)
+			{
+				array[i] = new std::vector<int>(subArraySize);
+			}
+			//--------------------------------------------------
+
+			auto time = GetTime();
+			summAllocTime += time;
+
+			// ---------------------- Delete Operator Test ------------------------
+
+			Start();
+
+			//--------------------------------------------------
+			for (int i = 0; i < testAllocationArraySize_; i++)
+			{
+				delete array[i];
+			}
+			//--------------------------------------------------
+
+			delete[] array;
+
+			time = GetTime();
+			summDeleteTime += time;
 		}
-		//--------------------------------------------------
 
-		auto time = GetTime();
-		summAllocTime += time;
+		auto avgAllocTime = summAllocTime / testRepeatCount;
+		WriteDouble(subArraySize);
+		WriteString(" Size New Vector Test = ");
+		WriteDouble(avgAllocTime);
+		WriteString("ms\r\n");
 
-	// ---------------------- Delete Operator Test ------------------------
-
-		Start();
-
-		//--------------------------------------------------
-		for (int i = 0; i < testAllocationArraySize_; i++)
-		{
-			delete array[i];
-		}
-		//--------------------------------------------------
-
-		time = GetTime();
-		summDeleteTime += time;
+		auto avgDeleteTime = summDeleteTime / testRepeatCount;
+		WriteDouble(subArraySize);
+		WriteString(" Size Delete Vector Test = ");
+		WriteDouble(avgDeleteTime);
+		WriteString("ms\r\n");
 	}
-
-	auto avgAllocTime = summAllocTime / testRepeatCount;
-	WriteString("New Vector Test = ");
-	WriteDouble(avgAllocTime);
-	WriteString("ms\r\n");
-
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
-	WriteString("Delete Vector Test = ");
-	WriteDouble(avgDeleteTime);
-	WriteString("ms\r\n");
-
-
-	delete[] array;
 }
 
 void TestClassMemoryAllocationMT()
@@ -1769,10 +1777,10 @@ int main()
 	//TestTwentyRefClassMemoryAllocationSharedPtr();
 	//fileOut_.flush();
 
-	TestArraysMemoryAllocation();
-	fileOut_.flush();
-	//TestVectorMemoryAllocation();
+	//TestArraysMemoryAllocation();
 	//fileOut_.flush();
+	TestVectorMemoryAllocation();
+	fileOut_.flush();
 
 	//TestClassMemoryAllocationMT();
 	//fileOut_.flush();
