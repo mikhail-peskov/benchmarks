@@ -1434,8 +1434,7 @@ namespace test_c_sharp
                     DoSomethingWithArray(array[0]);
                     array = null;
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-
-
+                    
                     time = GetTime();
                     summDeleteTime += time;
                     double memoryAfter = GC.GetTotalMemory(true);
@@ -1445,7 +1444,7 @@ namespace test_c_sharp
                     // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
                     // плюс 8 байт - ячейка в массиве
                     // плюс 100 4-байтных чисел в самом массиве
-                    var mustCollectBytes = testAllocationArraySize_ * (16 + 8 + subArraySize * 4);
+                    var mustCollectBytes = (double)testAccessArraySize_ * (16 + 8 + subArraySize * 4);
                     if (collected < mustCollectBytes)
                         Console.WriteLine("!!! GC.Collect Wrong");
 
