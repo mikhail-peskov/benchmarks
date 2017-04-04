@@ -1,2 +1,8 @@
-Delete 1 Ref Class SharedPtr Test = 644.176ms
-Delete 5 Ref Class SharedPtr Test = 1072.95ms
+10 Size New Array Test = 5.65467ms
+10Size Delete Array Test = 5.52658ms
+100 Size New Array Test = 14.6766ms
+100Size Delete Array Test = 20.5898ms
+1000 Size New Array Test = 92.5077ms
+1000Size Delete Array Test = 53.0351ms
+10000 Size New Array Test = 433.405ms
+10000Size Delete Array Test = 606.665ms
