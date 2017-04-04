@@ -1128,7 +1128,109 @@ void TestFifteenRefClassMemoryAllocationSharedPtr()
 
 
 
+//-----------------------   Twenty Ref classs SharedPtr ----------------------------------
 
+class TwentyRefClassSharedPtr
+{
+public:
+	shared_ptr<TwentyRefClassSharedPtr> Ref1;
+	shared_ptr<TwentyRefClassSharedPtr> Ref2;
+	shared_ptr<TwentyRefClassSharedPtr> Ref3;
+	shared_ptr<TwentyRefClassSharedPtr> Ref4;
+	shared_ptr<TwentyRefClassSharedPtr> Ref5;
+	shared_ptr<TwentyRefClassSharedPtr> Ref6;
+	shared_ptr<TwentyRefClassSharedPtr> Ref7;
+	shared_ptr<TwentyRefClassSharedPtr> Ref8;
+	shared_ptr<TwentyRefClassSharedPtr> Ref9;
+	shared_ptr<TwentyRefClassSharedPtr> Ref10;
+	shared_ptr<TwentyRefClassSharedPtr> Ref11;
+	shared_ptr<TwentyRefClassSharedPtr> Ref12;
+	shared_ptr<TwentyRefClassSharedPtr> Ref13;
+	shared_ptr<TwentyRefClassSharedPtr> Ref14;
+	shared_ptr<TwentyRefClassSharedPtr> Ref15;
+	shared_ptr<TwentyRefClassSharedPtr> Ref16;
+	shared_ptr<TwentyRefClassSharedPtr> Ref17;
+	shared_ptr<TwentyRefClassSharedPtr> Ref18;
+	shared_ptr<TwentyRefClassSharedPtr> Ref19;
+	shared_ptr<TwentyRefClassSharedPtr> Ref20;
+};
+
+void TestTwentyRefClassMemoryAllocationSharedPtr()
+{
+	// --------------------- New Operator Test ---------------------------------
+
+	double summDeleteTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	{
+		auto array = new shared_ptr<TwentyRefClassSharedPtr>[testAllocationClassSize_];
+
+		//--------------------------------------------------
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			array[i] = make_shared<TwentyRefClassSharedPtr>();
+		}
+
+		for (int i = 0; i < testAllocationClassSize_; i++)
+		{
+			long refIndex = (i + 1) % testAllocationClassSize_;
+			array[i]->Ref1 = array[refIndex];
+			refIndex = (i + 2) % testAllocationClassSize_;
+			array[i]->Ref2 = array[refIndex];
+			refIndex = (i + 3) % testAllocationClassSize_;
+			array[i]->Ref3 = array[refIndex];
+			refIndex = (i + 4) % testAllocationClassSize_;
+			array[i]->Ref4 = array[refIndex];
+			refIndex = (i + 5) % testAllocationClassSize_;
+			array[i]->Ref5 = array[refIndex];
+			refIndex = (i + 6) % testAllocationClassSize_;
+			array[i]->Ref6 = array[refIndex];
+			refIndex = (i + 7) % testAllocationClassSize_;
+			array[i]->Ref7 = array[refIndex];
+			refIndex = (i + 8) % testAllocationClassSize_;
+			array[i]->Ref8 = array[refIndex];
+			refIndex = (i + 9) % testAllocationClassSize_;
+			array[i]->Ref9 = array[refIndex];
+			refIndex = (i + 10) % testAllocationClassSize_;
+			array[i]->Ref10 = array[refIndex];
+			refIndex = (i + 11) % testAllocationClassSize_;
+			array[i]->Ref11 = array[refIndex];
+			refIndex = (i + 12) % testAllocationClassSize_;
+			array[i]->Ref12 = array[refIndex];
+			refIndex = (i + 13) % testAllocationClassSize_;
+			array[i]->Ref13 = array[refIndex];
+			refIndex = (i + 14) % testAllocationClassSize_;
+			array[i]->Ref14 = array[refIndex];
+			refIndex = (i + 15) % testAllocationClassSize_;
+			array[i]->Ref15 = array[refIndex];
+			refIndex = (i + 16) % testAllocationClassSize_;
+			array[i]->Ref16 = array[refIndex];
+			refIndex = (i + 17) % testAllocationClassSize_;
+			array[i]->Ref17 = array[refIndex];
+			refIndex = (i + 18) % testAllocationClassSize_;
+			array[i]->Ref18 = array[refIndex];
+			refIndex = (i + 19) % testAllocationClassSize_;
+			array[i]->Ref19 = array[refIndex];
+			refIndex = (i + 20) % testAllocationClassSize_;
+			array[i]->Ref20 = array[refIndex];
+		}
+		//--------------------------------------------------
+
+		// ---------------------- Delete Operator Test ------------------------
+
+		Start();
+
+		delete[] array;
+
+		auto time = GetTime();
+		summDeleteTime += time;
+	}
+
+	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	WriteString("Delete 20 Ref Class Test = ");
+	WriteDouble(avgDeleteTime);
+	WriteString("ms\r\n");
+}
 
 
 
@@ -1380,11 +1482,13 @@ int main()
 	//TestFifteenRefClassMemoryAllocation();
 	//TestTwentyRefClassMemoryAllocation();
 	
-	TestEmptyClassMemoryAllocationSharedPtr();
-	TestOneRefClassMemoryAllocationSharedPtr();
-	TestFiveRefClassMemoryAllocationSharedPtr();
-	TestTenRefClassMemoryAllocationSharedPtr();
-	TestFifteenRefClassMemoryAllocationSharedPtr();
+	
+
+	//TestEmptyClassMemoryAllocationSharedPtr();
+	//TestOneRefClassMemoryAllocationSharedPtr();
+	//TestFiveRefClassMemoryAllocationSharedPtr();
+	//TestTenRefClassMemoryAllocationSharedPtr();
+	//TestFifteenRefClassMemoryAllocationSharedPtr();
 	//TestTwentyRefClassMemoryAllocationSharedPtr();
 
 	//TestArraysMemoryAllocation();
