@@ -1540,7 +1540,7 @@ void TestArraysMemoryAllocation()
 		}
 
 		WriteString("------------------------------ \r\n");
-		WriteString("External Array Count = ");
+		WriteString("Array Count = ");
 		WriteDouble(arrayCount);
 		WriteString("\r\n");
 
@@ -1610,7 +1610,7 @@ void TestVectorMemoryAllocation()
 		}
 
 		WriteString("------------------------------ \r\n");
-		WriteString("External Array Count = ");
+		WriteString("Array Count = ");
 		WriteDouble(arrayCount);
 		WriteString("\r\n");
 

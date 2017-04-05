@@ -1457,7 +1457,7 @@ namespace test_c_sharp
                 }
 
                 WriteString("------------------------------ \r\n");
-                WriteString("External Array Count = ");
+                WriteString("Array Count = ");
                 WriteDouble(arrayCount);
                 WriteString("\r\n");
 
