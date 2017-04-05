@@ -13,11 +13,11 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 100;
+        const int _testRepeatCount = 100;
 
-        const int testAccessArraySize_ = 100000000;
-        const int testAllocationClassSize_ = 10000000;
-        const int testAllocationArraySize_ = 100000;
+        const int _testArrayAccessSize = 100000000;
+        const int _testClassAllocationSize = 10000000;
+        const int _testArrayAllocationSize = 100000;
 
         static Stopwatch stopwatch_ = new Stopwatch();
 
@@ -50,18 +50,18 @@ namespace test_c_sharp
 
         static void TestArrayAccess()
         {
-            var array = new int[testAccessArraySize_];
+            var array = new int[_testArrayAccessSize];
 
 
             // ------------------- Fill -----------------------------------------------
 
             double summTime = 0;
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAccessArraySize_; i++)
+                for (int i = 0; i < _testArrayAccessSize; i++)
                 {
                     array[i] = i;
                 }
@@ -70,7 +70,7 @@ namespace test_c_sharp
                 var time = GetTime();
                 summTime += time;
             }
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("Array Fill = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -78,14 +78,14 @@ namespace test_c_sharp
             // ------------------- Copy -----------------------------------------------
 
 
-            var destinationArray = new int[testAccessArraySize_];
+            var destinationArray = new int[_testArrayAccessSize];
             summTime = 0;
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAccessArraySize_; i++)
+                for (int i = 0; i < _testArrayAccessSize; i++)
                 {
                     destinationArray[i] = array[i];
                 }
@@ -94,7 +94,7 @@ namespace test_c_sharp
                 var time = GetTime();
                 summTime += time;
             }
-            avgTime = summTime / testRepeatCount;
+            avgTime = summTime / _testRepeatCount;
             WriteString("Array Copy = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -102,17 +102,17 @@ namespace test_c_sharp
 
         static void TestListAccess()
         {
-            var array = new List<int>(new int[testAccessArraySize_]);
+            var array = new List<int>(new int[_testArrayAccessSize]);
             
             // ------------------- Fill -----------------------------------------------
 
             double summTime = 0;
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAccessArraySize_; i++)
+                for (int i = 0; i < _testArrayAccessSize; i++)
                 {
                     array[i] = i;
                 }
@@ -121,7 +121,7 @@ namespace test_c_sharp
                 var time = GetTime();
                 summTime += time;
             }
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("List Fill = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -129,14 +129,14 @@ namespace test_c_sharp
             // ------------------- Copy -----------------------------------------------
 
 
-            var destinationArray = new List<int>(new int[testAccessArraySize_]);
+            var destinationArray = new List<int>(new int[_testArrayAccessSize]);
             summTime = 0;
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAccessArraySize_; i++)
+                for (int i = 0; i < _testArrayAccessSize; i++)
                 {
                     destinationArray[i] = array[i];
                 }
@@ -145,7 +145,7 @@ namespace test_c_sharp
                 var time = GetTime();
                 summTime += time;
             }
-            avgTime = summTime / testRepeatCount;
+            avgTime = summTime / _testRepeatCount;
             WriteString("List Copy = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -154,20 +154,20 @@ namespace test_c_sharp
 
         static unsafe void TestArrayUnsafeAccess()
         {
-            var array = new int[testAccessArraySize_];
+            var array = new int[_testArrayAccessSize];
 
 
             // ------------------- Fill -----------------------------------------------
             double summTime = 0;
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
                 fixed (int* pArray = array)
                 {
                     //--------------------------------------------------
-                    for (int i = 0; i < testAccessArraySize_; i++)
+                    for (int i = 0; i < _testArrayAccessSize; i++)
                     {
                         pArray[i] = i;
                     }
@@ -178,7 +178,7 @@ namespace test_c_sharp
                 summTime += time;
             }
 
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("Array Unsafe Fill = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -186,10 +186,10 @@ namespace test_c_sharp
             // ------------------- Copy -----------------------------------------------
 
 
-            var destinationArray = new int[testAccessArraySize_];
+            var destinationArray = new int[_testArrayAccessSize];
             summTime = 0;
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
@@ -197,7 +197,7 @@ namespace test_c_sharp
                 fixed (int* pDestinationArray = destinationArray)
                 {
                     //--------------------------------------------------
-                    for (int i = 0; i < testAccessArraySize_; i++)
+                    for (int i = 0; i < _testArrayAccessSize; i++)
                     {
                         pDestinationArray[i] = pArray[i];
                     }
@@ -208,7 +208,7 @@ namespace test_c_sharp
                 summTime += time;
             }
 
-            avgTime = summTime / testRepeatCount;
+            avgTime = summTime / _testRepeatCount;
             WriteString("Array Unsafe Copy = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -216,27 +216,27 @@ namespace test_c_sharp
 
         static void TestArrayRandomAccess()
         {
-            var indexArray = new int[testAccessArraySize_];
+            var indexArray = new int[_testArrayAccessSize];
             var indexRandom = new Random();
-            for (int i = 0; i < testAccessArraySize_; i++)
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
-                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
             }
 
-            var sourceArray = new int[testAccessArraySize_];
-            for (int i = 0; i < testAccessArraySize_; i++)
+            var sourceArray = new int[_testArrayAccessSize];
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
                 sourceArray[i] = i;
             }
 
-            var destinationArray = new int[testAccessArraySize_];
+            var destinationArray = new int[_testArrayAccessSize];
             double summTime = 0;
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
-                for (int i = 0; i < testAccessArraySize_; i++)
+                for (int i = 0; i < _testArrayAccessSize; i++)
                 {
                     int index = indexArray[i];
                     destinationArray[index] = sourceArray[index];
@@ -246,7 +246,7 @@ namespace test_c_sharp
                 summTime += time;
             }
 
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("Array Random Access = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -254,31 +254,31 @@ namespace test_c_sharp
         
         static unsafe void TestArrayRandomAccessUnsafe()
         {
-            var indexArray = new int[testAccessArraySize_];
+            var indexArray = new int[_testArrayAccessSize];
             var indexRandom = new Random();
-            for (int i = 0; i < testAccessArraySize_; i++)
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
-                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
             }
 
-            var sourceArray = new int[testAccessArraySize_];
-            for (int i = 0; i < testAccessArraySize_; i++)
+            var sourceArray = new int[_testArrayAccessSize];
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
                 sourceArray[i] = i;
             }
 
-            var destinationArray = new int[testAccessArraySize_];
+            var destinationArray = new int[_testArrayAccessSize];
             double summTime = 0;
 
             fixed (int* pIndexArray = indexArray)
             fixed (int* pSourceArray = sourceArray)
             fixed (int* pDestinationArray = destinationArray)
             {
-                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+                for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
                 {
                     Start();
 
-                    for (int i = 0; i < testAccessArraySize_; i++)
+                    for (int i = 0; i < _testArrayAccessSize; i++)
                     {
                         int index = pIndexArray[i];
                         pDestinationArray[index] = pSourceArray[index];
@@ -289,7 +289,7 @@ namespace test_c_sharp
                 }
             }
 
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("Array Random Access Unsafe = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -297,23 +297,23 @@ namespace test_c_sharp
 
         static unsafe void TestArrayRandomAccessUnsafePointerArythmetic()
         {
-            var indexArray = new int[testAccessArraySize_];
+            var indexArray = new int[_testArrayAccessSize];
             var indexRandom = new Random();
-            for (int i = 0; i < testAccessArraySize_; i++)
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
-                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
             }
 
-            var sourceArray = new int[testAccessArraySize_];
-            for (int i = 0; i < testAccessArraySize_; i++)
+            var sourceArray = new int[_testArrayAccessSize];
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
                 sourceArray[i] = i;
             }
 
-            var destinationArray = new int[testAccessArraySize_];
+            var destinationArray = new int[_testArrayAccessSize];
             double summTime = 0;
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 fixed (int* pIndexArrayFixed = indexArray)
                 fixed (int* pSourceArrayFixed = sourceArray)
@@ -324,7 +324,7 @@ namespace test_c_sharp
                     int* pDestinationArray = pDestinationArrayFixed;
                     Start();
 
-                    int* pEndIndex = pIndexArray + testAccessArraySize_;
+                    int* pEndIndex = pIndexArray + _testArrayAccessSize;
                     for (; pIndexArray < pEndIndex; pIndexArray++)
                     {
                         int index = *pIndexArray;
@@ -336,7 +336,7 @@ namespace test_c_sharp
                 }
             }
 
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("Array Random Access Unsafe Pointers = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -344,27 +344,27 @@ namespace test_c_sharp
 
         static void TestListRandomAccess()
         {
-            var indexArray = new List<int>(new int[testAccessArraySize_]);
+            var indexArray = new List<int>(new int[_testArrayAccessSize]);
             var indexRandom = new Random();
-            for (int i = 0; i < testAccessArraySize_; i++)
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
-                indexArray[i] = indexRandom.Next(testAccessArraySize_);
+                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
             }
 
-            var sourceArray = new List<int>(new int[testAccessArraySize_]);
-            for (int i = 0; i < testAccessArraySize_; i++)
+            var sourceArray = new List<int>(new int[_testArrayAccessSize]);
+            for (int i = 0; i < _testArrayAccessSize; i++)
             {
                 sourceArray[i] = i;
             }
 
-            var destinationArray = new List<int>(new int[testAccessArraySize_]);
+            var destinationArray = new List<int>(new int[_testArrayAccessSize]);
             double summTime = 0;
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
-                for (int i = 0; i < testAccessArraySize_; i++)
+                for (int i = 0; i < _testArrayAccessSize; i++)
                 {
                     int index = indexArray[i];
                     destinationArray[index] = sourceArray[index];
@@ -374,7 +374,7 @@ namespace test_c_sharp
                 summTime += time;
             }
 
-            var avgTime = summTime / testRepeatCount;
+            var avgTime = summTime / _testRepeatCount;
             WriteString("List Random Access = ");
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
@@ -396,12 +396,12 @@ namespace test_c_sharp
 
                 double summTime = 0;
                 int summResult = 0;
-                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+                for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
                 {
                     Start();
 
                     //--------------------------------------------------
-                    for (int i = 0; i < testAccessArraySize_; i++)
+                    for (int i = 0; i < _testArrayAccessSize; i++)
                     {
                         summResult = InlineMethod(i);
                     }
@@ -410,7 +410,7 @@ namespace test_c_sharp
                     var time = GetTime();
                     summTime += time;
                 }
-                var avgTime = summTime / testRepeatCount;
+                var avgTime = summTime / _testRepeatCount;
                 WriteString("Inline Method = ");
                 WriteDouble(avgTime);
                 WriteString(" ms\r\n");
@@ -442,16 +442,16 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthEmptyObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new EmptyClass[testAllocationClassSize_];
+                var array = new EmptyClass[_testClassAllocationSize];
 
                 Start();
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new EmptyClass();
                 }
@@ -479,7 +479,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -487,12 +487,12 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgAllocationTime = summAllocationTime / testRepeatCount;
+            var avgAllocationTime = summAllocationTime / _testRepeatCount;
             WriteString("New Class Test = ");
             WriteDouble(avgAllocationTime);
             WriteString(" ms\r\n");
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Empty Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -527,21 +527,21 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthOneRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new OneRefClass[testAllocationClassSize_];
+                var array = new OneRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new OneRefClass();
                 }
 
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
-                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    long refIndex = (i + 1) % _testClassAllocationSize;
                     array[i].Ref1 = array[refIndex];
                 }
                 //--------------------------------------------------
@@ -565,7 +565,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -573,7 +573,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete One Ref Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -603,29 +603,29 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthFiveRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new FiveRefClass[testAllocationClassSize_];
+                var array = new FiveRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new FiveRefClass();
                 }
 
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
-                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    long refIndex = (i + 1) % _testClassAllocationSize;
                     array[i].Ref1 = array[refIndex];
-                    refIndex = (i + 2) % testAllocationClassSize_;
+                    refIndex = (i + 2) % _testClassAllocationSize;
                     array[i].Ref2 = array[refIndex];
-                    refIndex = (i + 3) % testAllocationClassSize_;
+                    refIndex = (i + 3) % _testClassAllocationSize;
                     array[i].Ref3 = array[refIndex];
-                    refIndex = (i + 4) % testAllocationClassSize_;
+                    refIndex = (i + 4) % _testClassAllocationSize;
                     array[i].Ref4 = array[refIndex];
-                    refIndex = (i + 5) % testAllocationClassSize_;
+                    refIndex = (i + 5) % _testClassAllocationSize;
                     array[i].Ref5 = array[refIndex];
                 }
                 //--------------------------------------------------
@@ -649,7 +649,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 5);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 5);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -657,7 +657,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Five Ref Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -692,39 +692,39 @@ namespace test_c_sharp
 
             DoSomethingWidthTenRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new TenRefClass[testAllocationClassSize_];
+                var array = new TenRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new TenRefClass();
                 }
 
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
-                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    long refIndex = (i + 1) % _testClassAllocationSize;
                     array[i].Ref1 = array[refIndex];
-                    refIndex = (i + 2) % testAllocationClassSize_;
+                    refIndex = (i + 2) % _testClassAllocationSize;
                     array[i].Ref2 = array[refIndex];
-                    refIndex = (i + 3) % testAllocationClassSize_;
+                    refIndex = (i + 3) % _testClassAllocationSize;
                     array[i].Ref3 = array[refIndex];
-                    refIndex = (i + 4) % testAllocationClassSize_;
+                    refIndex = (i + 4) % _testClassAllocationSize;
                     array[i].Ref4 = array[refIndex];
-                    refIndex = (i + 5) % testAllocationClassSize_;
+                    refIndex = (i + 5) % _testClassAllocationSize;
                     array[i].Ref5 = array[refIndex];
-                    refIndex = (i + 6) % testAllocationClassSize_;
+                    refIndex = (i + 6) % _testClassAllocationSize;
                     array[i].Ref6 = array[refIndex];
-                    refIndex = (i + 7) % testAllocationClassSize_;
+                    refIndex = (i + 7) % _testClassAllocationSize;
                     array[i].Ref7 = array[refIndex];
-                    refIndex = (i + 8) % testAllocationClassSize_;
+                    refIndex = (i + 8) % _testClassAllocationSize;
                     array[i].Ref8 = array[refIndex];
-                    refIndex = (i + 9) % testAllocationClassSize_;
+                    refIndex = (i + 9) % _testClassAllocationSize;
                     array[i].Ref9 = array[refIndex];
-                    refIndex = (i + 10) % testAllocationClassSize_;
+                    refIndex = (i + 10) % _testClassAllocationSize;
                     array[i].Ref10 = array[refIndex];
                 }
                 //--------------------------------------------------
@@ -748,7 +748,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 10);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 10);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -756,7 +756,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Ten Ref Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -797,49 +797,49 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthFifteenRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new FifteenRefClass[testAllocationClassSize_];
+                var array = new FifteenRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new FifteenRefClass();
                 }
 
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
-                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    long refIndex = (i + 1) % _testClassAllocationSize;
                     array[i].Ref1 = array[refIndex];
-                    refIndex = (i + 2) % testAllocationClassSize_;
+                    refIndex = (i + 2) % _testClassAllocationSize;
                     array[i].Ref2 = array[refIndex];
-                    refIndex = (i + 3) % testAllocationClassSize_;
+                    refIndex = (i + 3) % _testClassAllocationSize;
                     array[i].Ref3 = array[refIndex];
-                    refIndex = (i + 4) % testAllocationClassSize_;
+                    refIndex = (i + 4) % _testClassAllocationSize;
                     array[i].Ref4 = array[refIndex];
-                    refIndex = (i + 5) % testAllocationClassSize_;
+                    refIndex = (i + 5) % _testClassAllocationSize;
                     array[i].Ref5 = array[refIndex];
-                    refIndex = (i + 6) % testAllocationClassSize_;
+                    refIndex = (i + 6) % _testClassAllocationSize;
                     array[i].Ref6 = array[refIndex];
-                    refIndex = (i + 7) % testAllocationClassSize_;
+                    refIndex = (i + 7) % _testClassAllocationSize;
                     array[i].Ref7 = array[refIndex];
-                    refIndex = (i + 8) % testAllocationClassSize_;
+                    refIndex = (i + 8) % _testClassAllocationSize;
                     array[i].Ref8 = array[refIndex];
-                    refIndex = (i + 9) % testAllocationClassSize_;
+                    refIndex = (i + 9) % _testClassAllocationSize;
                     array[i].Ref9 = array[refIndex];
-                    refIndex = (i + 10) % testAllocationClassSize_;
+                    refIndex = (i + 10) % _testClassAllocationSize;
                     array[i].Ref10 = array[refIndex];
-                    refIndex = (i + 11) % testAllocationClassSize_;
+                    refIndex = (i + 11) % _testClassAllocationSize;
                     array[i].Ref11 = array[refIndex];
-                    refIndex = (i + 12) % testAllocationClassSize_;
+                    refIndex = (i + 12) % _testClassAllocationSize;
                     array[i].Ref12 = array[refIndex];
-                    refIndex = (i + 13) % testAllocationClassSize_;
+                    refIndex = (i + 13) % _testClassAllocationSize;
                     array[i].Ref13 = array[refIndex];
-                    refIndex = (i + 14) % testAllocationClassSize_;
+                    refIndex = (i + 14) % _testClassAllocationSize;
                     array[i].Ref14 = array[refIndex];
-                    refIndex = (i + 15) % testAllocationClassSize_;
+                    refIndex = (i + 15) % _testClassAllocationSize;
                     array[i].Ref15 = array[refIndex];
                 }
                 //--------------------------------------------------
@@ -863,7 +863,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 15);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 15);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -871,7 +871,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Fifteen Ref Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -916,60 +916,60 @@ namespace test_c_sharp
 
             DoSomethingWidthTwentyRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new TwentyRefClass[testAllocationClassSize_];
+                var array = new TwentyRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new TwentyRefClass();
                 }
 
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
-                    long refIndex = (i + 1) % testAllocationClassSize_;
+                    long refIndex = (i + 1) % _testClassAllocationSize;
                     array[i].Ref1 = array[refIndex];
-                    refIndex = (i + 2) % testAllocationClassSize_;
+                    refIndex = (i + 2) % _testClassAllocationSize;
                     array[i].Ref2 = array[refIndex];
-                    refIndex = (i + 3) % testAllocationClassSize_;
+                    refIndex = (i + 3) % _testClassAllocationSize;
                     array[i].Ref3 = array[refIndex];
-                    refIndex = (i + 4) % testAllocationClassSize_;
+                    refIndex = (i + 4) % _testClassAllocationSize;
                     array[i].Ref4 = array[refIndex];
-                    refIndex = (i + 5) % testAllocationClassSize_;
+                    refIndex = (i + 5) % _testClassAllocationSize;
                     array[i].Ref5 = array[refIndex];
-                    refIndex = (i + 6) % testAllocationClassSize_;
+                    refIndex = (i + 6) % _testClassAllocationSize;
                     array[i].Ref6 = array[refIndex];
-                    refIndex = (i + 7) % testAllocationClassSize_;
+                    refIndex = (i + 7) % _testClassAllocationSize;
                     array[i].Ref7 = array[refIndex];
-                    refIndex = (i + 8) % testAllocationClassSize_;
+                    refIndex = (i + 8) % _testClassAllocationSize;
                     array[i].Ref8 = array[refIndex];
-                    refIndex = (i + 9) % testAllocationClassSize_;
+                    refIndex = (i + 9) % _testClassAllocationSize;
                     array[i].Ref9 = array[refIndex];
-                    refIndex = (i + 10) % testAllocationClassSize_;
+                    refIndex = (i + 10) % _testClassAllocationSize;
                     array[i].Ref10 = array[refIndex];
 
-                    refIndex = (i + 11) % testAllocationClassSize_;
+                    refIndex = (i + 11) % _testClassAllocationSize;
                     array[i].Ref11 = array[refIndex];
-                    refIndex = (i + 12) % testAllocationClassSize_;
+                    refIndex = (i + 12) % _testClassAllocationSize;
                     array[i].Ref12 = array[refIndex];
-                    refIndex = (i + 13) % testAllocationClassSize_;
+                    refIndex = (i + 13) % _testClassAllocationSize;
                     array[i].Ref13 = array[refIndex];
-                    refIndex = (i + 14) % testAllocationClassSize_;
+                    refIndex = (i + 14) % _testClassAllocationSize;
                     array[i].Ref14 = array[refIndex];
-                    refIndex = (i + 15) % testAllocationClassSize_;
+                    refIndex = (i + 15) % _testClassAllocationSize;
                     array[i].Ref15 = array[refIndex];
-                    refIndex = (i + 16) % testAllocationClassSize_;
+                    refIndex = (i + 16) % _testClassAllocationSize;
                     array[i].Ref16 = array[refIndex];
-                    refIndex = (i + 17) % testAllocationClassSize_;
+                    refIndex = (i + 17) % _testClassAllocationSize;
                     array[i].Ref17 = array[refIndex];
-                    refIndex = (i + 18) % testAllocationClassSize_;
+                    refIndex = (i + 18) % _testClassAllocationSize;
                     array[i].Ref18 = array[refIndex];
-                    refIndex = (i + 19) % testAllocationClassSize_;
+                    refIndex = (i + 19) % _testClassAllocationSize;
                     array[i].Ref19 = array[refIndex];
-                    refIndex = (i + 20) % testAllocationClassSize_;
+                    refIndex = (i + 20) % _testClassAllocationSize;
                     array[i].Ref20 = array[refIndex];
                 }
                 //--------------------------------------------------
@@ -993,7 +993,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 20);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 20);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1001,7 +1001,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Twenty Ref Class Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -1028,20 +1028,20 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthOneRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new OneRefClass[testAllocationClassSize_];
+                var array = new OneRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new OneRefClass();
                 }
 
                 var sharedObj = new OneRefClass();
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i].Ref1 = sharedObj;
                 }
@@ -1066,7 +1066,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1074,7 +1074,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete One Ref Class NoRecursionPtr Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -1092,20 +1092,20 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthFiveRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new FiveRefClass[testAllocationClassSize_];
+                var array = new FiveRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new FiveRefClass();
                 }
 
                 var sharedObj = new FiveRefClass();
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i].Ref1 = sharedObj;
                     array[i].Ref2 = sharedObj;
@@ -1134,7 +1134,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 5);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 5);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1142,7 +1142,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Five Ref Class NoRecursionPtr Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -1161,20 +1161,20 @@ namespace test_c_sharp
 
             DoSomethingWidthTenRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new TenRefClass[testAllocationClassSize_];
+                var array = new TenRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new TenRefClass();
                 }
 
                 var sharedObj = new TenRefClass();
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i].Ref1 = sharedObj;
                     array[i].Ref2 = sharedObj;
@@ -1208,7 +1208,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 10);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 10);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1216,7 +1216,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Ten Ref Class NoRecursionPtr Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -1235,20 +1235,20 @@ namespace test_c_sharp
             // прогреваем метод
             DoSomethingWidthFifteenRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new FifteenRefClass[testAllocationClassSize_];
+                var array = new FifteenRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new FifteenRefClass();
                 }
 
                 var sharedObj = new FifteenRefClass();
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i].Ref1 = sharedObj;
                     array[i].Ref2 = sharedObj;
@@ -1287,7 +1287,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 15);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 15);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1295,7 +1295,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Fifteen Ref Class NoRecursionPtr Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -1313,20 +1313,20 @@ namespace test_c_sharp
 
             DoSomethingWidthTwentyRefObject(null);
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                var array = new TwentyRefClass[testAllocationClassSize_];
+                var array = new TwentyRefClass[_testClassAllocationSize];
 
                 //--------------------------------------------------
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i] = new TwentyRefClass();
                 }
 
                 var sharedObj = new TwentyRefClass();
-                for (int i = 0; i < testAllocationClassSize_; i++)
+                for (int i = 0; i < _testClassAllocationSize; i++)
                 {
                     array[i].Ref1 = sharedObj;
                     array[i].Ref2 = sharedObj;
@@ -1371,7 +1371,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock + ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = (double)testAllocationClassSize_ * (16 + 8 + 8 * 20);
+                var mustCollectBytes = (double)_testClassAllocationSize * (16 + 8 + 8 * 20);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1379,7 +1379,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgDeleteTime = summDeleteTime / testRepeatCount;
+            var avgDeleteTime = summDeleteTime / _testRepeatCount;
             WriteString("Delete Twenty Ref Class NoRecursionPtr Test = ");
             WriteDouble(avgDeleteTime);
             WriteString(" ms\r\n");
@@ -1406,17 +1406,17 @@ namespace test_c_sharp
 
                 double summAllocationTime = 0;
                 double summDeleteTime = 0;
-                for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+                for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
                 {
                     // --------------------- New Operator Test ---------------------------------
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                    var array = new int[testAllocationArraySize_][];
+                    var array = new int[_testArrayAllocationSize][];
 
                     Start();
 
                     //--------------------------------------------------
-                    for (int i = 0; i < testAllocationArraySize_; i++)
+                    for (int i = 0; i < _testArrayAllocationSize; i++)
                     {
                         array[i] = new int[subArraySize];
                     }
@@ -1444,7 +1444,7 @@ namespace test_c_sharp
                     // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
                     // плюс 8 байт - ячейка в массиве
                     // плюс 100 4-байтных чисел в самом массиве
-                    var mustCollectBytes = (double)testAllocationArraySize_ * (16 + 8 + subArraySize * 4);
+                    var mustCollectBytes = (double)_testArrayAllocationSize * (16 + 8 + subArraySize * 4);
                     if (collected < mustCollectBytes)
                         Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1452,13 +1452,13 @@ namespace test_c_sharp
                     Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
                 }
 
-                var avgAllocationTime = summAllocationTime / testRepeatCount;
+                var avgAllocationTime = summAllocationTime / _testRepeatCount;
                 WriteDouble(subArraySize);
                 WriteString(" Size New Array Test = ");
                 WriteDouble(avgAllocationTime);
                 WriteString(" ms\r\n");
 
-                var avgDeleteTime = summDeleteTime / testRepeatCount;
+                var avgDeleteTime = summDeleteTime / _testRepeatCount;
                 WriteDouble(subArraySize);
                 WriteString(" Size Delete Array Test = ");
                 WriteDouble(avgDeleteTime);
@@ -1475,15 +1475,15 @@ namespace test_c_sharp
             double summAllocTime = 0;
             double summDeleteTime = 0;
 
-            for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
             {
                 Start();
 
-                var array = new EmptyClass[testAllocationClassSize_];
+                var array = new EmptyClass[_testClassAllocationSize];
 
                 var allocThread1 = new Thread(() =>
                     {
-                        for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+                        for (int i = 0; i < _testClassAllocationSize / 4; i++)
                         {
                             array[i] = new EmptyClass();
                         }
@@ -1491,7 +1491,7 @@ namespace test_c_sharp
 
                 var allocThread2 = new Thread(() =>
                 {
-                    for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+                    for (int i = _testClassAllocationSize / 4; i < _testClassAllocationSize / 2; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -1500,7 +1500,7 @@ namespace test_c_sharp
 
                 var allocThread3 = new Thread(() =>
                 {
-                    for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+                    for (int i = _testClassAllocationSize / 2; i < _testClassAllocationSize * 3 / 4; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -1508,7 +1508,7 @@ namespace test_c_sharp
 
                 var allocThread4 = new Thread(() =>
                 {
-                    for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+                    for (int i = _testClassAllocationSize * 3 / 4; i < _testClassAllocationSize; i++)
                     {
                         array[i] = new EmptyClass();
                     }
@@ -1549,7 +1549,7 @@ namespace test_c_sharp
 
                 // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
                 // плюс 8 байт - ячейка в массиве
-                var mustCollectBytes = testAllocationClassSize_ * (16 + 8);
+                var mustCollectBytes = _testClassAllocationSize * (16 + 8);
                 if (collected < mustCollectBytes)
                     Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1557,7 +1557,7 @@ namespace test_c_sharp
                 Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
             }
 
-            var avgTime = summAllocTime / testRepeatCount;
+            var avgTime = summAllocTime / _testRepeatCount;
 
             WriteString("New Class Test MT = ");
 
@@ -1565,7 +1565,7 @@ namespace test_c_sharp
 
             WriteString(" ms\r\n");
 
-            avgTime = summDeleteTime / testRepeatCount;
+            avgTime = summDeleteTime / _testRepeatCount;
 
             WriteString("Delete Class Test MT = ");
 
@@ -1581,21 +1581,25 @@ namespace test_c_sharp
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Restart();
 
-            TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
-            testInlineMethodsObject.test();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestInlineMethodsClass testInlineMethodsObject = new TestInlineMethodsClass();
+            //testInlineMethodsObject.test();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             TestArrayAccess();
             TestArrayUnsafeAccess();
             TestListAccess();
 
-            TestArrayRandomAccess();
-            TestArrayRandomAccessUnsafe();
-            TestArrayRandomAccessUnsafePointerArythmetic();
-            TestListRandomAccess();
             Console.WriteLine("---------------------");
             file_.Flush();
+
+            // TODO: запустить 
+            //TestArrayRandomAccess();
+            //TestArrayRandomAccessUnsafe();
+            //TestArrayRandomAccessUnsafePointerArythmetic();
+            //TestListRandomAccess();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             //TestEmptyClassMemoryAllocation();
             //Console.WriteLine("---------------------");

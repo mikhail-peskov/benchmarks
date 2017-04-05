@@ -4,11 +4,11 @@ using namespace std;
 
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 100;
+const int _testRepeatCount = 100;
 
-const int testAccessArraySize_ = 100000000;
-const int testAllocationClassSize_ = 10000000;
-const int testAllocationArraySize_ = 100000;
+const int _testArrayAccessSize = 100000000;
+const int _testClassAllocationSize = 10000000;
+const int _testArrayAllocationSize = 100000;
 
 _LARGE_INTEGER startCounter_;
 
@@ -46,7 +46,7 @@ void WriteDouble(double value)
 	fileOut_ << value;
 }
 
-void Test(const char* testName, std::function<void()> function, int avgIterationCount = testRepeatCount)
+void Test(const char* testName, std::function<void()> function, int avgIterationCount = _testRepeatCount)
 {
 	double summTime = 0;
 	for (int iterationIndes = 0; iterationIndes < avgIterationCount; iterationIndes++)
@@ -71,18 +71,18 @@ void Test(const char* testName, std::function<void()> function, int avgIteration
 
 void TestArrayAccess()
 {
-	int* array = new int[testAccessArraySize_];
+	int* array = new int[_testArrayAccessSize];
 
 
 	// ------------------- Fill -----------------------------------------------
 
 	double summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < _testArrayAccessSize; i++)
 		{
 			array[i] = i;
 		}
@@ -91,7 +91,7 @@ void TestArrayAccess()
 		auto time = GetTime();
 		summTime += time;
 	}
-	auto avgTime = summTime / testRepeatCount;
+	auto avgTime = summTime / _testRepeatCount;
 	WriteString("Array Fill = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
@@ -99,14 +99,14 @@ void TestArrayAccess()
 	// ------------------- Copy -----------------------------------------------
 
 
-	int* destinationArray = new int[testAccessArraySize_];
+	int* destinationArray = new int[_testArrayAccessSize];
 	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < _testArrayAccessSize; i++)
 		{
 			destinationArray[i] = array[i];
 		}
@@ -115,7 +115,7 @@ void TestArrayAccess()
 		auto time = GetTime();
 		summTime += time;
 	}
-	avgTime = summTime / testRepeatCount;
+	avgTime = summTime / _testRepeatCount;
 	WriteString("Array Copy = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
@@ -126,18 +126,18 @@ void TestArrayAccess()
 
 void TestVectorAccess()
 {
-	std::vector<int> vector(testAccessArraySize_);
+	std::vector<int> vector(_testArrayAccessSize);
 
 
 	// ------------------- Fill -----------------------------------------------
 
 	double summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < _testArrayAccessSize; i++)
 		{
 			vector[i] = i;
 		}
@@ -146,7 +146,7 @@ void TestVectorAccess()
 		auto time = GetTime();
 		summTime += time;
 	}
-	auto avgTime = summTime / testRepeatCount;
+	auto avgTime = summTime / _testRepeatCount;
 	WriteString("Vector Fill = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
@@ -154,14 +154,14 @@ void TestVectorAccess()
 	// ------------------- Copy -----------------------------------------------
 
 
-	std::vector<int> destinationVector(testAccessArraySize_);
+	std::vector<int> destinationVector(_testArrayAccessSize);
 	summTime = 0;
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < _testArrayAccessSize; i++)
 		{
 			destinationVector[i] = vector[i];
 		}
@@ -170,7 +170,7 @@ void TestVectorAccess()
 		auto time = GetTime();
 		summTime += time;
 	}
-	avgTime = summTime / testRepeatCount;
+	avgTime = summTime / _testRepeatCount;
 	WriteString("Vector Copy = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
@@ -178,27 +178,27 @@ void TestVectorAccess()
 
 void TestArrayRandomAccess()
 {
-	int* indexArray = new int[testAccessArraySize_];
-	int* sourceArray = new int[testAccessArraySize_];
-	int* destinationArray = new int[testAccessArraySize_];
+	int* indexArray = new int[_testArrayAccessSize];
+	int* sourceArray = new int[_testArrayAccessSize];
+	int* destinationArray = new int[_testArrayAccessSize];
 
 	srand(time(NULL));
 
-	for (int i = 0; i < testAccessArraySize_; i++) {
-		indexArray[i] = rand() % testAccessArraySize_;
+	for (int i = 0; i < _testArrayAccessSize; i++) {
+		indexArray[i] = rand() % _testArrayAccessSize;
 	}
 
-	for (int i = 0; i < testAccessArraySize_; i++) {
+	for (int i = 0; i < _testArrayAccessSize; i++) {
 		sourceArray[i] = i;
 	}
 
 	double summTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < _testArrayAccessSize; i++)
 		{
 			int index = indexArray[i];
 			destinationArray[index] = sourceArray[index];
@@ -208,7 +208,7 @@ void TestArrayRandomAccess()
 		summTime += time;
 	}
 
-	auto avgTime = summTime / testRepeatCount;
+	auto avgTime = summTime / _testRepeatCount;
 	WriteString("Test Random Access = ");
 	WriteDouble(avgTime);
 	WriteString(" ms\r\n");
@@ -220,27 +220,27 @@ void TestArrayRandomAccess()
 
 void TestVectorRandomAccess()
 {
-	std::vector<int> indexArray(testAccessArraySize_);
-	std::vector<int> sourceArray(testAccessArraySize_);
-	std::vector<int> destinationArray(testAccessArraySize_);
+	std::vector<int> indexArray(_testArrayAccessSize);
+	std::vector<int> sourceArray(_testArrayAccessSize);
+	std::vector<int> destinationArray(_testArrayAccessSize);
 
 	srand(time(NULL));
 
-	for (int i = 0; i < testAccessArraySize_; i++) {
-		indexArray[i] = rand() % testAccessArraySize_;
+	for (int i = 0; i < _testArrayAccessSize; i++) {
+		indexArray[i] = rand() % _testArrayAccessSize;
 	}
 
-	for (int i = 0; i < testAccessArraySize_; i++) {
+	for (int i = 0; i < _testArrayAccessSize; i++) {
 		sourceArray[i] = i;
 	}
 
 	double summTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
-		for (int i = 0; i < testAccessArraySize_; i++)
+		for (int i = 0; i < _testArrayAccessSize; i++)
 		{
 			int index = indexArray[i];
 			destinationArray[index] = sourceArray[index];
@@ -250,7 +250,7 @@ void TestVectorRandomAccess()
 		summTime += time;
 	}
 
-	auto avgTime = summTime / testRepeatCount;
+	auto avgTime = summTime / _testRepeatCount;
 	WriteString("Test Random Access Vector = ");
 	WriteDouble(avgTime);
 	WriteString(" ms\r\n");
@@ -269,12 +269,12 @@ public:
 	{
 		double summTime = 0;
 		int summResult = 0;
-		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+		for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 		{
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < testAccessArraySize_; i++)
+			for (int i = 0; i < _testArrayAccessSize; i++)
 			{
 				summResult = InlineMethod(i);
 			}
@@ -283,7 +283,7 @@ public:
 			auto time = GetTime();
 			summTime += time;
 		}
-		auto avgTime = summTime / testRepeatCount;
+		auto avgTime = summTime / _testRepeatCount;
 		WriteString("Inline Method = ");
 		WriteDouble(avgTime);
 		WriteString("ms\r\n");
@@ -305,12 +305,12 @@ public:
 	{
 		double summTime = 0;
 		int summResult = 0;
-		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+		for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 		{
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < testAccessArraySize_; i++)
+			for (int i = 0; i < _testArrayAccessSize; i++)
 			{
 				summResult = noInlineMethod(i);
 			}
@@ -319,7 +319,7 @@ public:
 			auto time = GetTime();
 			summTime += time;
 		}
-		auto avgTime = summTime / testRepeatCount;
+		auto avgTime = summTime / _testRepeatCount;
 		WriteString("No Inline Method = ");
 		WriteDouble(avgTime);
 		WriteString("ms\r\n");
@@ -349,14 +349,14 @@ void TestEmptyClassMemoryAllocation()
 	double summAllocationTime = 0;
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new EmptyClass*[testAllocationClassSize_];
+		auto array = new EmptyClass*[_testClassAllocationSize];
 
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = new EmptyClass();
 		}
@@ -370,7 +370,7 @@ void TestEmptyClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			delete array[i];
 		}
@@ -382,12 +382,12 @@ void TestEmptyClassMemoryAllocation()
 		summDeleteTime += time;
 	}
 
-	auto avgAllocationTime = summAllocationTime / testRepeatCount;
+	auto avgAllocationTime = summAllocationTime / _testRepeatCount;
 	WriteString("New Class Test = ");
 	WriteDouble(avgAllocationTime);
 	WriteString("ms\r\n");
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete Empty Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -407,19 +407,19 @@ void TestOneRefClassMemoryAllocation()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new OneRefClass*[testAllocationClassSize_];
+		auto array = new OneRefClass*[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = new OneRefClass();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -429,7 +429,7 @@ void TestOneRefClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			delete array[i];
 		}
@@ -441,7 +441,7 @@ void TestOneRefClassMemoryAllocation()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 1 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -465,27 +465,27 @@ void TestFiveRefClassMemoryAllocation()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new FiveRefClass*[testAllocationClassSize_];
+		auto array = new FiveRefClass*[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = new FiveRefClass();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -495,7 +495,7 @@ void TestFiveRefClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			delete array[i];
 		}
@@ -507,7 +507,7 @@ void TestFiveRefClassMemoryAllocation()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 5 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -537,37 +537,37 @@ void TestTenRefClassMemoryAllocation()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new TenRefClass*[testAllocationClassSize_];
+		auto array = new TenRefClass*[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = new TenRefClass();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
-			refIndex = (i + 6) % testAllocationClassSize_;
+			refIndex = (i + 6) % _testClassAllocationSize;
 			array[i]->Ref6 = array[refIndex];
-			refIndex = (i + 7) % testAllocationClassSize_;
+			refIndex = (i + 7) % _testClassAllocationSize;
 			array[i]->Ref7 = array[refIndex];
-			refIndex = (i + 8) % testAllocationClassSize_;
+			refIndex = (i + 8) % _testClassAllocationSize;
 			array[i]->Ref8 = array[refIndex];
-			refIndex = (i + 9) % testAllocationClassSize_;
+			refIndex = (i + 9) % _testClassAllocationSize;
 			array[i]->Ref9 = array[refIndex];
-			refIndex = (i + 10) % testAllocationClassSize_;
+			refIndex = (i + 10) % _testClassAllocationSize;
 			array[i]->Ref10 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -577,7 +577,7 @@ void TestTenRefClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			delete array[i];
 		}
@@ -589,7 +589,7 @@ void TestTenRefClassMemoryAllocation()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 10 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -625,47 +625,47 @@ void TestFifteenRefClassMemoryAllocation()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new FifteenRefClass*[testAllocationClassSize_];
+		auto array = new FifteenRefClass*[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = new FifteenRefClass();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
-			refIndex = (i + 6) % testAllocationClassSize_;
+			refIndex = (i + 6) % _testClassAllocationSize;
 			array[i]->Ref6 = array[refIndex];
-			refIndex = (i + 7) % testAllocationClassSize_;
+			refIndex = (i + 7) % _testClassAllocationSize;
 			array[i]->Ref7 = array[refIndex];
-			refIndex = (i + 8) % testAllocationClassSize_;
+			refIndex = (i + 8) % _testClassAllocationSize;
 			array[i]->Ref8 = array[refIndex];
-			refIndex = (i + 9) % testAllocationClassSize_;
+			refIndex = (i + 9) % _testClassAllocationSize;
 			array[i]->Ref9 = array[refIndex];
-			refIndex = (i + 10) % testAllocationClassSize_;
+			refIndex = (i + 10) % _testClassAllocationSize;
 			array[i]->Ref10 = array[refIndex];
-			refIndex = (i + 11) % testAllocationClassSize_;
+			refIndex = (i + 11) % _testClassAllocationSize;
 			array[i]->Ref11 = array[refIndex];
-			refIndex = (i + 12) % testAllocationClassSize_;
+			refIndex = (i + 12) % _testClassAllocationSize;
 			array[i]->Ref12 = array[refIndex];
-			refIndex = (i + 13) % testAllocationClassSize_;
+			refIndex = (i + 13) % _testClassAllocationSize;
 			array[i]->Ref13 = array[refIndex];
-			refIndex = (i + 14) % testAllocationClassSize_;
+			refIndex = (i + 14) % _testClassAllocationSize;
 			array[i]->Ref14 = array[refIndex];
-			refIndex = (i + 15) % testAllocationClassSize_;
+			refIndex = (i + 15) % _testClassAllocationSize;
 			array[i]->Ref15 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -675,7 +675,7 @@ void TestFifteenRefClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			delete array[i];
 		}
@@ -687,7 +687,7 @@ void TestFifteenRefClassMemoryAllocation()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 15 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -726,57 +726,57 @@ void TestTwentyRefClassMemoryAllocation()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new TwentyRefClass*[testAllocationClassSize_];
+		auto array = new TwentyRefClass*[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = new TwentyRefClass();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
-			refIndex = (i + 6) % testAllocationClassSize_;
+			refIndex = (i + 6) % _testClassAllocationSize;
 			array[i]->Ref6 = array[refIndex];
-			refIndex = (i + 7) % testAllocationClassSize_;
+			refIndex = (i + 7) % _testClassAllocationSize;
 			array[i]->Ref7 = array[refIndex];
-			refIndex = (i + 8) % testAllocationClassSize_;
+			refIndex = (i + 8) % _testClassAllocationSize;
 			array[i]->Ref8 = array[refIndex];
-			refIndex = (i + 9) % testAllocationClassSize_;
+			refIndex = (i + 9) % _testClassAllocationSize;
 			array[i]->Ref9 = array[refIndex];
-			refIndex = (i + 10) % testAllocationClassSize_;
+			refIndex = (i + 10) % _testClassAllocationSize;
 			array[i]->Ref10 = array[refIndex];
-			refIndex = (i + 11) % testAllocationClassSize_;
+			refIndex = (i + 11) % _testClassAllocationSize;
 			array[i]->Ref11 = array[refIndex];
-			refIndex = (i + 12) % testAllocationClassSize_;
+			refIndex = (i + 12) % _testClassAllocationSize;
 			array[i]->Ref12 = array[refIndex];
-			refIndex = (i + 13) % testAllocationClassSize_;
+			refIndex = (i + 13) % _testClassAllocationSize;
 			array[i]->Ref13 = array[refIndex];
-			refIndex = (i + 14) % testAllocationClassSize_;
+			refIndex = (i + 14) % _testClassAllocationSize;
 			array[i]->Ref14 = array[refIndex];
-			refIndex = (i + 15) % testAllocationClassSize_;
+			refIndex = (i + 15) % _testClassAllocationSize;
 			array[i]->Ref15 = array[refIndex];
-			refIndex = (i + 16) % testAllocationClassSize_;
+			refIndex = (i + 16) % _testClassAllocationSize;
 			array[i]->Ref16 = array[refIndex];
-			refIndex = (i + 17) % testAllocationClassSize_;
+			refIndex = (i + 17) % _testClassAllocationSize;
 			array[i]->Ref17 = array[refIndex];
-			refIndex = (i + 18) % testAllocationClassSize_;
+			refIndex = (i + 18) % _testClassAllocationSize;
 			array[i]->Ref18 = array[refIndex];
-			refIndex = (i + 19) % testAllocationClassSize_;
+			refIndex = (i + 19) % _testClassAllocationSize;
 			array[i]->Ref19 = array[refIndex];
-			refIndex = (i + 20) % testAllocationClassSize_;
+			refIndex = (i + 20) % _testClassAllocationSize;
 			array[i]->Ref20 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -786,7 +786,7 @@ void TestTwentyRefClassMemoryAllocation()
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			delete array[i];
 		}
@@ -797,7 +797,7 @@ void TestTwentyRefClassMemoryAllocation()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 20 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -817,14 +817,14 @@ void TestEmptyClassMemoryAllocationSharedPtr()
 	double summAllocationTime = 0;
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<EmptyClass>[testAllocationClassSize_];
+		auto array = new shared_ptr<EmptyClass>[_testClassAllocationSize];
 
 		Start();
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<EmptyClass>();
 		}
@@ -844,12 +844,12 @@ void TestEmptyClassMemoryAllocationSharedPtr()
 		summDeleteTime += time;
 	}
 
-	auto avgAllocationTime = summAllocationTime / testRepeatCount;
+	auto avgAllocationTime = summAllocationTime / _testRepeatCount;
 	WriteString("New Class Test Shared Pointers = ");
 	WriteDouble(avgAllocationTime);
 	WriteString("ms\r\n");
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete Empty Class Shared Pointers Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -872,18 +872,18 @@ void TestOneRefClassMemoryAllocationSharedPtr()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<OneRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<OneRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<OneRefClassSharedPtr>();
 		}
 
 		auto sharedObj = make_shared<OneRefClassSharedPtr>();
-		for (int i = 0; i < testAllocationClassSize_ - 1; i++)
+		for (int i = 0; i < _testClassAllocationSize - 1; i++)
 		{
 			long refIndex = i + 1;
 			array[i]->Ref1 = sharedObj;
@@ -900,7 +900,7 @@ void TestOneRefClassMemoryAllocationSharedPtr()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 1 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -924,18 +924,18 @@ void TestFiveRefClassMemoryAllocationSharedPtr()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<FiveRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<FiveRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<FiveRefClassSharedPtr>();
 		}
 
 		auto sharedObj = make_shared<FiveRefClassSharedPtr>();
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i]->Ref1 = sharedObj;
 			array[i]->Ref2 = sharedObj;
@@ -955,7 +955,7 @@ void TestFiveRefClassMemoryAllocationSharedPtr()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 5 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -984,18 +984,18 @@ void TestTenRefClassMemoryAllocationSharedPtr()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<TenRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<TenRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<TenRefClassSharedPtr>();
 		}
 
 		auto sharedObj = make_shared<TenRefClassSharedPtr>();
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i]->Ref1 = sharedObj;
 			array[i]->Ref2 = sharedObj;
@@ -1020,7 +1020,7 @@ void TestTenRefClassMemoryAllocationSharedPtr()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 10 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1054,18 +1054,18 @@ void TestFifteenRefClassMemoryAllocationSharedPtr()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<FifteenRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<FifteenRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<FifteenRefClassSharedPtr>();
 		}
 
 		auto sharedObj = make_shared<FifteenRefClassSharedPtr>();
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i]->Ref1 = sharedObj;
 			array[i]->Ref2 = sharedObj;
@@ -1095,7 +1095,7 @@ void TestFifteenRefClassMemoryAllocationSharedPtr()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 15 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1134,18 +1134,18 @@ void TestTwentyRefClassMemoryAllocationSharedPtr()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<TwentyRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<TwentyRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<TwentyRefClassSharedPtr>();
 		}
 
 		auto sharedObj = make_shared<TwentyRefClassSharedPtr>();
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i]->Ref1 = sharedObj;
 			array[i]->Ref2 = sharedObj;
@@ -1180,7 +1180,7 @@ void TestTwentyRefClassMemoryAllocationSharedPtr()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 20 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1198,17 +1198,17 @@ void TestOneRefClassMemoryAllocationSharedPtrStackOverflow()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<OneRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<OneRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<OneRefClassSharedPtr>();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_ - 1; i++)
+		for (int i = 0; i < _testClassAllocationSize - 1; i++)
 		{
 			long refIndex = i + 1;
 			array[i]->Ref1 = array[refIndex];
@@ -1225,7 +1225,7 @@ void TestOneRefClassMemoryAllocationSharedPtrStackOverflow()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 1 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1239,27 +1239,27 @@ void TestFiveRefClassMemoryAllocationSharedPtrStackOverflow()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<FiveRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<FiveRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<FiveRefClassSharedPtr>();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -1274,7 +1274,7 @@ void TestFiveRefClassMemoryAllocationSharedPtrStackOverflow()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 5 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1288,37 +1288,37 @@ void TestTenRefClassMemoryAllocationSharedPtrStackOverflow()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<TenRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<TenRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<TenRefClassSharedPtr>();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
-			refIndex = (i + 6) % testAllocationClassSize_;
+			refIndex = (i + 6) % _testClassAllocationSize;
 			array[i]->Ref6 = array[refIndex];
-			refIndex = (i + 7) % testAllocationClassSize_;
+			refIndex = (i + 7) % _testClassAllocationSize;
 			array[i]->Ref7 = array[refIndex];
-			refIndex = (i + 8) % testAllocationClassSize_;
+			refIndex = (i + 8) % _testClassAllocationSize;
 			array[i]->Ref8 = array[refIndex];
-			refIndex = (i + 9) % testAllocationClassSize_;
+			refIndex = (i + 9) % _testClassAllocationSize;
 			array[i]->Ref9 = array[refIndex];
-			refIndex = (i + 10) % testAllocationClassSize_;
+			refIndex = (i + 10) % _testClassAllocationSize;
 			array[i]->Ref10 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -1333,7 +1333,7 @@ void TestTenRefClassMemoryAllocationSharedPtrStackOverflow()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 10 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1347,47 +1347,47 @@ void TestFifteenRefClassMemoryAllocationSharedPtrStackOverflow()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<FifteenRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<FifteenRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<FifteenRefClassSharedPtr>();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
-			refIndex = (i + 6) % testAllocationClassSize_;
+			refIndex = (i + 6) % _testClassAllocationSize;
 			array[i]->Ref6 = array[refIndex];
-			refIndex = (i + 7) % testAllocationClassSize_;
+			refIndex = (i + 7) % _testClassAllocationSize;
 			array[i]->Ref7 = array[refIndex];
-			refIndex = (i + 8) % testAllocationClassSize_;
+			refIndex = (i + 8) % _testClassAllocationSize;
 			array[i]->Ref8 = array[refIndex];
-			refIndex = (i + 9) % testAllocationClassSize_;
+			refIndex = (i + 9) % _testClassAllocationSize;
 			array[i]->Ref9 = array[refIndex];
-			refIndex = (i + 10) % testAllocationClassSize_;
+			refIndex = (i + 10) % _testClassAllocationSize;
 			array[i]->Ref10 = array[refIndex];
-			refIndex = (i + 11) % testAllocationClassSize_;
+			refIndex = (i + 11) % _testClassAllocationSize;
 			array[i]->Ref11 = array[refIndex];
-			refIndex = (i + 12) % testAllocationClassSize_;
+			refIndex = (i + 12) % _testClassAllocationSize;
 			array[i]->Ref12 = array[refIndex];
-			refIndex = (i + 13) % testAllocationClassSize_;
+			refIndex = (i + 13) % _testClassAllocationSize;
 			array[i]->Ref13 = array[refIndex];
-			refIndex = (i + 14) % testAllocationClassSize_;
+			refIndex = (i + 14) % _testClassAllocationSize;
 			array[i]->Ref14 = array[refIndex];
-			refIndex = (i + 15) % testAllocationClassSize_;
+			refIndex = (i + 15) % _testClassAllocationSize;
 			array[i]->Ref15 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -1402,7 +1402,7 @@ void TestFifteenRefClassMemoryAllocationSharedPtrStackOverflow()
 		summDeleteTime += time;	
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 15 Ref Class SharedPtr Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1416,57 +1416,57 @@ void TestTwentyRefClassMemoryAllocationSharedPtrStackOverflow()
 
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
-		auto array = new shared_ptr<TwentyRefClassSharedPtr>[testAllocationClassSize_];
+		auto array = new shared_ptr<TwentyRefClassSharedPtr>[_testClassAllocationSize];
 
 		//--------------------------------------------------
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
 			array[i] = make_shared<TwentyRefClassSharedPtr>();
 		}
 
-		for (int i = 0; i < testAllocationClassSize_; i++)
+		for (int i = 0; i < _testClassAllocationSize; i++)
 		{
-			long refIndex = (i + 1) % testAllocationClassSize_;
+			long refIndex = (i + 1) % _testClassAllocationSize;
 			array[i]->Ref1 = array[refIndex];
-			refIndex = (i + 2) % testAllocationClassSize_;
+			refIndex = (i + 2) % _testClassAllocationSize;
 			array[i]->Ref2 = array[refIndex];
-			refIndex = (i + 3) % testAllocationClassSize_;
+			refIndex = (i + 3) % _testClassAllocationSize;
 			array[i]->Ref3 = array[refIndex];
-			refIndex = (i + 4) % testAllocationClassSize_;
+			refIndex = (i + 4) % _testClassAllocationSize;
 			array[i]->Ref4 = array[refIndex];
-			refIndex = (i + 5) % testAllocationClassSize_;
+			refIndex = (i + 5) % _testClassAllocationSize;
 			array[i]->Ref5 = array[refIndex];
-			refIndex = (i + 6) % testAllocationClassSize_;
+			refIndex = (i + 6) % _testClassAllocationSize;
 			array[i]->Ref6 = array[refIndex];
-			refIndex = (i + 7) % testAllocationClassSize_;
+			refIndex = (i + 7) % _testClassAllocationSize;
 			array[i]->Ref7 = array[refIndex];
-			refIndex = (i + 8) % testAllocationClassSize_;
+			refIndex = (i + 8) % _testClassAllocationSize;
 			array[i]->Ref8 = array[refIndex];
-			refIndex = (i + 9) % testAllocationClassSize_;
+			refIndex = (i + 9) % _testClassAllocationSize;
 			array[i]->Ref9 = array[refIndex];
-			refIndex = (i + 10) % testAllocationClassSize_;
+			refIndex = (i + 10) % _testClassAllocationSize;
 			array[i]->Ref10 = array[refIndex];
-			refIndex = (i + 11) % testAllocationClassSize_;
+			refIndex = (i + 11) % _testClassAllocationSize;
 			array[i]->Ref11 = array[refIndex];
-			refIndex = (i + 12) % testAllocationClassSize_;
+			refIndex = (i + 12) % _testClassAllocationSize;
 			array[i]->Ref12 = array[refIndex];
-			refIndex = (i + 13) % testAllocationClassSize_;
+			refIndex = (i + 13) % _testClassAllocationSize;
 			array[i]->Ref13 = array[refIndex];
-			refIndex = (i + 14) % testAllocationClassSize_;
+			refIndex = (i + 14) % _testClassAllocationSize;
 			array[i]->Ref14 = array[refIndex];
-			refIndex = (i + 15) % testAllocationClassSize_;
+			refIndex = (i + 15) % _testClassAllocationSize;
 			array[i]->Ref15 = array[refIndex];
-			refIndex = (i + 16) % testAllocationClassSize_;
+			refIndex = (i + 16) % _testClassAllocationSize;
 			array[i]->Ref16 = array[refIndex];
-			refIndex = (i + 17) % testAllocationClassSize_;
+			refIndex = (i + 17) % _testClassAllocationSize;
 			array[i]->Ref17 = array[refIndex];
-			refIndex = (i + 18) % testAllocationClassSize_;
+			refIndex = (i + 18) % _testClassAllocationSize;
 			array[i]->Ref18 = array[refIndex];
-			refIndex = (i + 19) % testAllocationClassSize_;
+			refIndex = (i + 19) % _testClassAllocationSize;
 			array[i]->Ref19 = array[refIndex];
-			refIndex = (i + 20) % testAllocationClassSize_;
+			refIndex = (i + 20) % _testClassAllocationSize;
 			array[i]->Ref20 = array[refIndex];
 		}
 		//--------------------------------------------------
@@ -1481,7 +1481,7 @@ void TestTwentyRefClassMemoryAllocationSharedPtrStackOverflow()
 		summDeleteTime += time;
 	}
 
-	auto avgDeleteTime = summDeleteTime / testRepeatCount;
+	auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete 20 Ref Class Test = ");
 	WriteDouble(avgDeleteTime);
 	WriteString("ms\r\n");
@@ -1501,16 +1501,16 @@ void TestArraysMemoryAllocation()
 
 		double summAllocationTime = 0;
 		double summDeleteTime = 0;
-		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+		for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 		{
 
 			// --------------------- New Operator Test ---------------------------------
-			auto array = new int*[testAccessArraySize_];
+			auto array = new int*[_testArrayAccessSize];
 
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < testAllocationArraySize_; i++)
+			for (int i = 0; i < _testArrayAllocationSize; i++)
 			{
 				array[i] = new int[subArraySize];
 			}
@@ -1524,7 +1524,7 @@ void TestArraysMemoryAllocation()
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < testAllocationArraySize_; i++)
+			for (int i = 0; i < _testArrayAllocationSize; i++)
 			{
 				delete[] array[i];
 			}
@@ -1536,14 +1536,14 @@ void TestArraysMemoryAllocation()
 			summDeleteTime += time;
 		}
 
-		auto avgAllocationTime = summAllocationTime / testRepeatCount;
+		auto avgAllocationTime = summAllocationTime / _testRepeatCount;
 		WriteDouble(subArraySize);
 		WriteString(" Size New Array Test = ");
 		WriteDouble(avgAllocationTime);
 		WriteString("ms\r\n");
 
 		WriteDouble(subArraySize);
-		auto avgDeleteTime = summDeleteTime / testRepeatCount;
+		auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 		WriteString( "Size Delete Array Test = ");
 		WriteDouble(avgDeleteTime);
 		WriteString("ms\r\n");
@@ -1564,14 +1564,14 @@ void TestVectorMemoryAllocation()
 		double summAllocTime = 0;
 		double summDeleteTime = 0;
 
-		for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+		for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 		{
-			auto array = new std::vector<int>*[testAccessArraySize_];
+			auto array = new std::vector<int>*[_testArrayAccessSize];
 
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < testAllocationArraySize_; i++)
+			for (int i = 0; i < _testArrayAllocationSize; i++)
 			{
 				array[i] = new std::vector<int>(subArraySize);
 			}
@@ -1585,7 +1585,7 @@ void TestVectorMemoryAllocation()
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < testAllocationArraySize_; i++)
+			for (int i = 0; i < _testArrayAllocationSize; i++)
 			{
 				delete array[i];
 			}
@@ -1597,13 +1597,13 @@ void TestVectorMemoryAllocation()
 			summDeleteTime += time;
 		}
 
-		auto avgAllocTime = summAllocTime / testRepeatCount;
+		auto avgAllocTime = summAllocTime / _testRepeatCount;
 		WriteDouble(subArraySize);
 		WriteString(" Size New Vector Test = ");
 		WriteDouble(avgAllocTime);
 		WriteString("ms\r\n");
 
-		auto avgDeleteTime = summDeleteTime / testRepeatCount;
+		auto avgDeleteTime = summDeleteTime / _testRepeatCount;
 		WriteDouble(subArraySize);
 		WriteString(" Size Delete Vector Test = ");
 		WriteDouble(avgDeleteTime);
@@ -1613,20 +1613,20 @@ void TestVectorMemoryAllocation()
 
 void TestClassMemoryAllocationMT()
 {
-	auto array = new EmptyClass*[testAllocationClassSize_];
+	auto array = new EmptyClass*[_testClassAllocationSize];
 
 	// --------------------- New Operator Test ---------------------------------
 
 	double summAllocTime = 0;
 	double summDeleteTime = 0;
 
-	for (int iterationIndes = 0; iterationIndes < testRepeatCount; iterationIndes++)
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
 	{
 		Start();
 
 		std::thread allocThread1([array]()
 		{
-			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+			for (int i = 0; i < _testClassAllocationSize / 4; i++)
 			{
 				array[i] = new EmptyClass();
 			}
@@ -1634,7 +1634,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread allocThread2([array]()
 		{
-			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+			for (int i = _testClassAllocationSize / 4; i < _testClassAllocationSize / 2; i++)
 			{
 				array[i] = new EmptyClass();
 			}
@@ -1643,7 +1643,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread allocThread3([array]()
 		{
-			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+			for (int i = _testClassAllocationSize / 2; i < _testClassAllocationSize * 3 / 4; i++)
 			{
 				array[i] = new EmptyClass();
 			}
@@ -1651,7 +1651,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread allocThread4([array]()
 		{
-			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+			for (int i = _testClassAllocationSize * 3 / 4; i < _testClassAllocationSize; i++)
 			{
 				array[i] = new EmptyClass();
 			}
@@ -1673,7 +1673,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread deleteThread1([array]()
 		{
-			for (int i = 0; i < testAllocationClassSize_ / 4; i++)
+			for (int i = 0; i < _testClassAllocationSize / 4; i++)
 			{
 				delete array[i];
 			}
@@ -1681,7 +1681,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread deleteThread2([array]()
 		{
-			for (int i = testAllocationClassSize_ / 4; i < testAllocationClassSize_ / 2; i++)
+			for (int i = _testClassAllocationSize / 4; i < _testClassAllocationSize / 2; i++)
 			{
 				delete array[i];
 			}
@@ -1690,7 +1690,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread deleteThread3([array]()
 		{
-			for (int i = testAllocationClassSize_ / 2; i < testAllocationClassSize_ * 3 / 4; i++)
+			for (int i = _testClassAllocationSize / 2; i < _testClassAllocationSize * 3 / 4; i++)
 			{
 				delete array[i];
 			}
@@ -1698,7 +1698,7 @@ void TestClassMemoryAllocationMT()
 
 		std::thread deleteThread4([array]()
 		{
-			for (int i = testAllocationClassSize_ * 3 / 4; i < testAllocationClassSize_; i++)
+			for (int i = _testClassAllocationSize * 3 / 4; i < _testClassAllocationSize; i++)
 			{
 				delete array[i];
 			}
@@ -1714,12 +1714,12 @@ void TestClassMemoryAllocationMT()
 		summDeleteTime += time;
 	}
 
-	auto avgTime = summAllocTime / testRepeatCount;
+	auto avgTime = summAllocTime / _testRepeatCount;
 	WriteString("New Class Test MT = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
 
-	avgTime = summDeleteTime / testRepeatCount;
+	avgTime = summDeleteTime / _testRepeatCount;
 	WriteString("Delete Class Test MT = ");
 	WriteDouble(avgTime);
 	WriteString("ms\r\n");
