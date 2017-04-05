@@ -8,7 +8,6 @@ const int _testRepeatCount = 100;
 
 const int _testArrayAccessSize = 100000000;
 const int _testClassAllocationSize = 10000000;
-const int _testArrayAllocationSize = 100000;
 
 _LARGE_INTEGER startCounter_;
 
@@ -1495,9 +1494,13 @@ void TestArraysMemoryAllocation()
 {
 	int subArraySize = 1;
 
-	for (int onderNumber = 0; onderNumber < 4; onderNumber++)
+	int arrayCount = 100000000;
+
+	for (int onderNumber = 0; onderNumber < 6; onderNumber++)
 	{
 		subArraySize *= 10;
+
+		arrayCount /= 10;
 
 		double summAllocationTime = 0;
 		double summDeleteTime = 0;
@@ -1510,7 +1513,7 @@ void TestArraysMemoryAllocation()
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < _testArrayAllocationSize; i++)
+			for (int i = 0; i < arrayCount; i++)
 			{
 				array[i] = new int[subArraySize];
 			}
@@ -1524,7 +1527,7 @@ void TestArraysMemoryAllocation()
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < _testArrayAllocationSize; i++)
+			for (int i = 0; i < arrayCount; i++)
 			{
 				delete[] array[i];
 			}
@@ -1535,6 +1538,11 @@ void TestArraysMemoryAllocation()
 			time = GetTime();
 			summDeleteTime += time;
 		}
+
+		WriteString("------------------------------ \r\n");
+		WriteString("External Array Count = ");
+		WriteDouble(arrayCount);
+		WriteString("\r\n");
 
 		auto avgAllocationTime = summAllocationTime / _testRepeatCount;
 		WriteDouble(subArraySize);
@@ -1555,9 +1563,13 @@ void TestVectorMemoryAllocation()
 {
 	int subArraySize = 1;
 
-	for (int onderNumber = 0; onderNumber < 4; onderNumber++)
+	int arrayCount = 100000000;
+
+	for (int onderNumber = 0; onderNumber < 6; onderNumber++)
 	{
 		subArraySize *= 10;
+
+		arrayCount /= 10;
 
 		// --------------------- New Operator Test ---------------------------------
 
@@ -1571,7 +1583,7 @@ void TestVectorMemoryAllocation()
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < _testArrayAllocationSize; i++)
+			for (int i = 0; i < arrayCount; i++)
 			{
 				array[i] = new std::vector<int>(subArraySize);
 			}
@@ -1585,7 +1597,7 @@ void TestVectorMemoryAllocation()
 			Start();
 
 			//--------------------------------------------------
-			for (int i = 0; i < _testArrayAllocationSize; i++)
+			for (int i = 0; i < arrayCount; i++)
 			{
 				delete array[i];
 			}
@@ -1596,6 +1608,11 @@ void TestVectorMemoryAllocation()
 			time = GetTime();
 			summDeleteTime += time;
 		}
+
+		WriteString("------------------------------ \r\n");
+		WriteString("External Array Count = ");
+		WriteDouble(arrayCount);
+		WriteString("\r\n");
 
 		auto avgAllocTime = summAllocTime / _testRepeatCount;
 		WriteDouble(subArraySize);
@@ -1732,58 +1749,58 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	TestInlineMethodsClass testInline;
-	testInline.test();
-	fileOut_.flush();
+	//TestInlineMethodsClass testInline;
+	//testInline.test();
+	//fileOut_.flush();
 
-	TestNoInlineMethodsClass testNoInline;
-	testNoInline.test();
-	fileOut_.flush();
-		
-	TestArrayAccess();
-	fileOut_.flush();
-	TestVectorAccess();
-	fileOut_.flush();
+	//TestNoInlineMethodsClass testNoInline;
+	//testNoInline.test();
+	//fileOut_.flush();
+	//	
+	//TestArrayAccess();
+	//fileOut_.flush();
+	//TestVectorAccess();
+	//fileOut_.flush();
 
-	TestArrayRandomAccess();
-	fileOut_.flush();
-	TestVectorRandomAccess();
-	fileOut_.flush();
+	//TestArrayRandomAccess();
+	//fileOut_.flush();
+	//TestVectorRandomAccess();
+	//fileOut_.flush();
 
-	TestEmptyClassMemoryAllocation();
-	fileOut_.flush();
-	TestOneRefClassMemoryAllocation();
-	fileOut_.flush();
-	TestFiveRefClassMemoryAllocation();
-	fileOut_.flush();
-	TestTenRefClassMemoryAllocation();
-	fileOut_.flush();
-	TestFifteenRefClassMemoryAllocation();
-	fileOut_.flush();
-	TestTwentyRefClassMemoryAllocation();
-	fileOut_.flush();
-	
-	TestEmptyClassMemoryAllocationSharedPtr();
-	fileOut_.flush();
+	//TestEmptyClassMemoryAllocation();
+	//fileOut_.flush();
+	//TestOneRefClassMemoryAllocation();
+	//fileOut_.flush();
+	//TestFiveRefClassMemoryAllocation();
+	//fileOut_.flush();
+	//TestTenRefClassMemoryAllocation();
+	//fileOut_.flush();
+	//TestFifteenRefClassMemoryAllocation();
+	//fileOut_.flush();
+	//TestTwentyRefClassMemoryAllocation();
+	//fileOut_.flush();
+	//
+	//TestEmptyClassMemoryAllocationSharedPtr();
+	//fileOut_.flush();
 
-	TestOneRefClassMemoryAllocationSharedPtr();
-	fileOut_.flush();
-	TestFiveRefClassMemoryAllocationSharedPtr();
-	fileOut_.flush();
-	TestTenRefClassMemoryAllocationSharedPtr();
-	fileOut_.flush();
-	TestFifteenRefClassMemoryAllocationSharedPtr();
-	fileOut_.flush();
-	TestTwentyRefClassMemoryAllocationSharedPtr();
-	fileOut_.flush();
+	//TestOneRefClassMemoryAllocationSharedPtr();
+	//fileOut_.flush();
+	//TestFiveRefClassMemoryAllocationSharedPtr();
+	//fileOut_.flush();
+	//TestTenRefClassMemoryAllocationSharedPtr();
+	//fileOut_.flush();
+	//TestFifteenRefClassMemoryAllocationSharedPtr();
+	//fileOut_.flush();
+	//TestTwentyRefClassMemoryAllocationSharedPtr();
+	//fileOut_.flush();
 
 	TestArraysMemoryAllocation();
 	fileOut_.flush();
 	TestVectorMemoryAllocation();
 	fileOut_.flush();
 
-	TestClassMemoryAllocationMT();
-	fileOut_.flush();
+	//TestClassMemoryAllocationMT();
+	//fileOut_.flush();
 
 	cout << "----------- Complete ------------------\r\n";
 

@@ -1399,13 +1399,13 @@ namespace test_c_sharp
         {
             int subArraySize = 1;
 
-            int externalArrayCount = 100000000;
+            int arrayCount = 100000000;
 
-            for (int onderNumber = 0; onderNumber < 4; onderNumber++)
+            for (int onderNumber = 0; onderNumber < 6; onderNumber++)
             {
                 subArraySize *= 10;
 
-                externalArrayCount /= 10;
+                arrayCount /= 10;
 
                 double summAllocationTime = 0;
                 double summDeleteTime = 0;
@@ -1415,12 +1415,12 @@ namespace test_c_sharp
                     // --------------------- New Operator Test ---------------------------------
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                    var array = new int[externalArrayCount][];
+                    var array = new int[arrayCount][];
 
                     Start();
 
                     //--------------------------------------------------
-                    for (int i = 0; i < externalArrayCount; i++)
+                    for (int i = 0; i < arrayCount; i++)
                     {
                         array[i] = new int[subArraySize];
                     }
@@ -1448,7 +1448,7 @@ namespace test_c_sharp
                     // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
                     // плюс 8 байт - ячейка в массиве
                     // плюс 100 4-байтных чисел в самом массиве
-                    var mustCollectBytes = (double)externalArrayCount * (16 + 8 + subArraySize * 4);
+                    var mustCollectBytes = (double)arrayCount * (16 + 8 + subArraySize * 4);
                     if (collected < mustCollectBytes)
                         Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1458,7 +1458,7 @@ namespace test_c_sharp
 
                 WriteString("------------------------------ \r\n");
                 WriteString("External Array Count = ");
-                WriteDouble(externalArrayCount);
+                WriteDouble(arrayCount);
                 WriteString("\r\n");
 
                 var avgAllocationTime = summAllocationTime / _testRepeatCount;
