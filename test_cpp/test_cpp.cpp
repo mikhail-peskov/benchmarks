@@ -1749,13 +1749,13 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	//TestInlineMethodsClass testInline;
-	//testInline.test();
-	//fileOut_.flush();
+	TestInlineMethodsClass testInline;
+	testInline.test();
+	fileOut_.flush();
 
-	//TestNoInlineMethodsClass testNoInline;
-	//testNoInline.test();
-	//fileOut_.flush();
+	TestNoInlineMethodsClass testNoInline;
+	testNoInline.test();
+	fileOut_.flush();
 	//	
 	//TestArrayAccess();
 	//fileOut_.flush();
@@ -1794,10 +1794,10 @@ int main()
 	//TestTwentyRefClassMemoryAllocationSharedPtr();
 	//fileOut_.flush();
 
-	TestArraysMemoryAllocation();
-	fileOut_.flush();
-	TestVectorMemoryAllocation();
-	fileOut_.flush();
+	//TestArraysMemoryAllocation();
+	//fileOut_.flush();
+	//TestVectorMemoryAllocation();
+	//fileOut_.flush();
 
 	//TestClassMemoryAllocationMT();
 	//fileOut_.flush();

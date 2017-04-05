@@ -1603,12 +1603,12 @@ namespace test_c_sharp
             //file_.Flush();
 
             // TODO: запустить 
-            //TestArrayRandomAccess();
-            //TestArrayRandomAccessUnsafe();
-            //TestArrayRandomAccessUnsafePointerArythmetic();
-            //TestListRandomAccess();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestArrayRandomAccess();
+            TestArrayRandomAccessUnsafe();
+            TestArrayRandomAccessUnsafePointerArythmetic();
+            TestListRandomAccess();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
             //TestEmptyClassMemoryAllocation();
             //Console.WriteLine("---------------------");
@@ -1650,9 +1650,9 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            TestArraysMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestArraysMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
             //TestClassMemoryAllocationMT();
             //Console.WriteLine("---------------------");
             //file_.Flush();
