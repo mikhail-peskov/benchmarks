@@ -4,7 +4,7 @@ using namespace std;
 
 //---------------- Infrastructure ----------------------
 
-const int testRepeatCount = 2;
+const int testRepeatCount = 100;
 
 const int testAccessArraySize_ = 100000000;
 const int testAllocationClassSize_ = 10000000;

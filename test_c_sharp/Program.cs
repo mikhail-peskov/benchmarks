@@ -13,11 +13,11 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int testRepeatCount = 2;
+        const int testRepeatCount = 100;
 
-        const int testAccessArraySize_ = 100000;
+        const int testAccessArraySize_ = 100000000;
         const int testAllocationClassSize_ = 10000000;
-        const int testAllocationArraySize_ = 1000000;
+        const int testAllocationArraySize_ = 100000;
 
         static Stopwatch stopwatch_ = new Stopwatch();
 
@@ -1411,12 +1411,12 @@ namespace test_c_sharp
                     // --------------------- New Operator Test ---------------------------------
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                    var array = new int[testAccessArraySize_][];
+                    var array = new int[testAllocationArraySize_][];
 
                     Start();
 
                     //--------------------------------------------------
-                    for (int i = 0; i < testAccessArraySize_; i++)
+                    for (int i = 0; i < testAllocationArraySize_; i++)
                     {
                         array[i] = new int[subArraySize];
                     }
@@ -1444,7 +1444,7 @@ namespace test_c_sharp
                     // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
                     // плюс 8 байт - ячейка в массиве
                     // плюс 100 4-байтных чисел в самом массиве
-                    var mustCollectBytes = (double)testAccessArraySize_ * (16 + 8 + subArraySize * 4);
+                    var mustCollectBytes = (double)testAllocationArraySize_ * (16 + 8 + subArraySize * 4);
                     if (collected < mustCollectBytes)
                         Console.WriteLine("!!! GC.Collect Wrong");
 
@@ -1593,56 +1593,56 @@ namespace test_c_sharp
             TestArrayRandomAccess();
             TestArrayRandomAccessUnsafe();
             TestArrayRandomAccessUnsafePointerArythmetic();
-            //TestListRandomAccess();
+            TestListRandomAccess();
             Console.WriteLine("---------------------");
             file_.Flush();
 
-            TestEmptyClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestEmptyClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
-            TestOneRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFiveRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFifteenRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTwentyRefClassMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestOneRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFiveRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFifteenRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTwentyRefClassMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
 
 
             // -------------- No Recursion Ptr Methods Calling -----------------------
 
-            TestOneRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFiveRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTenRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestFifteenRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestTwentyRefClassMemoryAllocationNoRecursionPtr();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestOneRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFiveRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTenRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestFifteenRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestTwentyRefClassMemoryAllocationNoRecursionPtr();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             TestArraysMemoryAllocation();
             Console.WriteLine("---------------------");
             file_.Flush();
-            TestClassMemoryAllocationMT();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestClassMemoryAllocationMT();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             Console.WriteLine("--- Complete ---");
 
