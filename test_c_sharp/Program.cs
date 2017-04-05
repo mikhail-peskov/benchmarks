@@ -17,7 +17,7 @@ namespace test_c_sharp
 
         const int _testArrayAccessSize = 100000000;
         const int _testClassAllocationSize = 10000000;
-        const int _testArrayAllocationSize = 100000;
+        
 
         static Stopwatch stopwatch_ = new Stopwatch();
 
@@ -1399,24 +1399,28 @@ namespace test_c_sharp
         {
             int subArraySize = 1;
 
+            int externalArrayCount = 100000000;
+
             for (int onderNumber = 0; onderNumber < 4; onderNumber++)
             {
                 subArraySize *= 10;
 
+                externalArrayCount /= 10;
 
                 double summAllocationTime = 0;
                 double summDeleteTime = 0;
                 for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
                 {
+
                     // --------------------- New Operator Test ---------------------------------
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-                    var array = new int[_testArrayAllocationSize][];
+                    var array = new int[externalArrayCount][];
 
                     Start();
 
                     //--------------------------------------------------
-                    for (int i = 0; i < _testArrayAllocationSize; i++)
+                    for (int i = 0; i < externalArrayCount; i++)
                     {
                         array[i] = new int[subArraySize];
                     }
@@ -1444,13 +1448,18 @@ namespace test_c_sharp
                     // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
                     // плюс 8 байт - ячейка в массиве
                     // плюс 100 4-байтных чисел в самом массиве
-                    var mustCollectBytes = (double)_testArrayAllocationSize * (16 + 8 + subArraySize * 4);
+                    var mustCollectBytes = (double)externalArrayCount * (16 + 8 + subArraySize * 4);
                     if (collected < mustCollectBytes)
                         Console.WriteLine("!!! GC.Collect Wrong");
 
                     Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
                     Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
                 }
+
+                WriteString("------------------------------ \r\n");
+                WriteString("External Array Count = ");
+                WriteDouble(externalArrayCount);
+                WriteString("\r\n");
 
                 var avgAllocationTime = summAllocationTime / _testRepeatCount;
                 WriteDouble(subArraySize);
@@ -1586,12 +1595,12 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            TestArrayAccess();
-            TestArrayUnsafeAccess();
-            TestListAccess();
+            //TestArrayAccess();
+            //TestArrayUnsafeAccess();
+            //TestListAccess();
 
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             // TODO: запустить 
             //TestArrayRandomAccess();
