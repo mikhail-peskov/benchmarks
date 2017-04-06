@@ -4,7 +4,7 @@ using namespace std;
 
 //---------------- Infrastructure ----------------------
 
-const int _testRepeatCount = 100;
+const int _testRepeatCount = 2;
 
 const int _testArrayAccessSize = 100000000;
 const int _testClassAllocationSize = 10000000;
@@ -181,11 +181,19 @@ void TestArrayRandomAccess()
 	int* sourceArray = new int[_testArrayAccessSize];
 	int* destinationArray = new int[_testArrayAccessSize];
 
-	srand(time(NULL));
+	//srand(time(NULL));
+	//for (int i = 0; i < _testArrayAccessSize; i++) {
+	//	indexArray[i] = rand() % _testArrayAccessSize;
+	//}
 
+	ifstream randNumbers("random_values.txt");
 	for (int i = 0; i < _testArrayAccessSize; i++) {
-		indexArray[i] = rand() % _testArrayAccessSize;
+		int nextValue;
+		randNumbers >> nextValue;
+		indexArray[i] = nextValue;
 	}
+	randNumbers.close();
+	cout << "file with random data loaded\r\n";
 
 	for (int i = 0; i < _testArrayAccessSize; i++) {
 		sourceArray[i] = i;
@@ -225,9 +233,23 @@ void TestVectorRandomAccess()
 
 	srand(time(NULL));
 
+	//for (int i = 0; i < _testArrayAccessSize; i++) {
+	//	indexArray[i] = rand() % _testArrayAccessSize;
+	//}
+
+
+
+	ifstream randNumbers("random_values.txt");
 	for (int i = 0; i < _testArrayAccessSize; i++) {
-		indexArray[i] = rand() % _testArrayAccessSize;
+		int nextValue;
+		randNumbers >> nextValue;
+		indexArray[i] = nextValue;
 	}
+	randNumbers.close();
+	cout << "file with random data loaded\r\n";
+
+
+
 
 	for (int i = 0; i < _testArrayAccessSize; i++) {
 		sourceArray[i] = i;
@@ -1749,23 +1771,24 @@ int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
 
-	TestInlineMethodsClass testInline;
-	testInline.test();
-	fileOut_.flush();
+	//TestInlineMethodsClass testInline;
+	//testInline.test();
+	//fileOut_.flush();
 
-	TestNoInlineMethodsClass testNoInline;
-	testNoInline.test();
-	fileOut_.flush();
+	//TestNoInlineMethodsClass testNoInline;
+	//testNoInline.test();
+	//fileOut_.flush();
+	
 	//	
 	//TestArrayAccess();
 	//fileOut_.flush();
 	//TestVectorAccess();
 	//fileOut_.flush();
 
-	//TestArrayRandomAccess();
-	//fileOut_.flush();
-	//TestVectorRandomAccess();
-	//fileOut_.flush();
+	TestArrayRandomAccess();
+	fileOut_.flush();
+	TestVectorRandomAccess();
+	fileOut_.flush();
 
 	//TestEmptyClassMemoryAllocation();
 	//fileOut_.flush();

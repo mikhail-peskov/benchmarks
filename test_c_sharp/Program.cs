@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int _testRepeatCount = 100;
+        const int _testRepeatCount = 2;
 
         const int _testArrayAccessSize = 100000000;
         const int _testClassAllocationSize = 10000000;
@@ -217,11 +217,33 @@ namespace test_c_sharp
         static void TestArrayRandomAccess()
         {
             var indexArray = new int[_testArrayAccessSize];
-            var indexRandom = new Random();
-            for (int i = 0; i < _testArrayAccessSize; i++)
+
+            // --------------------------------------------------------------------
+            //using (var randValuesFile = new System.IO.StreamWriter(@"random_values.txt"))
+            //{
+            //    var indexRandom = new Random();
+            //    for (int i = 0; i < _testArrayAccessSize; i++)
+            //    {
+            //        var nextValue = indexRandom.Next(_testArrayAccessSize);
+            //        randValuesFile.WriteLine(nextValue);
+            //    }
+            //}
+            //Console.WriteLine("Random File Generated");
+            //Console.ReadLine();
+            // --------------------------------------------------------------------
+
+
+            using (StreamReader sr = File.OpenText("random_values.txt"))
             {
-                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
+                for (int i = 0; i < _testArrayAccessSize; i++)
+                {
+                    String line = sr.ReadLine();
+                    var nextValue = int.Parse(line);
+                    indexArray[i] = nextValue;
+                }
             }
+
+            Console.WriteLine("Random Files added");
 
             var sourceArray = new int[_testArrayAccessSize];
             for (int i = 0; i < _testArrayAccessSize; i++)
@@ -255,10 +277,15 @@ namespace test_c_sharp
         static unsafe void TestArrayRandomAccessUnsafe()
         {
             var indexArray = new int[_testArrayAccessSize];
-            var indexRandom = new Random();
-            for (int i = 0; i < _testArrayAccessSize; i++)
+
+            using (StreamReader sr = File.OpenText("random_values.txt"))
             {
-                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
+                for (int i = 0; i < _testArrayAccessSize; i++)
+                {
+                    String line = sr.ReadLine();
+                    var nextValue = int.Parse(line);
+                    indexArray[i] = nextValue;
+                }
             }
 
             var sourceArray = new int[_testArrayAccessSize];
@@ -298,10 +325,20 @@ namespace test_c_sharp
         static unsafe void TestArrayRandomAccessUnsafePointerArythmetic()
         {
             var indexArray = new int[_testArrayAccessSize];
-            var indexRandom = new Random();
-            for (int i = 0; i < _testArrayAccessSize; i++)
+            //var indexRandom = new Random();
+            //for (int i = 0; i < _testArrayAccessSize; i++)
+            //{
+            //    indexArray[i] = indexRandom.Next(_testArrayAccessSize);
+            //}
+
+            using (StreamReader sr = File.OpenText("random_values.txt"))
             {
-                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
+                for (int i = 0; i < _testArrayAccessSize; i++)
+                {
+                    String line = sr.ReadLine();
+                    var nextValue = int.Parse(line);
+                    indexArray[i] = nextValue;
+                }
             }
 
             var sourceArray = new int[_testArrayAccessSize];
@@ -345,10 +382,20 @@ namespace test_c_sharp
         static void TestListRandomAccess()
         {
             var indexArray = new List<int>(new int[_testArrayAccessSize]);
-            var indexRandom = new Random();
-            for (int i = 0; i < _testArrayAccessSize; i++)
+            //var indexRandom = new Random();
+            //for (int i = 0; i < _testArrayAccessSize; i++)
+            //{
+            //    indexArray[i] = indexRandom.Next(_testArrayAccessSize);
+            //}
+
+            using (StreamReader sr = File.OpenText("random_values.txt"))
             {
-                indexArray[i] = indexRandom.Next(_testArrayAccessSize);
+                for (int i = 0; i < _testArrayAccessSize; i++)
+                {
+                    String line = sr.ReadLine();
+                    var nextValue = int.Parse(line);
+                    indexArray[i] = nextValue;
+                }
             }
 
             var sourceArray = new List<int>(new int[_testArrayAccessSize]);
@@ -1604,8 +1651,14 @@ namespace test_c_sharp
 
             // TODO: запустить 
             TestArrayRandomAccess();
+            Console.WriteLine("---------------------");
+            file_.Flush();
             TestArrayRandomAccessUnsafe();
+            Console.WriteLine("---------------------");
+            file_.Flush();
             TestArrayRandomAccessUnsafePointerArythmetic();
+            Console.WriteLine("---------------------");
+            file_.Flush();
             TestListRandomAccess();
             Console.WriteLine("---------------------");
             file_.Flush();
