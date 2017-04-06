@@ -1591,7 +1591,7 @@ void TestArraysMemoryAllocation()
 {
 	int subArraySize = 1;
 
-	int arrayCount = 100000000;
+	int arrayCount = 1000000000;
 
 	for (int onderNumber = 0; onderNumber < 6; onderNumber++)
 	{
@@ -1660,7 +1660,7 @@ void TestVectorMemoryAllocation()
 {
 	int subArraySize = 1;
 
-	int arrayCount = 100000000;
+	int arrayCount = 1000000000;
 
 	for (int onderNumber = 0; onderNumber < 6; onderNumber++)
 	{
@@ -1724,6 +1724,290 @@ void TestVectorMemoryAllocation()
 		WriteString("ms\r\n");
 	}
 }
+
+
+void TestArraysMemoryAllocationMT()
+{
+	int subArraySize = 1;
+
+	int arrayCount = 1000000000;
+
+	for (int onderNumber = 0; onderNumber < 6; onderNumber++)
+	{
+		subArraySize *= 10;
+
+		arrayCount /= 10;
+
+		double summAllocationTime = 0;
+		double summDeleteTime = 0;
+		for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+		{
+
+			// --------------------- New Operator Test ---------------------------------
+			auto array = new int*[_testArrayAccessSize];
+
+			Start();
+
+			//--------------------------------------------------
+
+			std::thread allocThread1([array, arrayCount, subArraySize]()
+			{
+				for (int i = 0; i < arrayCount / 4; i++)
+				{
+					array[i] = new int[subArraySize];
+				}
+			});
+
+			std::thread allocThread2([array, arrayCount, subArraySize]()
+			{
+				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+				{
+					array[i] = new int[subArraySize];
+				}
+			});
+
+
+			std::thread allocThread3([array, arrayCount, subArraySize]()
+			{
+				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+				{
+					array[i] = new int[subArraySize];
+				}
+			});
+
+			std::thread allocThread4([array, arrayCount, subArraySize]()
+			{
+				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+				{
+					array[i] = new int[subArraySize];
+				}
+			});
+
+			allocThread1.join();
+			allocThread2.join();
+			allocThread3.join();
+			allocThread4.join();
+
+			//--------------------------------------------------
+
+			auto time = GetTime();
+			summAllocationTime += time;
+
+			// ---------------------- Delete Operator Test ------------------------
+
+			Start();
+
+			//--------------------------------------------------
+
+			std::thread deleteThread1([array, arrayCount]()
+			{
+				for (int i = 0; i < arrayCount / 4; i++)
+				{
+					delete array[i];
+				}
+			});
+
+			std::thread deleteThread2([array, arrayCount]()
+			{
+				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+				{
+					delete array[i];
+				}
+			});
+
+
+			std::thread deleteThread3([array, arrayCount]()
+			{
+				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+				{
+					delete array[i];
+				}
+			});
+
+			std::thread deleteThread4([array, arrayCount]()
+			{
+				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+				{
+					delete array[i];
+				}
+			});
+
+			deleteThread1.join();
+			deleteThread2.join();
+			deleteThread3.join();
+			deleteThread4.join();
+
+
+			//--------------------------------------------------
+
+			delete[] array;
+
+			time = GetTime();
+			summDeleteTime += time;
+		}
+
+		WriteString("------------------------------ \r\n");
+		WriteString("Array Count = ");
+		WriteDouble(arrayCount);
+		WriteString("\r\n");
+
+		auto avgAllocationTime = summAllocationTime / _testRepeatCount;
+		WriteDouble(subArraySize);
+		WriteString(" Size New Array Test MT = ");
+		WriteDouble(avgAllocationTime);
+		WriteString("ms\r\n");
+
+		WriteDouble(subArraySize);
+		auto avgDeleteTime = summDeleteTime / _testRepeatCount;
+		WriteString("Size Delete Array Test MT = ");
+		WriteDouble(avgDeleteTime);
+		WriteString("ms\r\n");
+	}
+}
+
+
+void TestVectorMemoryAllocationMT()
+{
+	int subArraySize = 1;
+
+	int arrayCount = 1000000000;
+
+	for (int onderNumber = 0; onderNumber < 6; onderNumber++)
+	{
+		subArraySize *= 10;
+
+		arrayCount /= 10;
+
+		// --------------------- New Operator Test ---------------------------------
+
+		double summAllocTime = 0;
+		double summDeleteTime = 0;
+
+		for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+		{
+			auto array = new std::vector<int>*[_testArrayAccessSize];
+
+			Start();
+
+			//--------------------------------------------------
+
+			std::thread allocThread1([array, arrayCount, subArraySize]()
+			{
+				for (int i = 0; i < arrayCount / 4; i++)
+				{
+					array[i] = new std::vector<int>(subArraySize);
+				}
+			});
+
+			std::thread allocThread2([array, arrayCount, subArraySize]()
+			{
+				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+				{
+					array[i] = new std::vector<int>(subArraySize);
+				}
+			});
+
+
+			std::thread allocThread3([array, arrayCount, subArraySize]()
+			{
+				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+				{
+					array[i] = new std::vector<int>(subArraySize);
+				}
+			});
+
+			std::thread allocThread4([array, arrayCount, subArraySize]()
+			{
+				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+				{
+					array[i] = new std::vector<int>(subArraySize);
+				}
+			});
+
+			allocThread1.join();
+			allocThread2.join();
+			allocThread3.join();
+			allocThread4.join();
+			//--------------------------------------------------
+
+			auto time = GetTime();
+			summAllocTime += time;
+
+			// ---------------------- Delete Operator Test ------------------------
+
+			Start();
+
+			//--------------------------------------------------
+			std::thread deleteThread1([array, arrayCount]()
+			{
+				for (int i = 0; i < arrayCount / 4; i++)
+				{
+					delete array[i];
+				}
+			});
+
+			std::thread deleteThread2([array, arrayCount]()
+			{
+				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+				{
+					delete array[i];
+				}
+			});
+
+
+			std::thread deleteThread3([array, arrayCount]()
+			{
+				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+				{
+					delete array[i];
+				}
+			});
+
+			std::thread deleteThread4([array, arrayCount]()
+			{
+				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+				{
+					delete array[i];
+				}
+			});
+
+			deleteThread1.join();
+			deleteThread2.join();
+			deleteThread3.join();
+			deleteThread4.join();
+
+
+			//--------------------------------------------------
+
+			delete[] array;
+
+			time = GetTime();
+			summDeleteTime += time;
+		}
+
+		WriteString("------------------------------ \r\n");
+		WriteString("Array Count = ");
+		WriteDouble(arrayCount);
+		WriteString("\r\n");
+
+		auto avgAllocTime = summAllocTime / _testRepeatCount;
+		WriteDouble(subArraySize);
+		WriteString(" Size New Vector Test MT = ");
+		WriteDouble(avgAllocTime);
+		WriteString("ms\r\n");
+
+		auto avgDeleteTime = summDeleteTime / _testRepeatCount;
+		WriteDouble(subArraySize);
+		WriteString(" Size Delete Vector Test MT = ");
+		WriteDouble(avgDeleteTime);
+		WriteString("ms\r\n");
+	}
+}
+
+
+
+
+
 
 void TestClassMemoryAllocationMT()
 {
@@ -1916,10 +2200,16 @@ int main()
 	//TestTwentyRefClassMemoryAllocationSharedPtr();
 	//fileOut_.flush();
 
-	//TestArraysMemoryAllocation();
-	//fileOut_.flush();
-	//TestVectorMemoryAllocation();
-	//fileOut_.flush();
+	TestArraysMemoryAllocation();
+	fileOut_.flush();
+	TestVectorMemoryAllocation();
+	fileOut_.flush();
+
+
+	TestArraysMemoryAllocationMT();
+	fileOut_.flush();
+	TestVectorMemoryAllocationMT();
+	fileOut_.flush();
 
 	//TestClassMemoryAllocationMT();
 	//fileOut_.flush();
