@@ -13,7 +13,7 @@ namespace test_c_sharp
     class Program
     {
         //---------------- Infrastructure ----------------------
-        const int _testRepeatCount = 2;
+        const int _testRepeatCount = 3;
 
         const int _testArrayAccessSize = 100000000;
         const int _testClassAllocationSize = 10000000;
@@ -213,6 +213,8 @@ namespace test_c_sharp
             WriteDouble(avgTime);
             WriteString(" ms\r\n");
         }
+
+        // --------------------------- Full Random Access -----------------------------
 
         static void TestArrayRandomAccess()
         {
@@ -427,19 +429,193 @@ namespace test_c_sharp
             WriteString(" ms\r\n");
         }
 
+        // ----------------------------------------------------------------------------
+
+        // --------------------------- Sequence Random Access -----------------------------
+
+        static void TestArrayRandomAccessNoRandom()
+        {
+            var indexArray = new int[_testArrayAccessSize];
+
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                indexArray[i] = i;
+            }
+
+
+            var sourceArray = new int[_testArrayAccessSize];
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new int[_testArrayAccessSize];
+            double summTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                for (int i = 0; i < _testArrayAccessSize; i++)
+                {
+                    int index = indexArray[i];
+                    destinationArray[index] = sourceArray[index];
+                }
+
+                var time = GetTime();
+                summTime += time;
+            }
+
+            var avgTime = summTime / _testRepeatCount;
+            WriteString("Array Random Access No Random = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+
+        static unsafe void TestArrayRandomAccessUnsafeNoRandom()
+        {
+            var indexArray = new int[_testArrayAccessSize];
+
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                indexArray[i] = i;
+            }
+
+            var sourceArray = new int[_testArrayAccessSize];
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new int[_testArrayAccessSize];
+            double summTime = 0;
+
+
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                fixed (int* pIndexArray = indexArray)
+                fixed (int* pSourceArray = sourceArray)
+                fixed (int* pDestinationArray = destinationArray)
+                {
+                    for (int i = 0; i < _testArrayAccessSize; i++)
+                    {
+                        int index = pIndexArray[i];
+                        pDestinationArray[index] = pSourceArray[index];
+                    }
+                }
+
+                var time = GetTime();
+                summTime += time;
+            }
+
+            var avgTime = summTime / _testRepeatCount;
+            WriteString("Array Random Access Unsafe No Random = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+
+        static unsafe void TestArrayRandomAccessUnsafePointerArythmeticNoRandom()
+        {
+            var indexArray = new int[_testArrayAccessSize];
+
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                indexArray[i] = i;
+            }
+
+            var sourceArray = new int[_testArrayAccessSize];
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new int[_testArrayAccessSize];
+            double summTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                fixed (int* pIndexArrayFixed = indexArray)
+                fixed (int* pSourceArrayFixed = sourceArray)
+                fixed (int* pDestinationArrayFixed = destinationArray)
+                {
+                    int* pIndexArray = pIndexArrayFixed;
+                    int* pSourceArray = pSourceArrayFixed;
+                    int* pDestinationArray = pDestinationArrayFixed;
+                    
+                    int* pEndIndex = pIndexArray + _testArrayAccessSize;
+                    for (; pIndexArray < pEndIndex; pIndexArray++)
+                    {
+                        int index = *pIndexArray;
+                        *(pDestinationArray + index) = *(pSourceArray + index);
+                    }
+                }
+
+                var time = GetTime();
+                summTime += time;
+            }
+
+            var avgTime = summTime / _testRepeatCount;
+            WriteString("Array Random Access Unsafe Pointers No Random = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+
+        static void TestListRandomAccessNoRandom()
+        {
+            var indexArray = new List<int>(new int[_testArrayAccessSize]);
+
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                indexArray[i] = i;
+            }
+
+            var sourceArray = new List<int>(new int[_testArrayAccessSize]);
+            for (int i = 0; i < _testArrayAccessSize; i++)
+            {
+                sourceArray[i] = i;
+            }
+
+            var destinationArray = new List<int>(new int[_testArrayAccessSize]);
+            double summTime = 0;
+
+            for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+            {
+                Start();
+
+                for (int i = 0; i < _testArrayAccessSize; i++)
+                {
+                    int index = indexArray[i];
+                    destinationArray[index] = sourceArray[index];
+                }
+
+                var time = GetTime();
+                summTime += time;
+            }
+
+            var avgTime = summTime / _testRepeatCount;
+            WriteString("List Random Access No Random = ");
+            WriteDouble(avgTime);
+            WriteString(" ms\r\n");
+        }
+
+        // ----------------------------------------------------------------------------
 
         class TestInlineMethodsClass
         {
-            int InlineMethod(int param1)
+            int Method(int param)
             {
-                return param1;
+                return param;
             }
 
 
             public void test()
             {
                 // прогреваем метод
-                InlineMethod(0);
+                Method(0);
 
                 double summTime = 0;
                 int summResult = 0;
@@ -450,7 +626,7 @@ namespace test_c_sharp
                     //--------------------------------------------------
                     for (int i = 0; i < _testArrayAccessSize; i++)
                     {
-                        summResult = InlineMethod(i);
+                        summResult = Method(i);
                     }
                     //--------------------------------------------------
 
@@ -1446,7 +1622,7 @@ namespace test_c_sharp
         {
             int subArraySize = 1;
 
-            int arrayCount = 100000000;
+            int arrayCount = 1000000000;
 
             for (int onderNumber = 0; onderNumber < 6; onderNumber++)
             {
@@ -1521,6 +1697,131 @@ namespace test_c_sharp
                 WriteString(" ms\r\n");
             }
         }
+
+
+        static void TestArraysMemoryAllocationMT()
+        {
+            int subArraySize = 1;
+
+            int arrayCount = 1000000000;
+
+            for (int onderNumber = 0; onderNumber < 6; onderNumber++)
+            {
+                subArraySize *= 10;
+
+                arrayCount /= 10;
+
+                double summAllocationTime = 0;
+                double summDeleteTime = 0;
+                for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+                {
+
+                    // --------------------- New Operator Test ---------------------------------
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                    var array = new int[arrayCount][];
+
+                    Start();
+
+                    //--------------------------------------------------
+
+                    var allocThread1 = new Thread(() =>
+                    {
+                        for (int i = 0; i < arrayCount / 4; i++)
+                        {
+                            array[i] = new int[subArraySize];
+                        }
+                    });
+
+                    var allocThread2 = new Thread(() =>
+                    {
+                        for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+                        {
+                            array[i] = new int[subArraySize];
+                        }
+                    });
+
+
+                    var allocThread3 = new Thread(() =>
+                    {
+                        for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+                        {
+                            array[i] = new int[subArraySize];
+                        }
+                    });
+
+                    var allocThread4 = new Thread(() =>
+                    {
+                        for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+                        {
+                            array[i] = new int[subArraySize];
+                        }
+                    });
+
+
+                    allocThread1.Start();
+                    allocThread2.Start();
+                    allocThread3.Start();
+                    allocThread4.Start();
+
+                    allocThread1.Join();
+                    allocThread2.Join();
+                    allocThread3.Join();
+                    allocThread4.Join();
+                    
+                    //--------------------------------------------------
+
+                    var time = GetTime();
+                    summAllocationTime += time;
+
+                    // ---------------------- Delete Operator Test ------------------------
+
+                    double memoryBefore = GC.GetTotalMemory(true);
+
+                    Start();
+
+                    DoSomethingWithArray(array[0]);
+                    array = null;
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+                    time = GetTime();
+                    summDeleteTime += time;
+                    double memoryAfter = GC.GetTotalMemory(true);
+                    double collected = memoryBefore - memoryAfter;
+                    //Console.WriteLine("Collected = {0}", collected);
+
+                    // объукт пустого класса  CLR = 16 байт: SyncBlock +  ReferenceTypePointer
+                    // плюс 8 байт - ячейка в массиве
+                    // плюс 100 4-байтных чисел в самом массиве
+                    var mustCollectBytes = (double)arrayCount * (16 + 8 + subArraySize * 4);
+                    if (collected < mustCollectBytes)
+                        Console.WriteLine("!!! GC.Collect Wrong");
+
+                    Console.WriteLine("Collected Difference = {0}", collected - mustCollectBytes);
+                    Console.WriteLine("Collected Proportion = {0}", collected / mustCollectBytes);
+                }
+
+                WriteString("------------------------------ \r\n");
+                WriteString("Array Count = ");
+                WriteDouble(arrayCount);
+                WriteString("\r\n");
+
+                var avgAllocationTime = summAllocationTime / _testRepeatCount;
+                WriteDouble(subArraySize);
+                WriteString(" Size New Array Test MT = ");
+                WriteDouble(avgAllocationTime);
+                WriteString(" ms\r\n");
+
+                var avgDeleteTime = summDeleteTime / _testRepeatCount;
+                WriteDouble(subArraySize);
+                WriteString(" Size Delete Array Test MT = ");
+                WriteDouble(avgDeleteTime);
+                WriteString(" ms\r\n");
+            }
+        }
+
+
+
 
         static void TestClassMemoryAllocationMT()
         {
@@ -1632,6 +1933,7 @@ namespace test_c_sharp
         }
 
 
+
         static void Main(string[] args)
         {
             var totalStopwatch = new Stopwatch();
@@ -1650,18 +1952,33 @@ namespace test_c_sharp
             //file_.Flush();
 
             // TODO: запустить 
-            TestArrayRandomAccess();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestArrayRandomAccessUnsafe();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestArrayRandomAccessUnsafePointerArythmetic();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            TestListRandomAccess();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestArrayRandomAccess();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestArrayRandomAccessUnsafe();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestArrayRandomAccessUnsafePointerArythmetic();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestListRandomAccess();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+
+
+            //TestArrayRandomAccessNoRandom();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestArrayRandomAccessUnsafeNoRandom();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestArrayRandomAccessUnsafePointerArythmeticNoRandom();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+            //TestListRandomAccessNoRandom();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+
 
             //TestEmptyClassMemoryAllocation();
             //Console.WriteLine("---------------------");
@@ -1703,9 +2020,14 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            //TestArraysMemoryAllocation();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestArraysMemoryAllocation();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+
+            TestArraysMemoryAllocationMT();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+
             //TestClassMemoryAllocationMT();
             //Console.WriteLine("---------------------");
             //file_.Flush();

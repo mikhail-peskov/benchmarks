@@ -4,7 +4,7 @@ using namespace std;
 
 //---------------- Infrastructure ----------------------
 
-const int _testRepeatCount = 2;
+const int _testRepeatCount = 100;
 
 const int _testArrayAccessSize = 100000000;
 const int _testClassAllocationSize = 10000000;
@@ -277,6 +277,81 @@ void TestVectorRandomAccess()
 	WriteString(" ms\r\n");
 }
 
+void TestArrayRandomAccessNoRandom()
+{
+	int* indexArray = new int[_testArrayAccessSize];
+	int* sourceArray = new int[_testArrayAccessSize];
+	int* destinationArray = new int[_testArrayAccessSize];
+
+	for (int i = 0; i < _testArrayAccessSize; i++) {
+		indexArray[i] = i;
+	}
+	
+	for (int i = 0; i < _testArrayAccessSize; i++) {
+		sourceArray[i] = i;
+	}
+
+	double summTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		for (int i = 0; i < _testArrayAccessSize; i++)
+		{
+			int index = indexArray[i];
+			destinationArray[index] = sourceArray[index];
+		}
+
+		auto time = GetTime();
+		summTime += time;
+	}
+
+	auto avgTime = summTime / _testRepeatCount;
+	WriteString("Test Random Access No Random = ");
+	WriteDouble(avgTime);
+	WriteString(" ms\r\n");
+
+	delete[] indexArray;
+	delete[] sourceArray;
+	delete[] destinationArray;
+}
+
+void TestVectorRandomAccessNoRandom()
+{
+	std::vector<int> indexArray(_testArrayAccessSize);
+	std::vector<int> sourceArray(_testArrayAccessSize);
+	std::vector<int> destinationArray(_testArrayAccessSize);
+
+	for (int i = 0; i < _testArrayAccessSize; i++) {
+		indexArray[i] = i;
+	}
+	
+	for (int i = 0; i < _testArrayAccessSize; i++) {
+		sourceArray[i] = i;
+	}
+
+	double summTime = 0;
+
+	for (int iterationIndes = 0; iterationIndes < _testRepeatCount; iterationIndes++)
+	{
+		Start();
+
+		for (int i = 0; i < _testArrayAccessSize; i++)
+		{
+			int index = indexArray[i];
+			destinationArray[index] = sourceArray[index];
+		}
+
+		auto time = GetTime();
+		summTime += time;
+	}
+
+	auto avgTime = summTime / _testRepeatCount;
+	WriteString("Test Random Access Vector No Random = ");
+	WriteDouble(avgTime);
+	WriteString(" ms\r\n");
+}
 
 class TestInlineMethodsClass
 {
@@ -1767,6 +1842,26 @@ void TestClassMemoryAllocationMT()
 	delete[] array;
 }
 
+
+void RestoreZeroes(int* inData, int inDataLength, int* outData)
+{
+	for (int inDataPosition = 0; inDataPosition < inDataLength; inDataPosition++) {
+		int inItem = inData[inDataPosition];
+		if (0 == inItem) {
+			inDataPosition++;
+			int zeroCount = inData[inDataPosition];
+			for (int zeroIndex = 0; zeroIndex < zeroCount; zeroIndex++) {
+				*outData = 0;
+				outData++;
+			}
+		}
+		else {
+			*outData = inItem;
+			outData++;
+		}
+	}
+}
+
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
@@ -1785,10 +1880,14 @@ int main()
 	//TestVectorAccess();
 	//fileOut_.flush();
 
-	TestArrayRandomAccess();
-	fileOut_.flush();
-	TestVectorRandomAccess();
-	fileOut_.flush();
+	//TestArrayRandomAccess();
+	//fileOut_.flush();
+	//TestVectorRandomAccess();
+	//fileOut_.flush();
+	//TestArrayRandomAccessNoRandom();
+	//fileOut_.flush();
+	//TestVectorRandomAccessNoRandom();
+	//fileOut_.flush();
 
 	//TestEmptyClassMemoryAllocation();
 	//fileOut_.flush();
