@@ -1870,43 +1870,33 @@ void TestVectorMemoryAllocationMT()
 
 			//--------------------------------------------------
 
-			std::thread allocThread1([array, arrayCount, subArraySize]()
-			{
-				for (int i = 0; i < arrayCount / 4; i++)
+			const int threadCount = 8;
+			std::thread threads[threadCount];
+
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+
+				threads[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
 				{
-					array[i] = new std::vector<int>(subArraySize);
-				}
-			});
+					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
+					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
 
-			std::thread allocThread2([array, arrayCount, subArraySize]()
-			{
-				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
-				{
-					array[i] = new std::vector<int>(subArraySize);
-				}
-			});
+					int beginIndex = (int)beginIndexLong;
+					int endIndex = (int)endIndexLong;
 
-
-			std::thread allocThread3([array, arrayCount, subArraySize]()
-			{
-				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
-				{
-					array[i] = new std::vector<int>(subArraySize);
-				}
-			});
-
-			std::thread allocThread4([array, arrayCount, subArraySize]()
-			{
-				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
-				{
-					array[i] = new std::vector<int>(subArraySize);
-				}
-			});
-
-			allocThread1.join();
-			allocThread2.join();
-			allocThread3.join();
-			allocThread4.join();
+					for (int i = beginIndex
+						; i < endIndex
+						; i++)
+					{
+						array[i] = new std::vector<int>(subArraySize);
+					}
+				});
+			}
+			
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+				threads[threadIndex].join();
+			}
+			
+			
 			//--------------------------------------------------
 
 			auto time = GetTime();
@@ -1916,46 +1906,29 @@ void TestVectorMemoryAllocationMT()
 
 			Start();
 
-			//--------------------------------------------------
-			std::thread deleteThread1([array, arrayCount]()
-			{
-				for (int i = 0; i < arrayCount / 4; i++)
+			std::thread threadsToDelete[threadCount];
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+
+				threadsToDelete[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
 				{
-					delete array[i];
-				}
-			});
+					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
+					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
 
-			std::thread deleteThread2([array, arrayCount]()
-			{
-				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
-				{
-					delete array[i];
-				}
-			});
+					int beginIndex = (int)beginIndexLong;
+					int endIndex = (int)endIndexLong;
 
+					for (int i = beginIndex
+						; i < endIndex
+						; i++)
+					{
+						delete array[i];
+					}
+				});
+			}
 
-			std::thread deleteThread3([array, arrayCount]()
-			{
-				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
-				{
-					delete array[i];
-				}
-			});
-
-			std::thread deleteThread4([array, arrayCount]()
-			{
-				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
-				{
-					delete array[i];
-				}
-			});
-
-			deleteThread1.join();
-			deleteThread2.join();
-			deleteThread3.join();
-			deleteThread4.join();
-
-
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+				threadsToDelete[threadIndex].join();
+			}
 			//--------------------------------------------------
 
 			delete[] array;
