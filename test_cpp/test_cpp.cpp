@@ -1746,98 +1746,77 @@ void TestArraysMemoryAllocationMT()
 			// --------------------- New Operator Test ---------------------------------
 			auto array = new int*[_testArrayAccessSize];
 
+			cout << "begin allocation\r\n";
+
 			Start();
 
 			//--------------------------------------------------
 
-			std::thread allocThread1([array, arrayCount, subArraySize]()
-			{
-				for (int i = 0; i < arrayCount / 4; i++)
-				{
-					array[i] = new int[subArraySize];
-				}
-			});
+			const int threadCount = 8;
+			std::thread threads[threadCount];
 
-			std::thread allocThread2([array, arrayCount, subArraySize]()
-			{
-				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
-				{
-					array[i] = new int[subArraySize];
-				}
-			});
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+
+				threads[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
+					{
+					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
+					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
+
+					int beginIndex = (int)beginIndexLong;
+					int endIndex = (int)endIndexLong;
+
+					for (int i = beginIndex
+						; i < endIndex
+						; i++)
+						{
+							array[i] = new int[subArraySize];
+						}
+					});
+			}
 
 
-			std::thread allocThread3([array, arrayCount, subArraySize]()
-			{
-				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
-				{
-					array[i] = new int[subArraySize];
-				}
-			});
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+				threads[threadIndex].join();
+			}
 
-			std::thread allocThread4([array, arrayCount, subArraySize]()
-			{
-				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
-				{
-					array[i] = new int[subArraySize];
-				}
-			});
-
-			allocThread1.join();
-			allocThread2.join();
-			allocThread3.join();
-			allocThread4.join();
 
 			//--------------------------------------------------
 
 			auto time = GetTime();
 			summAllocationTime += time;
 
+			cout << "end allocation\r\n";
+
 			// ---------------------- Delete Operator Test ------------------------
 
 			Start();
 
 			//--------------------------------------------------
+			std::thread threadsToDelete[threadCount];
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
 
-			std::thread deleteThread1([array, arrayCount]()
-			{
-				for (int i = 0; i < arrayCount / 4; i++)
+				threadsToDelete[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
 				{
-					delete array[i];
-				}
-			});
+					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
+					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
 
-			std::thread deleteThread2([array, arrayCount]()
-			{
-				for (int i = arrayCount / 4; i < arrayCount / 2; i++)
-				{
-					delete array[i];
-				}
-			});
+					int beginIndex = (int)beginIndexLong;
+					int endIndex = (int)endIndexLong;
 
-
-			std::thread deleteThread3([array, arrayCount]()
-			{
-				for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
-				{
-					delete array[i];
-				}
-			});
-
-			std::thread deleteThread4([array, arrayCount]()
-			{
-				for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
-				{
-					delete array[i];
-				}
-			});
-
-			deleteThread1.join();
-			deleteThread2.join();
-			deleteThread3.join();
-			deleteThread4.join();
+					for (int i = beginIndex
+						; i < endIndex
+						; i++)
+					{
+						delete[] array[i];
+					}
+				});
+			}
 
 
+			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+				threadsToDelete[threadIndex].join();
+			}
+			
 			//--------------------------------------------------
 
 			delete[] array;
@@ -2146,9 +2125,20 @@ void RestoreZeroes(int* inData, int inDataLength, int* outData)
 	}
 }
 
+template<typename T>
+constexpr T pi = T(3.1415926535897932385);
+
+
+constexpr int sum(int a, int b)
+{
+	return a + b;
+}
+
 int main()
 {
 	fileOut_.open("cpp_report.txt", std::ios_base::out);
+
+
 
 	//TestInlineMethodsClass testInline;
 	//testInline.test();
@@ -2200,10 +2190,10 @@ int main()
 	//TestTwentyRefClassMemoryAllocationSharedPtr();
 	//fileOut_.flush();
 
-	TestArraysMemoryAllocation();
-	fileOut_.flush();
-	TestVectorMemoryAllocation();
-	fileOut_.flush();
+	//TestArraysMemoryAllocation();
+	//fileOut_.flush();
+	//TestVectorMemoryAllocation();
+	//fileOut_.flush();
 
 
 	TestArraysMemoryAllocationMT();

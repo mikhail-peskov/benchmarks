@@ -1,0 +1,72 @@
+------------------------------ 
+Array Count = 1e+08
+10 Size New Array Test = 8481.17ms
+10Size Delete Array Test = 10400ms
+------------------------------ 
+Array Count = 1e+07
+100 Size New Array Test = 2790.39ms
+100Size Delete Array Test = 4172.86ms
+------------------------------ 
+Array Count = 1e+06
+1000 Size New Array Test = 2279.57ms
+1000Size Delete Array Test = 3260ms
+------------------------------ 
+Array Count = 100000
+10000 Size New Array Test = 1603.54ms
+10000Size Delete Array Test = 3821.5ms
+------------------------------ 
+Array Count = 10000
+100000 Size New Array Test = 374.625ms
+100000Size Delete Array Test = 965.294ms
+------------------------------ 
+Array Count = 1000
+1e+06 Size New Array Test = 4.42588ms
+1e+06Size Delete Array Test = 12.3593ms
+------------------------------ 
+Array Count = 1e+08
+10 Size New Vector Test = 41720.6ms
+10 Size Delete Vector Test = 28612.3ms
+------------------------------ 
+Array Count = 1e+07
+100 Size New Vector Test = 12609ms
+100 Size Delete Vector Test = 8927.24ms
+------------------------------ 
+Array Count = 1e+06
+1000 Size New Vector Test = 10357.4ms
+1000 Size Delete Vector Test = 6417.11ms
+------------------------------ 
+Array Count = 100000
+10000 Size New Vector Test = 18228.5ms
+10000 Size Delete Vector Test = 16097.9ms
+------------------------------ 
+Array Count = 10000
+100000 Size New Vector Test = 3964.08ms
+100000 Size Delete Vector Test = 3046.61ms
+------------------------------ 
+Array Count = 1000
+1e+06 Size New Vector Test = 1290.17ms
+1e+06 Size Delete Vector Test = 238.293ms
+------------------------------ 
+Array Count = 1e+08
+10 Size New Array Test MT = 45628.1ms
+10Size Delete Array Test MT = 29140.1ms
+------------------------------ 
+Array Count = 1e+07
+100 Size New Array Test MT = 14071.3ms
+100Size Delete Array Test MT = 8742.08ms
+------------------------------ 
+Array Count = 1e+06
+1000 Size New Array Test MT = 14872.7ms
+1000Size Delete Array Test MT = 9450.07ms
+------------------------------ 
+Array Count = 100000
+10000 Size New Array Test MT = 17443.6ms
+10000Size Delete Array Test MT = 17440.7ms
+------------------------------ 
+Array Count = 10000
+100000 Size New Array Test MT = 4926.32ms
+100000Size Delete Array Test MT = 3641.17ms
+------------------------------ 
+Array Count = 1000
+1e+06 Size New Array Test MT = 6.90088ms
+1e+06Size Delete Array Test MT = 39.7751ms

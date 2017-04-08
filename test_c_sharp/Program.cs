@@ -1720,55 +1720,222 @@ namespace test_c_sharp
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
                     var array = new int[arrayCount][];
+                    Console.WriteLine("Allocation start");
 
                     Start();
 
+
+                    const int threadCount = 4;
+                    var threads = new Task[threadCount];
+                    for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                    {
+                        int threadIndexCopy = threadIndex;
+                        threads[threadIndex] = new Task(() =>
+                        {
+                            long beginIndexLong = (long)arrayCount * threadIndexCopy / threadCount;
+                            long endIndexLong = (long)arrayCount * (threadIndexCopy + 1) / threadCount;
+
+                            int beginIndex = (int)beginIndexLong;
+                            int endIndex = (int)endIndexLong;
+
+                            for (int i = beginIndex
+                                 ; i < endIndex
+                                 ; i++)
+                            {
+                                array[i] = new int[subArraySize];
+                            }
+                        });
+                    }
+
+                    for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                    {
+                        threads[threadIndex].Start();
+                    }
+
+                    for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                    {
+                        threads[threadIndex].Wait();
+                    }
+
+                    Console.WriteLine("Allocation end");
+
+                    // Parallel threads
+
+                    //const int threadCount = 4;
+                    //var threads = new Thread[threadCount];
+                    //for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                    //{
+                    //    int threadIndexCopy = threadIndex;
+                    //    threads[threadIndex] = new Thread(() =>
+                    //    {
+                    //        long beginIndexLong = (long)arrayCount * threadIndexCopy / threadCount;
+                    //        long endIndexLong = (long)arrayCount * (threadIndexCopy + 1) / threadCount;
+
+                    //        int beginIndex = (int)beginIndexLong;
+                    //        int endIndex = (int) endIndexLong;
+
+                    //        for (int i = beginIndex
+                    //             ; i < endIndex
+                    //             ; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    });
+                    //}
+
+                    //for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                    //{
+                    //    threads[threadIndex].Start();
+                    //}
+
+                    //for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                    //{
+                    //    threads[threadIndex].Join();
+                    //}
+
                     //--------------------------------------------------
 
-                    var allocThread1 = new Thread(() =>
-                    {
-                        for (int i = 0; i < arrayCount / 4; i++)
-                        {
-                            array[i] = new int[subArraySize];
-                        }
-                    });
+                    // 8 parallel
 
-                    var allocThread2 = new Thread(() =>
-                    {
-                        for (int i = arrayCount / 4; i < arrayCount / 2; i++)
-                        {
-                            array[i] = new int[subArraySize];
-                        }
-                    });
+                    //Parallel.Invoke(
+                    //    () =>
+                    //    { // 1
+                    //        for (int i = 0; i < arrayCount / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 2
+                    //        for (int i = arrayCount / 8; i < arrayCount * 2 / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 3
+                    //        for (int i = arrayCount * 2 / 8; i < arrayCount * 3 / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 4
+                    //        for (int i = arrayCount * 4 / 8; i < arrayCount * 5 / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 5
+                    //        for (int i = arrayCount * 5 / 8; i < arrayCount * 6 / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 6
+                    //        for (int i = arrayCount * 5 / 8; i < arrayCount * 6 / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 7
+                    //        for (int i = arrayCount * 6 / 8; i < arrayCount * 7 / 8; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    { // 8
+                    //        for (int i = arrayCount * 7 / 8; i < arrayCount; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    );
 
 
-                    var allocThread3 = new Thread(() =>
-                    {
-                        for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
-                        {
-                            array[i] = new int[subArraySize];
-                        }
-                    });
+                    // 4 parallel
 
-                    var allocThread4 = new Thread(() =>
-                    {
-                        for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
-                        {
-                            array[i] = new int[subArraySize];
-                        }
-                    });
+                    //Parallel.Invoke(
+                    //    () =>
+                    //    {
+                    //        for (int i = 0; i < arrayCount / 4; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    {
+                    //        for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    {
+                    //        for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    }
+                    //    , () =>
+                    //    {
+                    //        for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+                    //        {
+                    //            array[i] = new int[subArraySize];
+                    //        }
+                    //    });
 
 
-                    allocThread1.Start();
-                    allocThread2.Start();
-                    allocThread3.Start();
-                    allocThread4.Start();
+                    // 4 Threads
 
-                    allocThread1.Join();
-                    allocThread2.Join();
-                    allocThread3.Join();
-                    allocThread4.Join();
-                    
+                    //var allocThread1 = new Thread(() =>
+                    //{
+                    //    for (int i = 0; i < arrayCount / 4; i++)
+                    //    {
+                    //        array[i] = new int[subArraySize];
+                    //    }
+                    //});
+
+                    //var allocThread2 = new Thread(() =>
+                    //{
+                    //    for (int i = arrayCount / 4; i < arrayCount / 2; i++)
+                    //    {
+                    //        array[i] = new int[subArraySize];
+                    //    }
+                    //});
+
+
+                    //var allocThread3 = new Thread(() =>
+                    //{
+                    //    for (int i = arrayCount / 2; i < arrayCount * 3 / 4; i++)
+                    //    {
+                    //        array[i] = new int[subArraySize];
+                    //    }
+                    //});
+
+                    //var allocThread4 = new Thread(() =>
+                    //{
+                    //    for (int i = arrayCount * 3 / 4; i < arrayCount; i++)
+                    //    {
+                    //        array[i] = new int[subArraySize];
+                    //    }
+                    //});
+
+
+                    //allocThread1.Start();
+                    //allocThread2.Start();
+                    //allocThread3.Start();
+                    //allocThread4.Start();
+
+                    //allocThread1.Join();
+                    //allocThread2.Join();
+                    //allocThread3.Join();
+                    //allocThread4.Join();
+
                     //--------------------------------------------------
 
                     var time = GetTime();
@@ -2020,9 +2187,9 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            TestArraysMemoryAllocation();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestArraysMemoryAllocation();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
             TestArraysMemoryAllocationMT();
             Console.WriteLine("---------------------");
