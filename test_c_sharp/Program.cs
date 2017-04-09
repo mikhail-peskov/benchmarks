@@ -1726,11 +1726,11 @@ namespace test_c_sharp
 
 
                     const int threadCount = 8;
-                    var threads = new Task[threadCount];
+                    var threads = new Thread[threadCount];
                     for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
                     {
                         int threadIndexCopy = threadIndex;
-                        threads[threadIndex] = new Task(() =>
+                        threads[threadIndex] = new Thread(() =>
                         {
                             long beginIndexLong = (long)arrayCount * threadIndexCopy / threadCount;
                             long endIndexLong = (long)arrayCount * (threadIndexCopy + 1) / threadCount;
@@ -1754,7 +1754,7 @@ namespace test_c_sharp
 
                     for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
                     {
-                        threads[threadIndex].Wait();
+                        threads[threadIndex].Join();
                     }
 
                     Console.WriteLine("Allocation end");
@@ -1813,10 +1813,8 @@ namespace test_c_sharp
 
 
 
-        static void TestClassMemoryAllocationMT()
+        static void TestEmptyClassMemoryAllocationMT()
         {
-
-
             // --------------------- New Operator Test ---------------------------------
 
             double summAllocTime = 0;
@@ -1828,49 +1826,38 @@ namespace test_c_sharp
 
                 var array = new EmptyClass[_testClassAllocationSize];
 
-                var allocThread1 = new Thread(() =>
+                const int threadCount = 8;
+                var threads = new Thread[threadCount];
+                for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
+                {
+                    int threadIndexCopy = threadIndex;
+                    threads[threadIndex] = new Thread(() =>
                     {
-                        for (int i = 0; i < _testClassAllocationSize / 4; i++)
+                        long beginIndexLong = (long)_testClassAllocationSize * threadIndexCopy / threadCount;
+                        long endIndexLong = (long)_testClassAllocationSize * (threadIndexCopy + 1) / threadCount;
+
+                        int beginIndex = (int)beginIndexLong;
+                        int endIndex = (int)endIndexLong;
+
+                        for (int i = beginIndex
+                             ; i < endIndex
+                             ; i++)
                         {
                             array[i] = new EmptyClass();
                         }
                     });
+                }
 
-                var allocThread2 = new Thread(() =>
+
+                for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
                 {
-                    for (int i = _testClassAllocationSize / 4; i < _testClassAllocationSize / 2; i++)
-                    {
-                        array[i] = new EmptyClass();
-                    }
-                });
+                    threads[threadIndex].Start();
+                }
 
-
-                var allocThread3 = new Thread(() =>
+                for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
                 {
-                    for (int i = _testClassAllocationSize / 2; i < _testClassAllocationSize * 3 / 4; i++)
-                    {
-                        array[i] = new EmptyClass();
-                    }
-                });
-
-                var allocThread4 = new Thread(() =>
-                {
-                    for (int i = _testClassAllocationSize * 3 / 4; i < _testClassAllocationSize; i++)
-                    {
-                        array[i] = new EmptyClass();
-                    }
-                });
-
-                allocThread1.Start();
-                allocThread2.Start();
-                allocThread3.Start();
-                allocThread4.Start();
-
-                allocThread1.Join();
-                allocThread2.Join();
-                allocThread3.Join();
-                allocThread4.Join();
-
+                    threads[threadIndex].Join();
+                }
 
                 var time = GetTime();
                 summAllocTime += time;
@@ -1969,7 +1956,10 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-
+            TestEmptyClassMemoryAllocationMT();
+            Console.WriteLine("---------------------");
+            file_.Flush();
+            
             //TestEmptyClassMemoryAllocation();
             //Console.WriteLine("---------------------");
             //file_.Flush();
@@ -2014,11 +2004,11 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            TestArraysMemoryAllocationMT();
-            Console.WriteLine("---------------------");
-            file_.Flush();
+            //TestArraysMemoryAllocationMT();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
 
-            //TestClassMemoryAllocationMT();
+            //TestEmptyClassMemoryAllocationMT();
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
