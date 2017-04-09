@@ -1974,44 +1974,31 @@ void TestClassMemoryAllocationMT()
 	{
 		Start();
 
-		std::thread allocThread1([array]()
-		{
-			for (int i = 0; i < _testClassAllocationSize / 4; i++)
+		const int threadCount = 8;
+		std::thread threads[threadCount];
+
+		for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+
+			threads[threadIndex] = std::thread([array, threadIndex, threadCount]()
 			{
-				array[i] = new EmptyClass();
-			}
-		});
+				long long beginIndexLong = (long long)_testClassAllocationSize * threadIndex / threadCount;
+				long long endIndexLong = (long long)_testClassAllocationSize * (threadIndex + 1) / threadCount;
 
-		std::thread allocThread2([array]()
-		{
-			for (int i = _testClassAllocationSize / 4; i < _testClassAllocationSize / 2; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
+				int beginIndex = (int)beginIndexLong;
+				int endIndex = (int)endIndexLong;
 
-
-		std::thread allocThread3([array]()
-		{
-			for (int i = _testClassAllocationSize / 2; i < _testClassAllocationSize * 3 / 4; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
-
-		std::thread allocThread4([array]()
-		{
-			for (int i = _testClassAllocationSize * 3 / 4; i < _testClassAllocationSize; i++)
-			{
-				array[i] = new EmptyClass();
-			}
-		});
-
-		allocThread1.join();
-		allocThread2.join();
-		allocThread3.join();
-		allocThread4.join();
-
+				for (int i = beginIndex
+					; i < endIndex
+					; i++)
+				{
+					array[i] = new EmptyClass();
+				}
+			});
+		}
+		
+		for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+			threads[threadIndex].join();
+		}
 
 		auto time = GetTime();
 		summAllocTime += time;
@@ -2021,45 +2008,31 @@ void TestClassMemoryAllocationMT()
 		
 		Start();
 
-		std::thread deleteThread1([array]()
-		{
-			for (int i = 0; i < _testClassAllocationSize / 4; i++)
+		std::thread threadsToDelete[threadCount];
+		for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+
+			threadsToDelete[threadIndex] = std::thread([array, threadIndex, threadCount]()
 			{
-				delete array[i];
-			}
-		});
+				long long beginIndexLong = (long long)_testClassAllocationSize * threadIndex / threadCount;
+				long long endIndexLong = (long long)_testClassAllocationSize * (threadIndex + 1) / threadCount;
 
-		std::thread deleteThread2([array]()
-		{
-			for (int i = _testClassAllocationSize / 4; i < _testClassAllocationSize / 2; i++)
-			{
-				delete array[i];
-			}
-		});
+				int beginIndex = (int)beginIndexLong;
+				int endIndex = (int)endIndexLong;
 
+				for (int i = beginIndex
+					; i < endIndex
+					; i++)
+				{
+					delete array[i];
+				}
+			});
+		}
+		
+		for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
+			threadsToDelete[threadIndex].join();
+		}
 
-		std::thread deleteThread3([array]()
-		{
-			for (int i = _testClassAllocationSize / 2; i < _testClassAllocationSize * 3 / 4; i++)
-			{
-				delete array[i];
-			}
-		});
-
-		std::thread deleteThread4([array]()
-		{
-			for (int i = _testClassAllocationSize * 3 / 4; i < _testClassAllocationSize; i++)
-			{
-				delete array[i];
-			}
-		});
-
-		deleteThread1.join();
-		deleteThread2.join();
-		deleteThread3.join();
-		deleteThread4.join();
-
-
+	
 		time = GetTime();
 		summDeleteTime += time;
 	}
@@ -2136,6 +2109,9 @@ int main()
 	//TestVectorRandomAccessNoRandom();
 	//fileOut_.flush();
 
+	TestClassMemoryAllocationMT();
+	fileOut_.flush();
+
 	//TestEmptyClassMemoryAllocation();
 	//fileOut_.flush();
 	//TestOneRefClassMemoryAllocation();
@@ -2169,10 +2145,10 @@ int main()
 	//fileOut_.flush();
 
 
-	TestArraysMemoryAllocationMT();
-	fileOut_.flush();
-	TestVectorMemoryAllocationMT();
-	fileOut_.flush();
+	//TestArraysMemoryAllocationMT();
+	//fileOut_.flush();
+	//TestVectorMemoryAllocationMT();
+	//fileOut_.flush();
 
 	//TestClassMemoryAllocationMT();
 	//fileOut_.flush();

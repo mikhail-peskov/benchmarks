@@ -1,0 +1,2 @@
+New Class Test MT = 99.5497ms
+Delete Class Test MT = 69.9632ms
