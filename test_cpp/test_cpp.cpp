@@ -2109,8 +2109,8 @@ int main()
 	//TestVectorRandomAccessNoRandom();
 	//fileOut_.flush();
 
-	TestClassMemoryAllocationMT();
-	fileOut_.flush();
+	//TestClassMemoryAllocationMT();
+	//fileOut_.flush();
 
 	//TestEmptyClassMemoryAllocation();
 	//fileOut_.flush();
@@ -2147,8 +2147,8 @@ int main()
 
 	//TestArraysMemoryAllocationMT();
 	//fileOut_.flush();
-	//TestVectorMemoryAllocationMT();
-	//fileOut_.flush();
+	TestVectorMemoryAllocationMT();
+	fileOut_.flush();
 
 	//TestClassMemoryAllocationMT();
 	//fileOut_.flush();

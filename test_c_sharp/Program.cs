@@ -1956,10 +1956,10 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            TestEmptyClassMemoryAllocationMT();
-            Console.WriteLine("---------------------");
-            file_.Flush();
-            
+            //TestEmptyClassMemoryAllocationMT();
+            //Console.WriteLine("---------------------");
+            //file_.Flush();
+
             //TestEmptyClassMemoryAllocation();
             //Console.WriteLine("---------------------");
             //file_.Flush();
@@ -2004,9 +2004,9 @@ namespace test_c_sharp
             //Console.WriteLine("---------------------");
             //file_.Flush();
 
-            //TestArraysMemoryAllocationMT();
-            //Console.WriteLine("---------------------");
-            //file_.Flush();
+            TestArraysMemoryAllocationMT();
+            Console.WriteLine("---------------------");
+            file_.Flush();
 
             //TestEmptyClassMemoryAllocationMT();
             //Console.WriteLine("---------------------");
