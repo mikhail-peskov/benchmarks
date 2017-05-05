@@ -1752,7 +1752,7 @@ void TestArraysMemoryAllocationMT()
 
 			//--------------------------------------------------
 
-			const int threadCount = 8;
+			const int threadCount = 4;
 			std::thread threads[threadCount];
 
 			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
@@ -1870,7 +1870,7 @@ void TestVectorMemoryAllocationMT()
 
 			//--------------------------------------------------
 
-			const int threadCount = 8;
+			const int threadCount = 4;
 			std::thread threads[threadCount];
 
 			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
@@ -1974,7 +1974,7 @@ void TestClassMemoryAllocationMT()
 	{
 		Start();
 
-		const int threadCount = 8;
+		const int threadCount = 4;
 		std::thread threads[threadCount];
 
 		for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
@@ -2093,7 +2093,7 @@ int main()
 	//TestNoInlineMethodsClass testNoInline;
 	//testNoInline.test();
 	//fileOut_.flush();
-	
+	//
 	//	
 	//TestArrayAccess();
 	//fileOut_.flush();
@@ -2165,7 +2165,7 @@ int main()
 	//TestTwentyRefClassMemoryAllocationSharedPtrStackOverflow();
 
 
-	getchar();
+	//getchar();
     return 0;
 }
 

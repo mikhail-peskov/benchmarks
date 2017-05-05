@@ -1725,7 +1725,7 @@ namespace test_c_sharp
                     Start();
 
 
-                    const int threadCount = 8;
+                    const int threadCount = 4;
                     var threads = new Thread[threadCount];
                     for (int threadIndex = 0; threadIndex < threadCount; threadIndex++)
                     {
@@ -2018,7 +2018,7 @@ namespace test_c_sharp
 
             file_.Close();
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
