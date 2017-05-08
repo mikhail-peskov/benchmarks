@@ -4,6 +4,8 @@ using namespace std;
 
 //---------------- Infrastructure ----------------------
 
+const int _threadCount = 8;
+
 const int _testRepeatCount = 100;
 
 const int _testArrayAccessSize = 100000000;
@@ -1725,7 +1727,7 @@ void TestVectorMemoryAllocation()
 	}
 }
 
-
+template <int threadCount>
 void TestArraysMemoryAllocationMT()
 {
 	int subArraySize = 1;
@@ -1737,6 +1739,9 @@ void TestArraysMemoryAllocationMT()
 		subArraySize *= 10;
 
 		arrayCount /= 10;
+
+		if (100000 == subArraySize)
+			arrayCount *= 10;
 
 		double summAllocationTime = 0;
 		double summDeleteTime = 0;
@@ -1752,12 +1757,11 @@ void TestArraysMemoryAllocationMT()
 
 			//--------------------------------------------------
 
-			const int threadCount = 4;
 			std::thread threads[threadCount];
 
 			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
 
-				threads[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
+				threads[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex]()
 					{
 					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
 					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
@@ -1795,7 +1799,7 @@ void TestArraysMemoryAllocationMT()
 			std::thread threadsToDelete[threadCount];
 			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
 
-				threadsToDelete[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
+				threadsToDelete[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex]()
 				{
 					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
 					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
@@ -1844,7 +1848,7 @@ void TestArraysMemoryAllocationMT()
 	}
 }
 
-
+template <int threadCount>
 void TestVectorMemoryAllocationMT()
 {
 	int subArraySize = 1;
@@ -1870,12 +1874,11 @@ void TestVectorMemoryAllocationMT()
 
 			//--------------------------------------------------
 
-			const int threadCount = 4;
 			std::thread threads[threadCount];
 
 			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
 
-				threads[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
+				threads[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex]()
 				{
 					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
 					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
@@ -1909,7 +1912,7 @@ void TestVectorMemoryAllocationMT()
 			std::thread threadsToDelete[threadCount];
 			for (int threadIndex = 0; threadIndex < threadCount; threadIndex++) {
 
-				threadsToDelete[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex, threadCount]()
+				threadsToDelete[threadIndex] = std::thread([array, arrayCount, subArraySize, threadIndex]()
 				{
 					long long beginIndexLong = (long long)arrayCount * threadIndex / threadCount;
 					long long endIndexLong = (long long)arrayCount * (threadIndex + 1) / threadCount;
@@ -2144,10 +2147,21 @@ int main()
 	//TestVectorMemoryAllocation();
 	//fileOut_.flush();
 
+	WriteDouble(_threadCount);
+	WriteString(" threads:\r\n");
 
-	//TestArraysMemoryAllocationMT();
-	//fileOut_.flush();
-	TestVectorMemoryAllocationMT();
+	TestArraysMemoryAllocationMT<8>();
+	fileOut_.flush();
+
+	TestVectorMemoryAllocationMT<8>();
+	fileOut_.flush();
+
+	WriteString("Single thread:\r\n");
+
+	TestArraysMemoryAllocationMT<1>();
+	fileOut_.flush();
+
+	TestVectorMemoryAllocationMT<1>();
 	fileOut_.flush();
 
 	//TestClassMemoryAllocationMT();
